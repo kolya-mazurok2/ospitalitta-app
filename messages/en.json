@@ -1,0 +1,57 @@
+{
+  "category": {
+    "cocktails": "Cocktails",
+    "food": "Food"
+  },
+  "taste": {
+    "bitter": "Bitter",
+    "sour": "Sour",
+    "sweet": "Sweet",
+    "spicy": "Spicy",
+    "zero": "No alcohol"
+  },
+  "food": {
+    "pizza": "Pizza",
+    "burgers": "Burgers",
+    "sharing": "Sharing"
+  },
+  "pick": {
+    "label": "Brothers recommend"
+  },
+  "pizza_note": {
+    "text": "Our pizzas come 5 to 7 minutes from the oven. Worth the small wait.",
+    "bold": "Made to order."
+  },
+  "legend": {
+    "title": "How to read this menu",
+    "sub": "We sort by taste, not by name.\nHere is what the marks mean.",
+    "bitter_name": "Bitter",
+    "bitter_desc": "bitterness",
+    "sour_name": "Sour",
+    "sour_desc": "sourness",
+    "sweet_name": "Sweet",
+    "sweet_desc": "sweetness",
+    "marks_name": "Marks",
+    "marks_desc": "intensity",
+    "olive_name": "Olive",
+    "olive_desc": "signature ones",
+    "loved_name": "Loved here",
+    "loved_desc": "bestsellers",
+    "prices": "Prices in Lekë",
+    "cta": "Got it"
+  },
+  "cart": {
+    "show_waiter": "Show your waiter",
+    "open_list": "Show this to your waiter",
+    "keep_browsing": "Keep browsing",
+    "total_label": "Total · Lekë",
+    "clear": "Clear order"
+  },
+  "pairing": {
+    "drink_label": "What this drink loves on the plate:",
+    "plate_label": "What this plate loves in a glass:"
+  },
+  "footer": {
+    "powered": "powered by Ospitalitta"
+  }
+}

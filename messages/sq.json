@@ -1,0 +1,57 @@
+{
+  "category": {
+    "cocktails": "Kokteje",
+    "food": "Ushqim"
+  },
+  "taste": {
+    "bitter": "Të hidhura",
+    "sour": "Të thartat",
+    "sweet": "Të ëmbla",
+    "spicy": "Pikante",
+    "zero": "Pa alkool"
+  },
+  "food": {
+    "pizza": "Pizza",
+    "burgers": "Burgera",
+    "sharing": "Për të ndarë"
+  },
+  "pick": {
+    "label": "Brothers recommend"
+  },
+  "pizza_note": {
+    "text": "Picat tona vijnë 5 deri në 7 minuta nga furra. Ia vlen pritja.",
+    "bold": "Bëhet me porosi."
+  },
+  "legend": {
+    "title": "Si të lexoni këtë menu",
+    "sub": "Ne renditim sipas shijes, jo sipas emrit.\nKjo është ajo që shenjat nënkuptojnë.",
+    "bitter_name": "Të hidhura",
+    "bitter_desc": "hidhësi",
+    "sour_name": "Të thartat",
+    "sour_desc": "aciditet",
+    "sweet_name": "Të ëmbla",
+    "sweet_desc": "ëmbëlsi",
+    "marks_name": "Shenja",
+    "marks_desc": "intensitet",
+    "olive_name": "Ulliri",
+    "olive_desc": "të veçantat tona",
+    "loved_name": "Të dashuruara",
+    "loved_desc": "më të shitura",
+    "prices": "Çmimet në Lekë",
+    "cta": "Kuptova"
+  },
+  "cart": {
+    "show_waiter": "Trego kamarierit",
+    "open_list": "Tregoja kamarierit",
+    "keep_browsing": "Vazhdoni shfletimin",
+    "total_label": "Totali · Lekë",
+    "clear": "Fshi porosinë"
+  },
+  "pairing": {
+    "drink_label": "Çfarë do ky pije në pjatë:",
+    "plate_label": "Çfarë do kjo pjatë në gotë:"
+  },
+  "footer": {
+    "powered": "powered by Ospitalitta"
+  }
+}

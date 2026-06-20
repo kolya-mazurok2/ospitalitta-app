@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+/*
+  @theme inline — utilities compile to var(--color-*) not baked hex values.
+  This means [data-venue] runtime overrides propagate through bg-surface, text-ink, etc.
+  Mapping covers ONLY semantic roles. Component-level tokens (radii, scrim) stay as style={}.
+*/
+@theme inline {
+  /* surfaces */
+  --color-surface:        var(--surface);
+  --color-surface-card:   var(--surface-card);
+  --color-surface-card-a: var(--surface-card-a);
+  --color-surface-frame:  var(--surface-frame);
+  --color-surface-media:  var(--surface-media);
+  --color-surface-dark:   var(--surface-dark);
+  --color-surface-dark-2: var(--surface-dark-2);
+
+  /* ink */
+  --color-ink:            var(--ink);
+  --color-ink-heading:    var(--ink-heading);
+  --color-ink-body:       var(--ink-body);
+  --color-ink-body-2:     var(--ink-body-2);
+  --color-on-dark:        var(--on-dark);
+  --color-on-dark-2:      var(--on-dark-2);
+
+  /* brand / olive */
+  --color-brand:          var(--brand);
+  --color-brand-on-dark:  var(--brand-on-dark);
+  --color-brand-bright:   var(--brand-bright);
+  --color-hairline:       var(--hairline);
+  --color-accent-pit:     var(--accent-pit);
+
+  /* structural */
+  --color-line:           var(--line);
+  --color-line-strong:    var(--line-strong);
+  --color-line-soft:      var(--line-soft);
+  --color-ink-faint:      var(--ink-faint);
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    /* A-size scale: set by JS from localStorage['font_scale'], default 1 */
+    font-size: calc(100% * var(--font-scale, 1));
+  }
+
+  ::selection {
+    background: var(--brand-on-dark, #9BA86A);
+    color: var(--surface, #F3F0E7);
+  }
+
+  /* hide scrollbars on scroll containers (keep functionality) */
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+}
+
+@layer utilities {
+  /* sheet animation */
+  .animate-bb-up {
+    animation: bbUp 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .animate-bb-dim {
+    animation: bbDim 220ms ease both;
+  }
+}
+
+@keyframes bbUp {
+  from { transform: translateY(100%) }
+  to   { transform: translateY(0) }
+}
+
+@keyframes bbDim {
+  from { opacity: 0 }
+  to   { opacity: 1 }
+}

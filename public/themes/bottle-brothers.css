@@ -1,0 +1,154 @@
+/* =============================================================
+   Bottle Brothers — venue theme (DEC-016, 3 levels)
+   1 primitives  →  2 semantic / alias  →  3 component
+   Components consume ONLY level 2 (and 3). Never level 1 directly.
+
+   This is a VENUE theme layered on the Ospitalitta token contract.
+   The role names in level 2 are the SHARED contract every venue fills;
+   BB swaps in its own primitives + type families + a few component
+   overrides (sharp paper edges, round-only-in-app). No new roles.
+
+   Scope it under the venue route so app components read these vars:
+     [data-venue="bottle-brothers"] { ... }
+   In Next this lives on the /venue/[id] layout wrapper.
+
+   Sources of truth: CLAUDE.md (BB brand block) + the prototype
+   "BB Menu Mobile v2.dc.html" + "BB Brand Foundations.dc.html".
+   Every value below is documented, none invented.
+   ============================================================= */
+
+/* ---------- 1 · PRIMITIVES — BB raw values ---------- */
+:root {
+  /* surfaces (paper world + dark world) */
+  --bb-cream:        #F3F0E7;  /* paper, the default screen surface  */
+  --bb-card:         #F7F3EA;  /* item card backing                  */
+  --bb-card-active:  #F0EBDD;  /* card on press                      */
+  --bb-frame:        #ECE7D6;  /* framed plaque (recommend, note)    */
+  --bb-media:        #ECE6D4;  /* photo/video placeholder backing    */
+  --bb-char:         #1C1E1B;  /* working dark surface / app shell   */
+  --bb-char-deep:    #15110E;  /* deepest near-black: bar + dark notices */
+  --bb-white:        #FFFFFF;  /* logo backing ONLY                  */
+
+  /* ink */
+  --bb-ink:          #181817;  /* names, max contrast                */
+  --bb-ink-heading:  #3F4445;  /* section / sheet headings (muted ink) */
+  --bb-ink-body:     #494E4F;  /* detail description body            */
+  --bb-ink-body-2:   #3A3933;  /* card description body              */
+  --bb-on-dark:      #F2E9DA;  /* light text on char                 */
+  --bb-on-dark-2:    #E9E3D5;  /* secondary light text on char       */
+
+  /* olive — ONE colour, a family of three by surface */
+  --bb-olive-logo:   #9CAA40;  /* logo, hairlines/borders, on char   */
+  --bb-olive-cream:  #7E8C50;  /* on cream: prices, labels, glyph, loved-here */
+  --bb-olive-app:    #9BA86A;  /* app UI accent (active underline, badge) */
+  --bb-olive-bright: #A9B978;  /* brighter olive on char (totals, links) */
+  --bb-olive-hi:     #B6C07A;  /* olive highlight droplet             */
+  --bb-cherry:       #C7503B;  /* olive PIT only, nothing else        */
+
+  /* neutral UI grey — borders, inactive, dividers (always as rgba) */
+  --bb-grey:         84 89 90; /* use rgb(var(--bb-grey) / <alpha>)   */
+
+  /* type families */
+  --bb-font-display: 'Marcellus', serif;       /* names, headings     */
+  --bb-font-text:    'Jost', sans-serif;        /* everything else     */
+
+  /* type scale — modular ~1.333, body never below 16.
+     Expressed in rem so the in-app A-size control can scale the whole
+     system by setting --font-scale on <html> (see component layer). */
+  --bb-fs-9:   0.5625rem;  /* micro labels (recommend eyebrow, footer) */
+  --bb-fs-10:  0.625rem;   /* section subhead                          */
+  --bb-fs-11:  0.6875rem;  /* "?" button, "Prices in Lekë"             */
+  --bb-fs-12:  0.75rem;    /* caption, cart badge, "Show your waiter"  */
+  --bb-fs-13:  0.8125rem;  /* prices, tab labels, food desc            */
+  --bb-fs-135: 0.84375rem; /* card descriptions, notice text           */
+  --bb-fs-14:  0.875rem;   /* pairing label, pairing row names         */
+  --bb-fs-15:  0.9375rem;  /* card/list names, legend rows             */
+  --bb-fs-16:  1rem;       /* food name, detail description            */
+  --bb-fs-17:  1.0625rem;  /* detail name                              */
+  --bb-fs-21:  1.3125rem;  /* section headings (Marcellus uppercase)   */
+  --bb-fs-23:  1.4375rem;  /* sheet heading                            */
+  --bb-fs-24:  1.5rem;     /* list total, + on photo                   */
+  --bb-fs-30:  1.875rem;   /* detail FAB +                             */
+
+  /* spacing — 4px base (shared with core) */
+  --bb-sp-1: 4px;  --bb-sp-2: 8px;  --bb-sp-3: 12px; --bb-sp-4: 16px;
+  --bb-sp-5: 18px; --bb-sp-6: 24px; --bb-sp-7: 32px; --bb-sp-8: 48px;
+
+  /* radius — paper is sharp, app gets roundness only where a finger needs it */
+  --bb-r-card:    0;             /* cards, plaques, anything paper      */
+  --bb-r-sheet:   26px 26px 0 0; /* bottom-sheet top corners            */
+  --bb-r-pill:    999px;         /* counter / badge                     */
+  --bb-r-round:   50%;           /* +, stepper, dots                    */
+
+  /* motion — left/gold soft, right/ember sharp (core principle).
+     Sheets glide up (soft). Press feedback is an instant hard cut. */
+  --bb-ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --bb-dur-sheet: 300ms;
+  --bb-dur-dim:   220ms;
+}
+
+/* ---------- 2 · SEMANTIC / ALIAS — the ONLY layer app UI reads ---------- */
+[data-venue="bottle-brothers"] {
+  --surface:        var(--bb-cream);
+  --surface-card:   var(--bb-card);
+  --surface-card-a: var(--bb-card-active);
+  --surface-frame:  var(--bb-frame);
+  --surface-media:  var(--bb-media);
+  --surface-dark:   var(--bb-char);
+  --surface-dark-2: var(--bb-char-deep);
+
+  --ink:            var(--bb-ink);
+  --ink-heading:    var(--bb-ink-heading);
+  --ink-body:       var(--bb-ink-body);
+  --ink-body-2:     var(--bb-ink-body-2);
+  --on-dark:        var(--bb-on-dark);
+  --on-dark-2:      var(--bb-on-dark-2);
+
+  /* brand olive resolves per surface: on cream vs on char */
+  --brand:          var(--bb-olive-cream); /* default, on paper */
+  --brand-on-dark:  var(--bb-olive-app);
+  --brand-bright:   var(--bb-olive-bright);
+  --hairline:       var(--bb-olive-logo);  /* olive borders/frames */
+  --accent-pit:     var(--bb-cherry);
+
+  --line:           rgb(var(--bb-grey) / 0.18); /* dividers/borders */
+  --line-strong:    rgb(var(--bb-grey) / 0.35); /* section underline */
+  --line-soft:      rgb(var(--bb-grey) / 0.12); /* card borders     */
+  --ink-faint:      rgb(var(--bb-grey) / 0.5);  /* inactive tab text */
+
+  --font-display:   var(--bb-font-display);
+  --font-text:      var(--bb-font-text);
+}
+
+/* ---------- 3 · COMPONENT — local, pulls from semantic ---------- */
+[data-venue="bottle-brothers"] {
+  /* item card */
+  --card-bg:        var(--surface-card);
+  --card-bg-active: var(--surface-card-a);
+  --card-border:    var(--line-soft);
+  --card-radius:    var(--bb-r-card);
+
+  /* bottom sheet */
+  --sheet-bg:       var(--surface);
+  --sheet-radius:   var(--bb-r-sheet);
+  --sheet-scrim:    rgba(21, 17, 14, 0.5);
+
+  /* floating "show your waiter" bar */
+  --bar-bg:         var(--surface-dark-2);
+  --bar-fg:         var(--on-dark);
+  --bar-accent:     var(--brand-bright);
+
+  /* round + / FAB */
+  --fab-bg:         var(--surface-dark-2);
+  --fab-fg:         var(--on-dark);
+  --fab-radius:     var(--bb-r-round);
+
+  /* active tab underline */
+  --tab-underline:  var(--brand-on-dark);
+
+  /* in-app accessibility text scale — A-size control writes this on <html>.
+     Steps: 0.9 / 1 / 1.15 / 1.3 ; persisted in localStorage['font_scale']. */
+  --font-scale:     1;
+}
+
+/* root font-size carries the A-size scale (html { font-size: calc(100% * var(--font-scale)) }) */
