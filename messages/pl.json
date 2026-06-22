@@ -1,0 +1,56 @@
+{
+  "category": {
+    "cocktails": "Koktajle",
+    "food": "Jedzenie"
+  },
+  "taste": {
+    "bitter": "Gorzkie",
+    "sour": "Kwaśne",
+    "sweet": "Słodkie",
+    "spicy": "Ostre",
+    "zero": "Bez alkoholu"
+  },
+  "food": {
+    "pizza": "Pizza",
+    "burgers": "Burgery",
+    "sharing": "Do podziału"
+  },
+  "pick": {
+    "label": "Polecamy"
+  },
+  "pizza_note": {
+    "text": "Nasze pizze są gotowe w 5 do 7 minut z pieca. Warto chwilę poczekać.",
+    "bold": "Przygotowywane na zamówienie."
+  },
+  "legend": {
+    "title": "Jak czytać to menu",
+    "sub": "Sortujemy według smaku, nie nazwy.\nOto co oznaczają znaczniki.",
+    "bitter_name": "Gorzkie",
+    "bitter_desc": "goryczka",
+    "sour_name": "Kwaśne",
+    "sour_desc": "kwasowość",
+    "sweet_name": "Słodkie",
+    "sweet_desc": "słodycz",
+    "marks_name": "Znaczniki",
+    "marks_desc": "intensywność",
+    "olive_name": "Oliwka",
+    "olive_desc": "specjalność lokalu",
+    "loved_name": "Ulubione tutaj",
+    "loved_desc": "bestsellery",
+    "cta": "Rozumiem"
+  },
+  "cart": {
+    "show_waiter": "Pokaż kelnerkowi",
+    "open_list": "Pokaż to kelnerkowi",
+    "keep_browsing": "Wróć do menu",
+    "total_label": "Razem · Lekë",
+    "clear": "Wyczyść zamówienie"
+  },
+  "pairing": {
+    "drink_label": "Co ten drink lubi na talerzu:",
+    "plate_label": "Co to danie lubi w kieliszku:"
+  },
+  "footer": {
+    "powered": "powered by Ospitalitta"
+  }
+}

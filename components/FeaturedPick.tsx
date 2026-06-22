@@ -1,14 +1,14 @@
 import Glass from '@/components/Glass'
 import TasteMark from '@/components/TasteMark'
 import FramedPlaque from '@/components/FramedPlaque'
-import type { GlassType, TasteKey } from '@/lib/menu-data'
+import type { GlassType } from '@/lib/menu-data'
 
 interface Props {
   name: string
   desc: string
   price: string
   glass: GlassType
-  taste: TasteKey
+  taste: string
   n?: 1 | 2 | 3
   house?: boolean
   label: string      // messages pick.label

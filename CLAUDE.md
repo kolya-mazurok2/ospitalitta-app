@@ -435,6 +435,30 @@ Individual venue can override specific token values by appending to their own st
 
 ---
 
+## Dev Rules — do not violate
+
+### Never assume layout without a design spec
+If a component renders elements in a certain order (e.g. desc → name, or name → price),
+**do not reorder them** unless:
+1. The design handoff explicitly shows a different order, OR
+2. The user explicitly says "put X above Y"
+
+If something looks visually wrong, **ask first** — do not silently "fix" it by guessing
+what the correct layout should be. Violations of this rule repeat the same mistake in a loop.
+
+### Never assume design intent for a new venue
+Each venue (BB, Saly, future) has its own design spec. Do not port BB decisions to Saly or
+vice versa without confirming. When a new venue's component looks different from BB:
+→ ask "what should the layout be?" before touching anything.
+
+### Check for existing components before creating new ones
+Before building a new component, check if one already exists (grep components/, lib/).
+If unsure whether to reuse or create — **ask**. Do not create duplicate components for
+"slightly different" layouts. Prefer adding a prop to an existing component over forking it.
+One component shared across BB and Saly is always better than two near-identical ones.
+
+---
+
 ## Open TODOs (content — confirm with client before fixing)
 From BB design handoff — do not silently fill in:
 

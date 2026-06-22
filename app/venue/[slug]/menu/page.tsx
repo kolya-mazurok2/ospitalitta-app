@@ -25,6 +25,8 @@ export default async function MenuPage({ params }: Props) {
   const locale = getLocale(localeCookie, al, venue.locales)
   const leadTaste = getLeadTaste(al)
 
+  const welcome = venue.onboarding.welcome?.[locale] ?? venue.onboarding.welcome?.['en']
+
   return (
     <MenuClient
       menuData={menu}
@@ -32,6 +34,11 @@ export default async function MenuPage({ params }: Props) {
       locale={locale}
       leadTaste={leadTaste}
       locales={venue.locales}
+      logoSrc={venue.logoSrc}
+      onboarding={{ pricesNote: venue.onboarding.pricesNote, welcome }}
+      defaultCategory={venue.defaultCategory}
+      houseIndicator={venue.houseIndicator}
+      showCocktailGuide={venue.showCocktailGuide ?? true}
     />
   )
 }

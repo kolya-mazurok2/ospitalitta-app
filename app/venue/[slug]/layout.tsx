@@ -37,11 +37,11 @@ export default async function VenueLayout({ children, params }: Props) {
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       {venue.brand.fonts.map(f => (
         <link key={f.family} rel="stylesheet" href={f.href} />
       ))}
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       <link rel="stylesheet" href={venue.brand.stylesheet} />
       <div
         data-venue={venue.brand.themeAttr}

@@ -6,17 +6,19 @@ import Image from 'next/image'
 const SCALE_STEPS = [0.9, 1, 1.15, 1.3]
 const SCALE_LABELS = [0.72, 0.88, 1.04, 1.20] // rem sizes for the "A" buttons
 
-const LOCALE_LABELS: Record<string, string> = {
-  en: 'English',
-  sq: 'Shqip',
-  it: 'Italiano',
-  pl: 'Polski',
-  de: 'Deutsch',
-  fr: 'Français',
-  no: 'Norsk',
-}
+// Platform-level order — all supported locales in display sequence
+const ALL_LOCALES: { code: string; label: string }[] = [
+  { code: 'pl', label: 'Polski' },
+  { code: 'it', label: 'Italiano' },
+  { code: 'fr', label: 'Français' },
+  { code: 'sq', label: 'Shqip' },
+  { code: 'de', label: 'Deutsch' },
+  { code: 'no', label: 'Norsk' },
+  { code: 'en', label: 'English' },
+]
 
 interface Props {
+  logoSrc: string
   locale: string
   locales: string[]
   fontScale: number
@@ -26,7 +28,7 @@ interface Props {
 }
 
 export default function HeaderControls({
-  locale, locales, fontScale,
+  logoSrc, locale, locales, fontScale,
   onOpenLegend, onLocaleChange, onScaleChange,
 }: Props) {
   const [aaOpen, setAaOpen] = useState(false)
@@ -37,17 +39,18 @@ export default function HeaderControls({
 
   return (
     <div style={{
-      flexShrink: 0, padding: '62px 20px 12px',
+      flexShrink: 0, padding: '20px 20px 12px',
       background: 'var(--surface)', position: 'relative', zIndex: 6,
     }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
         {/* logo */}
         <Image
-          src="/assets/bb-logo-crop.png"
-          alt="Bottle Brothers"
-          width={104}
-          height={36}
-          style={{ height: 'auto', display: 'block' }}
+          src={logoSrc}
+          alt=""
+          width={300}
+          height={40}
+          className="venue-logo"
+          style={{ height: '40px', width: 'auto', display: 'block' }}
           priority
         />
 
@@ -59,7 +62,7 @@ export default function HeaderControls({
             style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '2px 0', display: 'flex', alignItems: 'center', flexShrink: 0 }}
             aria-label="How to read this menu"
           >
-            <Image src="/assets/icon-info.svg" alt="" width={20} height={20} aria-hidden />
+            <Image src="/assets/icon-info.svg" alt="" width={24} height={24} aria-hidden />
           </button>
 
           {/* Aa size picker */}
@@ -69,7 +72,7 @@ export default function HeaderControls({
               style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '2px 0', display: 'flex', alignItems: 'center' }}
               aria-label="Text size"
             >
-              <Image src="/assets/icon-typography.svg" alt="" width={20} height={20} aria-hidden />
+              <Image src="/assets/icon-typography.svg" alt="" width={24} height={24} aria-hidden />
             </button>
 
             {aaOpen && (
@@ -110,7 +113,7 @@ export default function HeaderControls({
               style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '2px 0', display: 'flex', alignItems: 'center', flexShrink: 0 }}
               aria-label="Language"
             >
-              <Image src="/assets/icon-language.svg" alt="" width={20} height={20} aria-hidden />
+              <Image src="/assets/icon-language.svg" alt="" width={24} height={24} aria-hidden />
             </button>
 
             {langOpen && (
@@ -120,12 +123,12 @@ export default function HeaderControls({
                 display: 'flex', flexDirection: 'column', minWidth: 140,
                 boxShadow: '0 12px 30px rgb(0 0 0 / 0.35)',
               }}>
-                {locales.map(lc => {
-                  const active = locale === lc
+                {ALL_LOCALES.filter(l => locales.includes(l.code)).map(({ code, label }) => {
+                  const active = locale === code
                   return (
                     <button
-                      key={lc}
-                      onClick={() => { onLocaleChange(lc); setLangOpen(false) }}
+                      key={code}
+                      onClick={() => { onLocaleChange(code); setLangOpen(false) }}
                       style={{
                         display: 'flex', alignItems: 'center',
                         background: active ? 'var(--brand-on-dark)' : 'transparent',
@@ -136,7 +139,7 @@ export default function HeaderControls({
                         textAlign: 'left', whiteSpace: 'nowrap',
                       }}
                     >
-                      {LOCALE_LABELS[lc] ?? lc.toUpperCase()}
+                      {label}
                     </button>
                   )
                 })}

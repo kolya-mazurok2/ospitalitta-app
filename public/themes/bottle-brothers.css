@@ -146,6 +146,30 @@
   /* active tab underline */
   --tab-underline:  var(--brand-on-dark);
 
+  /* badge / aux label pill */
+  --badge-weight:      500;
+  --badge-size:        0.5rem;
+  --badge-color:       var(--brand-bright);
+  --badge-bg:          var(--surface-frame);
+  --badge-border:      1px solid var(--brand);
+  --badge-radius:      0px;
+  --badge-padding:     3px 6px;
+
+  /* featured pick box */
+  --pick-bg:           var(--surface-frame);
+  --pick-border-color: var(--brand);
+  --pick-label-color:  var(--brand-bright);
+  --pick-muted:        var(--ink-faint);
+
+  /* section note callout */
+  --note-bg:           var(--surface-frame);
+  --note-border-color: var(--brand);
+  --note-text-color:   var(--ink-body);
+
+  /* section sub (right of section title) */
+  --section-sub-color: var(--ink-faint);
+  --section-sub-size:  0.625rem;
+
   /* in-app accessibility text scale — A-size control writes this on <html>.
      Steps: 0.9 / 1 / 1.15 / 1.3 ; persisted in localStorage['font_scale']. */
   --font-scale:     1;

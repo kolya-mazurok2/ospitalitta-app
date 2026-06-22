@@ -3,6 +3,9 @@ import TasteMark from '@/components/TasteMark'
 interface Props {
   title: string
   sub: string
+  welcome?: string
+  hasCocktails: boolean
+  showRows?: boolean
   bitterName: string
   bitterDesc: string
   sourName: string
@@ -38,7 +41,7 @@ const rowDesc: React.CSSProperties = {
 }
 
 export default function LegendSheet({
-  title, sub,
+  title, sub, welcome, hasCocktails, showRows = true,
   bitterName, bitterDesc, sourName, sourDesc, sweetName, sweetDesc,
   marksName, marksDesc, oliveName, oliveDesc, lovedName, lovedDesc,
   pricesNote, cta, onClose,
@@ -89,7 +92,21 @@ export default function LegendSheet({
           {sub}
         </p>
 
-        <div style={{ display: 'flex', flexDirection: 'column', marginTop: 14 }}>
+        {welcome && (
+          <p style={{
+            fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.875rem',
+            lineHeight: 1.55, color: 'var(--ink-body)',
+            marginTop: 14, padding: '12px 14px',
+            background: 'var(--surface-frame)',
+            border: '1px solid var(--hairline)',
+            textWrap: 'pretty',
+          }}>
+            {welcome}
+          </p>
+        )}
+
+        {showRows && <div style={{ display: 'flex', flexDirection: 'column', marginTop: 14 }}>
+          {hasCocktails && (<>
           {/* bitter */}
           <div style={rowStyle}>
             <span style={iconWrap}>
@@ -158,19 +175,6 @@ export default function LegendSheet({
             <span style={{ ...rowDesc, textAlign: 'right' }}>{marksDesc}</span>
           </div>
 
-          {/* olive */}
-          <div style={rowStyle}>
-            <span style={iconWrap}>
-              <svg width="13" height="15" viewBox="0 0 24 24" style={{ display: 'block' }} aria-hidden>
-                <ellipse cx="12" cy="12" rx="6.6" ry="8.8" transform="rotate(-18 12 12)" fill="#7E8C50" />
-                <ellipse cx="9.7" cy="7.6" rx="1.5" ry="2.3" transform="rotate(-18 12 12)" fill="#B6C07A" />
-                <ellipse cx="13.4" cy="14.2" rx="1.4" ry="1.9" transform="rotate(-18 12 12)" fill="#C7503B" />
-              </svg>
-            </span>
-            <span style={rowName}>{oliveName}</span>
-            <span style={rowDesc}>{oliveDesc}</span>
-          </div>
-
           {/* loved here */}
           <div style={rowStyle}>
             <span style={iconWrap}>
@@ -182,7 +186,21 @@ export default function LegendSheet({
             <span style={rowName}>{lovedName}</span>
             <span style={rowDesc}>{lovedDesc}</span>
           </div>
-        </div>
+          </>)}
+
+          {/* olive / house specialty */}
+          <div style={rowStyle}>
+            <span style={iconWrap}>
+              <svg width="13" height="15" viewBox="0 0 24 24" style={{ display: 'block' }} aria-hidden>
+                <ellipse cx="12" cy="12" rx="6.6" ry="8.8" transform="rotate(-18 12 12)" fill="#7E8C50" />
+                <ellipse cx="9.7" cy="7.6" rx="1.5" ry="2.3" transform="rotate(-18 12 12)" fill="#B6C07A" />
+                <ellipse cx="13.4" cy="14.2" rx="1.4" ry="1.9" transform="rotate(-18 12 12)" fill="#C7503B" />
+              </svg>
+            </span>
+            <span style={rowName}>{oliveName}</span>
+            <span style={rowDesc}>{oliveDesc}</span>
+          </div>
+        </div>}
 
         {/* prices note */}
         <div style={{

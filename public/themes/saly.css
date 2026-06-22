@@ -1,0 +1,93 @@
+/* Saly — elegant seafood. Pine · Sand · Brass-gold. Cormorant Garamond + Hanken Grotesk. */
+
+/* Headings use real 600 weight — Cormorant Garamond doesn't have 700 */
+[data-venue="saly"] h3 {
+  font-weight: 600;
+}
+
+[data-venue="saly"] {
+  /* --- Level 1: Primitives (exact values from Saly Paper Menu Handoff) --- */
+  --saly-sand:        #F3EDE0;   /* paper background */
+  --saly-sand-white:  #FBF8F0;   /* card / lighter surface */
+  --saly-pine:        #2F5249;   /* titles, prices, lines, borders */
+  --saly-ink:         #1E3A33;   /* dish names, primary text */
+  --saly-body:        #3A4D44;
+  --saly-body-muted:  #566B5E;
+  --saly-body-muted2: #4A5D52;
+  --saly-brass:       #C9A23F;   /* callout border, rules */
+  --saly-gold-text:   #9A7B2E;   /* labels, languages, pill text */
+  --saly-rattan:      #E7D9BB;   /* recommends box */
+  --saly-rattan-note: #EAE0CB;   /* section note callout */
+  --saly-desc-muted:  #7A8C7C;   /* item description */
+  --saly-sub-muted:   #8A7A5E;
+
+  /* --- Level 2: Semantic aliases --- */
+  --surface:          var(--saly-sand);
+  --surface-card:     var(--saly-sand-white);
+  --surface-frame:    var(--saly-rattan);
+  --surface-dark:     var(--saly-pine);
+  --surface-dark-2:   var(--saly-ink);
+  --surface-media:    rgba(47, 82, 73, 0.07);
+
+  --ink:              var(--saly-ink);
+  --ink-heading:      var(--saly-pine);
+  --ink-body:         var(--saly-body);
+  --ink-body-2:       var(--saly-body-muted);
+  --ink-faint:        var(--saly-desc-muted);
+
+  --on-dark:          var(--saly-sand);
+  --on-dark-2:        rgba(243, 237, 224, 0.72);
+
+  --brand:            var(--saly-brass);
+  --brand-on-dark:    var(--saly-brass);
+  --brand-bright:     var(--saly-gold-text);
+
+  --hairline:         rgba(47, 82, 73, 0.14);
+  --line:             rgba(47, 82, 73, 0.22);
+  --line-strong:      rgba(47, 82, 73, 0.30);
+  --line-soft:        rgba(47, 82, 73, 0.09);
+  --tab-underline:    var(--saly-brass);
+  --surface-card-a:   rgba(47, 82, 73, 0.07);
+
+  /* --- Level 3: Component --- */
+
+  /* badge / aux label pill (FOR 2, PER KG, PER 100 G) */
+  --badge-weight:      600;
+  --badge-size:        9px;
+  --badge-color:       #9A7B2E;
+  --badge-bg:          rgba(201, 162, 63, 0.16);
+  --badge-border:      none;
+  --badge-radius:      4px;
+  --badge-padding:     2px 7px;
+
+  /* featured pick / "recommends" rattan box */
+  --pick-bg:           var(--saly-rattan);
+  --pick-border-color: var(--saly-brass);
+  --pick-label-color:  var(--saly-gold-text);
+  --pick-muted:        var(--saly-desc-muted);
+
+  /* section note callout box */
+  --note-bg:           var(--saly-rattan-note);
+  --note-border-color: var(--saly-brass);
+  --note-text-color:   var(--saly-body-muted2);
+
+  /* section sub (right of section title) */
+  --section-sub-color: rgba(47, 82, 73, 0.55);
+  --section-sub-size:  11px;
+  --sheet-bg:         var(--saly-sand);
+  --sheet-scrim:      rgba(15, 30, 22, 0.62);
+  --sheet-radius:     6px 6px 0 0;
+
+  --fab-bg:           var(--saly-pine);
+  --fab-fg:           var(--saly-brass);
+
+  --card-bg:          var(--saly-sand-white);
+  --card-border:      rgba(47, 82, 73, 0.12);
+
+  --bb-r-card:        4px;
+
+  /* --- Fonts --- */
+  --font-display:     'Cormorant Garamond', Georgia, serif;
+  --font-text:        'Hanken Grotesk', 'Helvetica Neue', Arial, sans-serif;
+}
+

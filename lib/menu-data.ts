@@ -6,7 +6,11 @@
 
 export type GlassType = 'wine' | 'collins' | 'rocks' | 'martini' | 'coupe'
 export type TasteKey = 'bitter' | 'sour' | 'sweet' | 'spicy' | 'zero'
-export type FoodKey = 'pizza' | 'burgers' | 'sharing'
+export type TierKey  = 'tier-600' | 'tier-700' | 'tier-800' | 'tier-900' | 'tier-1000'
+export type FoodKey  = 'pizza' | 'burgers' | 'sharing'
+                     | 'cold' | 'warm' | 'salads' | 'pasta' | 'mains' | 'fresh-fish'
+
+export const TASTE_KEYS: ReadonlySet<string> = new Set<TasteKey>(['bitter','sour','sweet','spicy','zero'])
 export type Locale = string
 
 export interface I18nText {
@@ -22,15 +26,16 @@ export interface MenuItem {
   flavor?: 'sweet' | 'sour' // zero items only
   loved?: boolean
   house?: boolean
+  badge?: string         // label pill: "For 2", "For sharing", etc.
   videoSrc?: string
   posterSrc?: string
   i18n: I18nText
 }
 
 export interface MenuSection {
-  key: TasteKey | FoodKey
+  key: TasteKey | TierKey | FoodKey
   type: 'cocktail' | 'food'
-  i18n: { [locale: string]: { label: string; sub: string } }
+  i18n: { [locale: string]: { label: string; sub?: string; badge?: string; note?: string } }
   items: MenuItem[]
 }
 
@@ -56,12 +61,19 @@ export interface FeaturedPick {
   i18n?: { [locale: string]: { desc?: string } }
 }
 
+export interface FoodFeaturedPick {
+  itemRef: string             // slug of a food item (must exist in one of foodSections)
+  showAfterSection: FoodKey   // render callout at bottom of this section's tab
+  i18n: { [locale: string]: { label: string; desc?: string } }
+}
+
 export interface VenueMenuData {
   sections: MenuSection[]
   foodSections: MenuSection[]
   pairings: Pairing[]
   foodPairings: FoodPairing[]
   featuredPick: FeaturedPick
+  foodFeaturedPick?: FoodFeaturedPick
   tasteWhy?: Record<string, { lead: string; post: string }>
 }
 

@@ -13,8 +13,11 @@ import CartBar from '@/components/CartBar'
 import ListSheet from '@/components/ListSheet'
 import LegendSheet from '@/components/LegendSheet'
 import type { VenueMenuData, TasteKey, FoodKey, MenuItem } from '@/lib/menu-data'
+import { TASTE_KEYS } from '@/lib/menu-data'
 import { tabOrder, pickLocale, money } from '@/lib/locale'
 import { type CartItem, loadCart, saveCart, addItem, changeQty, cartCount, cartTotal, parsePrice, clearCart } from '@/lib/cart'
+import { lsGet, lsSet } from '@/lib/storage'
+import { setLocaleAction } from '@/app/actions/locale'
 
 const SCALE_STEPS = [0.9, 1, 1.15, 1.3] as const
 
@@ -53,9 +56,14 @@ interface Props {
   locale: string
   leadTaste: TasteKey
   locales: string[]
+  logoSrc: string
+  onboarding: { pricesNote: string; welcome?: string }
+  defaultCategory?: 'cocktails' | 'food'
+  houseIndicator?: string
+  showCocktailGuide?: boolean
 }
 
-function SectionIcon({ taste }: { taste: TasteKey }) {
+function SectionIcon({ taste }: { taste: string }) {
   const s = { display: 'block' as const, color: 'var(--brand)', flexShrink: 0 as const }
   if (taste === 'bitter') return (
     <svg viewBox="0 0 160 160" style={{ ...s, width: 19, height: 19 }} aria-hidden>
@@ -86,20 +94,70 @@ function SectionIcon({ taste }: { taste: TasteKey }) {
   return null
 }
 
-export default function MenuClient({ menuData, venueSlug, locale, leadTaste, locales }: Props) {
+function ViewToggle({ mode, onChange }: { mode: 'expanded' | 'compact'; onChange: (m: 'expanded' | 'compact') => void }) {
+  const isCompact = mode === 'compact'
+  return (
+    <button
+      onClick={() => onChange(isCompact ? 'expanded' : 'compact')}
+      style={{
+        flexShrink: 0, padding: '0 13px', height: '100%', minHeight: 44,
+        background: 'transparent', border: 'none', borderLeft: '1px solid var(--line)',
+        cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        color: 'var(--ink-faint)',
+      }}
+      aria-label={isCompact ? 'Switch to card view' : 'Switch to list view'}
+    >
+      {isCompact ? (
+        /* grid.svg — switch back to cards */
+        <svg viewBox="0 0 48 48" width="17" height="17" fill="currentColor" style={{ display: 'block' }} aria-hidden>
+          <path d="m19.48 26.64h-17.1c-1.04 0-1.88.84-1.88 1.88v17.1c0 1.04.84 1.88 1.88 1.88h17.1c1.04 0 1.88-.84 1.88-1.88v-17.1c0-1.04-.84-1.88-1.88-1.88z"/>
+          <path d="m19.48.5h-17.1c-1.04 0-1.88.84-1.88 1.88v17.1c0 1.04.84 1.88 1.88 1.88h17.1c1.04 0 1.88-.84 1.88-1.88v-17.1c0-1.04-.84-1.88-1.88-1.88z"/>
+          <path d="m45.62.5h-17.1c-1.04 0-1.88.84-1.88 1.88v17.1c0 1.04.84 1.88 1.88 1.88h17.1c1.04 0 1.88-.84 1.88-1.88v-17.1c0-1.04-.84-1.88-1.88-1.88z"/>
+          <path d="m45.62 26.64h-17.1c-1.04 0-1.88.84-1.88 1.88v17.1c0 1.04.84 1.88 1.88 1.88h17.1c1.04 0 1.88-.84 1.88-1.88v-17.1c0-1.04-.84-1.88-1.88-1.88z"/>
+        </svg>
+      ) : (
+        /* view-list.svg — switch to compact */
+        <svg viewBox="0 0 28 28" width="17" height="17" fill="currentColor" style={{ display: 'block' }} aria-hidden>
+          <path d="m25 25h-14c-.6 0-1-.4-1-1v-4c0-.6.4-1 1-1h14c.6 0 1 .4 1 1v4c0 .6-.4 1-1 1zm-18 0h-4c-.6 0-1-.4-1-1v-4c0-.6.4-1 1-1h4c.6 0 1 .4 1 1v4c0 .6-.4 1-1 1zm18-8h-14c-.6 0-1-.4-1-1v-4c0-.6.4-1 1-1h14c.6 0 1 .4 1 1v4c0 .6-.4 1-1 1zm-18 0h-4c-.6 0-1-.4-1-1v-4c0-.6.4-1 1-1h4c.6 0 1 .4 1 1v4c0 .6-.4 1-1 1zm18-8h-14c-.6 0-1-.4-1-1v-4c0-.6.4-1 1-1h14c.6 0 1 .4 1 1v4c0 .6-.4 1-1 1zm-18 0h-4c-.6 0-1-.4-1-1v-4c0-.6.4-1 1-1h4c.6 0 1 .4 1 1v4c0 .6-.4 1-1 1z"/>
+        </svg>
+      )}
+    </button>
+  )
+}
+
+export default function MenuClient({ menuData, venueSlug, locale, leadTaste, locales, logoSrc, onboarding, defaultCategory, houseIndicator, showCocktailGuide }: Props) {
   const t = useTranslations()
   const router = useRouter()
 
-  const [category, setCategory] = useState<'cocktails' | 'food'>('cocktails')
-  const [tab, setTab] = useState<TasteKey>(leadTaste)
-  const [foodTab, setFoodTab] = useState<FoodKey>('pizza')
+  const hasCocktails = menuData.sections.length > 0
+  const hasFoodSections = menuData.foodSections.length > 0
+  const isTasteBased = hasCocktails && TASTE_KEYS.has(menuData.sections[0].key)
+  const initialCategory: 'cocktails' | 'food' = defaultCategory ?? (hasCocktails ? 'cocktails' : 'food')
+  const [category, setCategory] = useState<'cocktails' | 'food'>(initialCategory)
+  const [viewMode, setViewMode] = useState<'expanded' | 'compact'>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = sessionStorage.getItem(`osp_view_${venueSlug}`)
+      return saved === 'compact' ? 'compact' : 'expanded'
+    }
+    return 'expanded'
+  })
+  const [tab, setTab] = useState<string>(
+    isTasteBased ? leadTaste : (menuData.sections[0]?.key ?? '')
+  )
+  const [foodTab, setFoodTab] = useState<FoodKey>((menuData.foodSections[0]?.key as FoodKey) ?? 'pizza')
   const [openItem, setOpenItem] = useState<OpenItem | null>(null)
   const [showList, setShowList] = useState(false)
   const [legendOpen, setLegendOpen] = useState(false)
   const [pickDismissed, setPickDismissed] = useState(false)
+  const [foodPickDismissed, setFoodPickDismissed] = useState(false)
   const [cart, setCart] = useState<CartItem[]>([])
   const [fontScale, setFontScale] = useState(1)
   const [pendingScroll, setPendingScroll] = useState<string | null>(null)
+
+  const changeViewMode = (mode: 'expanded' | 'compact') => {
+    sessionStorage.setItem(`osp_view_${venueSlug}`, mode)
+    setViewMode(mode)
+  }
 
   const skipOpenRef = useRef(false)
 
@@ -107,30 +165,47 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
     const saved = loadCart(venueSlug)
     if (saved.length) setCart(saved)
 
-    const raw = parseFloat(localStorage.getItem('font_scale') ?? '1')
+    const raw = parseFloat(lsGet('font_scale') ?? '1')
     const fs = (SCALE_STEPS as readonly number[]).includes(raw) ? raw : 1
     setFontScale(fs)
     document.documentElement.style.setProperty('--font-scale', String(fs))
 
-    if (!localStorage.getItem('onboarding_seen')) setLegendOpen(true)
+    // lsGet returns null both when key absent and when localStorage is blocked (iframe).
+    // Treat both as first visit → show onboarding.
+    if (!lsGet(`onboarding_seen_${venueSlug}`)) setLegendOpen(true)
   }, [venueSlug])
 
   useEffect(() => { saveCart(venueSlug, cart) }, [cart, venueSlug])
 
-  // Scroll to pending item — reruns on tab/category change so element is in DOM
+  // Scroll to pending item — reruns on tab/category/foodTab change so element is in DOM
   useEffect(() => {
     if (!pendingScroll) return
     const el = document.getElementById(`item-${pendingScroll}`)
     if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); setPendingScroll(null) }
-  }, [pendingScroll, tab, category])
+  }, [pendingScroll, tab, category, foodTab])
 
   // ----- Indexes -----
   const cocktailIndex = useMemo(() => {
-    const m: Record<string, { item: MenuItem; taste: TasteKey }> = {}
+    const m: Record<string, { item: MenuItem; taste: string }> = {}
     for (const sec of menuData.sections)
-      for (const item of sec.items) m[item.slug] = { item, taste: sec.key as TasteKey }
+      for (const item of sec.items) m[item.slug] = { item, taste: sec.key }
     return m
   }, [menuData])
+
+  const cocktailTabs = useMemo((): string[] => {
+    if (!hasCocktails) return []
+    if (isTasteBased) {
+      const ordered = tabOrder(leadTaste) as string[]
+      return ordered.filter(k => menuData.sections.some(s => s.key === k))
+    }
+    return menuData.sections.map(s => s.key)
+  }, [menuData.sections, leadTaste, hasCocktails, isTasteBased])
+
+  const sectionByKey = useMemo(() => {
+    const m: Record<string, (typeof menuData.sections)[0]> = {}
+    for (const sec of menuData.sections) m[sec.key] = sec
+    return m
+  }, [menuData.sections])
 
   const foodIndex = useMemo(() => {
     const m: Record<string, MenuItem> = {}
@@ -155,6 +230,16 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
     cocktailIndex[menuData.featuredPick.cocktailRef] ?? null,
     [menuData, cocktailIndex])
 
+  const foodPickEntry = useMemo(() => {
+    const fp = menuData.foodFeaturedPick
+    if (!fp) return null
+    for (const sec of menuData.foodSections) {
+      const item = sec.items.find(i => i.slug === fp.itemRef)
+      if (item) return { item, sectionKey: sec.key as FoodKey }
+    }
+    return null
+  }, [menuData])
+
   // ----- Helpers -----
   const pl = <T,>(i18n: Record<string, T>) => pickLocale(i18n, locale)
 
@@ -165,11 +250,11 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
   const handleScaleChange = (v: number) => {
     setFontScale(v)
     document.documentElement.style.setProperty('--font-scale', String(v))
-    localStorage.setItem('font_scale', String(v))
+    lsSet('font_scale', String(v))
   }
 
-  const handleLocaleChange = (lc: string) => {
-    document.cookie = `osp_locale=${lc}; path=/; max-age=${60 * 60 * 24 * 30}`
+  const handleLocaleChange = async (lc: string) => {
+    await setLocaleAction(lc)   // server action sets cookie via Set-Cookie header (works in iframes)
     router.refresh()
   }
 
@@ -180,7 +265,9 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
     if (!entry) return
     const { item, taste } = entry
     const text = pl(item.i18n)
-    const tasteKey = (taste === 'bitter' || taste === 'sour' || taste === 'sweet') ? taste : undefined
+    const tasteKey = (taste === 'bitter' || taste === 'sour' || taste === 'sweet')
+      ? (taste as 'bitter' | 'sour' | 'sweet')
+      : undefined
     const pairing = pairingIndex[slug]
     const whyData = tasteKey ? menuData.tasteWhy?.[tasteKey] : undefined
 
@@ -251,14 +338,11 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
   }))
 
   // ----- Tab labels -----
-  const tasteTabs = tabOrder(leadTaste)
-  const tasteLabel: Record<TasteKey, string> = {
-    bitter: t('taste.bitter'), sour: t('taste.sour'), sweet: t('taste.sweet'),
-    spicy: t('taste.spicy'), zero: t('taste.zero'),
-  }
   const foodLabel: Record<string, string> = {
     pizza: t('food.pizza'), burgers: t('food.burgers'), sharing: t('food.sharing'),
   }
+  const foodTabLabel = (sec: typeof menuData.foodSections[0]) =>
+    pl(sec.i18n).label || foodLabel[sec.key] || sec.key
 
   const currentSection = menuData.sections.find(s => s.key === tab)
   const currentFoodSection = menuData.foodSections.find(s => s.key === foodTab)
@@ -267,7 +351,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
   const handlePickTap = () => {
     if (!pickEntry) return
     setCategory('cocktails')
-    setTab(pickEntry.taste)
+    setTab(pickEntry.taste)   // string from cocktailIndex
     setPendingScroll(pickEntry.item.slug)
   }
 
@@ -286,26 +370,29 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, position: 'relative', background: 'var(--surface)' }}>
 
       <HeaderControls
+        logoSrc={logoSrc}
         locale={locale} locales={locales} fontScale={fontScale}
         onOpenLegend={() => setLegendOpen(true)}
         onLocaleChange={handleLocaleChange}
         onScaleChange={handleScaleChange}
       />
 
-      {/* Category nav */}
-      <div style={{ flexShrink: 0, background: 'var(--surface)', borderBottom: '1px solid var(--line)' }}>
-        <div style={{ display: 'flex', padding: '0 18px' }}>
-          {(['cocktails', 'food'] as const).map(cat => {
-            const active = category === cat
-            return (
-              <button key={cat} onClick={() => { setCategory(cat); setOpenItem(null) }} style={tabBtn(active)}>
-                {cat === 'cocktails' ? t('category.cocktails') : t('category.food')}
-                {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
-              </button>
-            )
-          })}
+      {/* Category nav — hidden for food-only venues */}
+      {hasCocktails && menuData.foodSections.length > 0 && (
+        <div style={{ flexShrink: 0, background: 'var(--surface)', borderBottom: '1px solid var(--line)' }}>
+          <div style={{ display: 'flex', padding: '0 18px' }}>
+            {(defaultCategory === 'food' ? ['food', 'cocktails'] : ['cocktails', 'food'] as const).map(cat => {
+              const active = category === cat
+              return (
+                <button key={cat} onClick={() => { setCategory(cat); setOpenItem(null) }} style={tabBtn(active)}>
+                  {cat === 'cocktails' ? t('category.cocktails') : t('category.food')}
+                  {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
+                </button>
+              )
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Scrollable content */}
       <div className="scrollbar-none" style={{ flex: 1, minHeight: 0, overflowY: 'auto', background: 'var(--surface)' }}>
@@ -313,18 +400,23 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
         {/* ===== COCKTAILS ===== */}
         {category === 'cocktails' && (
           <>
-            <div className="scrollbar-none" style={{ position: 'sticky', top: 0, zIndex: 4, background: 'var(--surface)', borderBottom: '1px solid var(--line)', overflowX: 'auto' }}>
-              <div style={{ display: 'flex', padding: '0 16px', width: 'max-content' }}>
-                {tasteTabs.map(tk => {
-                  const active = tab === tk
-                  return (
-                    <button key={tk} onClick={() => setTab(tk)} style={tabBtn(active)}>
-                      {tasteLabel[tk]}
-                      {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
-                    </button>
-                  )
-                })}
+            <div style={{ position: 'sticky', top: 0, zIndex: 4, background: 'var(--surface)', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center' }}>
+              <div className="scrollbar-none" style={{ flex: 1, overflowX: 'auto' }}>
+                <div style={{ display: 'flex', padding: '0 16px', width: 'max-content' }}>
+                  {cocktailTabs.map(tk => {
+                    const active = tab === tk
+                    const sec = sectionByKey[tk]
+                    const label = sec ? pl(sec.i18n).label : tk
+                    return (
+                      <button key={tk} onClick={() => setTab(tk)} style={tabBtn(active)}>
+                        {label}
+                        {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
+                      </button>
+                    )
+                  })}
+                </div>
               </div>
+              <ViewToggle mode={viewMode} onChange={changeViewMode} />
             </div>
 
             <div style={{ padding: '0 18px 50px' }}>
@@ -365,16 +457,18 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
                 )
               })()}
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginTop: 16 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: viewMode === 'compact' ? 0 : 14, marginTop: viewMode === 'compact' ? 8 : 16 }}>
                 {currentSection?.items.map(item => {
                   const text = pl(item.i18n)
                   return (
                     <ItemCard
                       key={item.slug} id={item.slug}
                       name={text.name} desc={text.desc} price={money(item.price)}
-                      glass={item.glass} taste={currentSection.key as TasteKey}
+                      glass={item.glass} taste={currentSection.key}
+                      compact={viewMode === 'compact'}
                       lvl={item.lvl} flavor={item.flavor}
                       loved={item.loved} house={item.house}
+                      houseIndicator={houseIndicator}
                       videoSrc={item.videoSrc} posterSrc={item.posterSrc}
                       lovedLabel="loved here"
                       onTap={() => openCocktailDetail(item.slug)}
@@ -399,18 +493,21 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
         {/* ===== FOOD ===== */}
         {category === 'food' && (
           <>
-            <div className="scrollbar-none" style={{ position: 'sticky', top: 0, zIndex: 4, background: 'var(--surface)', borderBottom: '1px solid var(--line)', overflowX: 'auto' }}>
-              <div style={{ display: 'flex', padding: '0 16px', width: 'max-content' }}>
-                {menuData.foodSections.map(sec => {
-                  const active = foodTab === sec.key
-                  return (
-                    <button key={sec.key} onClick={() => setFoodTab(sec.key as FoodKey)} style={tabBtn(active)}>
-                      {foodLabel[sec.key] ?? sec.key}
-                      {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
-                    </button>
-                  )
-                })}
+            <div style={{ position: 'sticky', top: 0, zIndex: 4, background: 'var(--surface)', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center' }}>
+              <div className="scrollbar-none" style={{ flex: 1, overflowX: 'auto' }}>
+                <div style={{ display: 'flex', padding: '0 16px', width: 'max-content' }}>
+                  {menuData.foodSections.map(sec => {
+                    const active = foodTab === sec.key
+                    return (
+                      <button key={sec.key} onClick={() => setFoodTab(sec.key as FoodKey)} style={tabBtn(active)}>
+                        {foodTabLabel(sec)}
+                        {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
+                      </button>
+                    )
+                  })}
+                </div>
               </div>
+              <ViewToggle mode={viewMode} onChange={changeViewMode} />
             </div>
 
             <div style={{ padding: '0 18px 50px' }}>
@@ -419,23 +516,65 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
               )}
 
               {currentFoodSection && (() => {
-                const secText = pl(currentFoodSection.i18n) as { label: string; sub: string }
+                const secText = pl(currentFoodSection.i18n) as { label: string; sub?: string; badge?: string; note?: string }
                 return (
-                  <div style={{ display: 'flex', alignItems: 'flex-end', marginTop: 24, borderBottom: '1px solid var(--line-strong)', paddingBottom: 7 }}>
-                    <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.3125rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-heading)', lineHeight: 1 }}>
-                      {secText.label}
-                    </h3>
+                  <div style={{ marginTop: 24, borderBottom: '1px solid var(--line-strong)', paddingBottom: 7 }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 10 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                        <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.3125rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-heading)', lineHeight: 1 }}>
+                          {secText.label}
+                        </h3>
+                        {secText.badge && (
+                          <span style={{
+                            fontFamily: 'var(--font-text)', fontSize: 'var(--badge-size, 9px)',
+                            letterSpacing: '0.12em', textTransform: 'uppercase',
+                            color: 'var(--badge-color, var(--brand-bright))',
+                            background: 'var(--badge-bg, var(--surface-frame))',
+                            border: 'var(--badge-border, 1px solid var(--brand))',
+                            borderRadius: 'var(--badge-radius, 0px)',
+                            padding: 'var(--badge-padding, 2px 6px)',
+                            whiteSpace: 'nowrap', flexShrink: 0,
+                          }}>
+                            {secText.badge}
+                          </span>
+                        )}
+                      </div>
+                      {secText.sub && (
+                        <span style={{
+                          fontFamily: 'var(--font-text)', fontWeight: 300,
+                          fontSize: 'var(--section-sub-size, 0.6875rem)', letterSpacing: '0.04em',
+                          color: 'var(--section-sub-color, var(--ink-faint))', textAlign: 'right', maxWidth: 150,
+                        }}>
+                          {secText.sub}
+                        </span>
+                      )}
+                    </div>
+                    {secText.note && (
+                      <div style={{
+                        background: 'var(--note-bg, var(--surface-frame))',
+                        borderLeft: '3px solid var(--note-border-color, var(--brand))',
+                        padding: '10px 14px', marginTop: 12,
+                        fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.75rem', lineHeight: 1.5,
+                        color: 'var(--note-text-color, var(--ink-body))',
+                      }}>
+                        {secText.note}
+                      </div>
+                    )}
                   </div>
                 )
               })()}
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 16 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: viewMode === 'compact' ? 0 : 12, marginTop: viewMode === 'compact' ? 8 : 16 }}>
                 {currentFoodSection?.items.map(item => {
                   const text = pl(item.i18n)
                   return (
                     <FoodCard
                       key={item.slug} id={item.slug}
-                      name={text.name} desc={text.desc} price={money(item.price)}
+                      name={text.name} desc={text.desc} price={item.price}
+                      badge={item.badge}
+                      compact={viewMode === 'compact'}
+                      videoSrc={item.videoSrc}
+                      posterSrc={item.posterSrc}
                       onTap={() => openFoodDetail(item.slug)}
                       onAdd={(e) => {
                         e.stopPropagation()
@@ -447,6 +586,73 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
                   )
                 })}
               </div>
+
+              {/* Food featured pick callout — appears at bottom of showAfterSection tab */}
+              {!foodPickDismissed && menuData.foodFeaturedPick?.showAfterSection === foodTab && foodPickEntry && (() => {
+                const fp = menuData.foodFeaturedPick!
+                const fpText = pl(fp.i18n) as { label: string; desc?: string }
+                const itemText = pl(foodPickEntry.item.i18n)
+                return (
+                  <div
+                    onClick={() => {
+                      skipOpenRef.current = true
+                      setTimeout(() => { skipOpenRef.current = false }, 0)
+                      setFoodTab(foodPickEntry.sectionKey)
+                      setPendingScroll(foodPickEntry.item.slug)
+                    }}
+                    style={{
+                      cursor: 'pointer',
+                      background: 'var(--pick-bg, var(--surface-frame))',
+                      borderLeft: '3px solid var(--pick-border-color, var(--brand))',
+                      padding: '16px 20px',
+                      margin: '20px -18px 0',
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                      <span style={{
+                        fontFamily: 'var(--font-text)', fontWeight: 600, fontSize: '11px',
+                        letterSpacing: '0.2em', textTransform: 'uppercase',
+                        color: 'var(--pick-label-color, var(--brand-bright))',
+                      }}>
+                        {fpText.label}
+                      </span>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setFoodPickDismissed(true) }}
+                        style={{
+                          background: 'transparent', border: 'none', cursor: 'pointer',
+                          color: 'var(--ink-faint)', fontSize: '0.9375rem', lineHeight: 1,
+                          padding: '0 0 0 8px', flexShrink: 0,
+                        }}
+                        aria-label="Dismiss"
+                      >
+                        ×
+                      </button>
+                    </div>
+                    {fpText.desc && (
+                      <p style={{
+                        fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.71875rem',
+                        color: 'var(--pick-muted, var(--ink-faint))', margin: '8px 0 10px', lineHeight: 1.45,
+                      }}>
+                        {fpText.desc}
+                      </p>
+                    )}
+                    <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12 }}>
+                      <span style={{
+                        fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: '1.25rem',
+                        color: 'var(--ink-heading)', letterSpacing: '0.02em',
+                      }}>
+                        {itemText.name}
+                      </span>
+                      <span style={{
+                        fontFamily: 'var(--font-text)', fontWeight: 500, fontSize: '0.9375rem',
+                        color: 'var(--ink-heading)', flexShrink: 0,
+                      }}>
+                        {money(foodPickEntry.item.price)}
+                      </span>
+                    </div>
+                  </div>
+                )
+              })()}
 
               <div style={{ textAlign: 'center', fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.5625rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgb(84 89 90 / 0.32)', marginTop: 34 }}>
                 {t('footer.powered')}
@@ -499,14 +705,15 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
       {legendOpen && (
         <LegendSheet
           title={t('legend.title')} sub={t('legend.sub')}
+          hasCocktails={hasCocktails} showRows={showCocktailGuide ?? true}
           bitterName={t('legend.bitter_name')} bitterDesc={t('legend.bitter_desc')}
           sourName={t('legend.sour_name')} sourDesc={t('legend.sour_desc')}
           sweetName={t('legend.sweet_name')} sweetDesc={t('legend.sweet_desc')}
           marksName={t('legend.marks_name')} marksDesc={t('legend.marks_desc')}
           oliveName={t('legend.olive_name')} oliveDesc={t('legend.olive_desc')}
           lovedName={t('legend.loved_name')} lovedDesc={t('legend.loved_desc')}
-          pricesNote={t('legend.prices')} cta={t('legend.cta')}
-          onClose={() => { localStorage.setItem('onboarding_seen', '1'); setLegendOpen(false) }}
+          pricesNote={onboarding.pricesNote} welcome={onboarding.welcome} cta={t('legend.cta')}
+          onClose={() => { lsSet(`onboarding_seen_${venueSlug}`, '1'); setLegendOpen(false) }}
         />
       )}
     </div>

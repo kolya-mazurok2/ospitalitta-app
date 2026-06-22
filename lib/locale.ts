@@ -90,3 +90,11 @@ export function pickLocale<T>(
 export function money(price: string): string {
   return price.replace(/^L/, '')
 }
+
+/** Split price into display amount and unit label (for per-weight/per-person items). */
+export function parsePriceDisplay(price: string): { amount: string; unit: string | null } {
+  const stripped = price.replace(/^L/, '')
+  if (stripped.endsWith('/kg'))   return { amount: stripped.slice(0, -3), unit: 'PER KG' }
+  if (stripped.endsWith('/100g')) return { amount: stripped.slice(0, -5), unit: 'PER 100 G' }
+  return { amount: stripped, unit: null }
+}
