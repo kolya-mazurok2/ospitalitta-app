@@ -381,7 +381,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
       {hasCocktails && menuData.foodSections.length > 0 && (
         <div style={{ flexShrink: 0, background: 'var(--surface)', borderBottom: '1px solid var(--line)' }}>
           <div style={{ display: 'flex', padding: '0 18px' }}>
-            {(defaultCategory === 'food' ? ['food', 'cocktails'] : ['cocktails', 'food'] as const).map(cat => {
+            {(defaultCategory === 'food' ? ['food', 'cocktails'] : ['cocktails', 'food'] as ('cocktails' | 'food')[]).map(cat => {
               const active = category === cat
               return (
                 <button key={cat} onClick={() => { setCategory(cat); setOpenItem(null) }} style={tabBtn(active)}>
