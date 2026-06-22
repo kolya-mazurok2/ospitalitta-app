@@ -25,11 +25,13 @@ interface Props {
   onOpenLegend: () => void
   onLocaleChange: (locale: string) => void
   onScaleChange: (scale: number) => void
+  headerDecor?: string
+  headerDecorLeft?: string
 }
 
 export default function HeaderControls({
   logoSrc, locale, locales, fontScale,
-  onOpenLegend, onLocaleChange, onScaleChange,
+  onOpenLegend, onLocaleChange, onScaleChange, headerDecor, headerDecorLeft,
 }: Props) {
   const [aaOpen, setAaOpen] = useState(false)
   const [langOpen, setLangOpen] = useState(false)
@@ -42,6 +44,42 @@ export default function HeaderControls({
       flexShrink: 0, padding: '20px 20px 12px',
       background: 'var(--surface)', position: 'relative', zIndex: 6,
     }}>
+      {headerDecor && (
+        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+          <img
+            src={headerDecor}
+            alt=""
+            aria-hidden
+            style={{
+              position: 'absolute',
+              right: 'calc(3% - 120px)', top: 'calc(50% + 20px)',
+              transform: 'translateY(-50%) rotate(-8deg)',
+              width: '48%',
+              opacity: 0.20,
+              mixBlendMode: 'multiply',
+              filter: 'saturate(0.8)',
+              pointerEvents: 'none',
+            }}
+          />
+        </div>
+      )}
+      {headerDecorLeft && (
+        <img
+          src={headerDecorLeft}
+          alt=""
+          aria-hidden
+          style={{
+            position: 'absolute',
+            left: 14, bottom: -28,
+            width: 64,
+            opacity: 0.26,
+            mixBlendMode: 'multiply',
+            filter: 'saturate(0.75)',
+            transform: 'rotate(18deg)',
+            pointerEvents: 'none',
+          }}
+        />
+      )}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
         {/* logo */}
         <Image

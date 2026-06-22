@@ -18,6 +18,7 @@ import { tabOrder, pickLocale, money } from '@/lib/locale'
 import { type CartItem, loadCart, saveCart, addItem, changeQty, cartCount, cartTotal, parsePrice, clearCart } from '@/lib/cart'
 import { lsGet, lsSet } from '@/lib/storage'
 import { setLocaleAction } from '@/app/actions/locale'
+import MenuBackdrop from '@/components/MenuBackdrop'
 
 const SCALE_STEPS = [0.9, 1, 1.15, 1.3] as const
 
@@ -61,6 +62,9 @@ interface Props {
   defaultCategory?: 'cocktails' | 'food'
   houseIndicator?: string
   showCocktailGuide?: boolean
+  backgroundTheme?: 'seafood' | 'cocktail' | 'none'
+  headerDecor?: string
+  headerDecorLeft?: string
 }
 
 function SectionIcon({ taste }: { taste: string }) {
@@ -125,7 +129,7 @@ function ViewToggle({ mode, onChange }: { mode: 'expanded' | 'compact'; onChange
   )
 }
 
-export default function MenuClient({ menuData, venueSlug, locale, leadTaste, locales, logoSrc, onboarding, defaultCategory, houseIndicator, showCocktailGuide }: Props) {
+export default function MenuClient({ menuData, venueSlug, locale, leadTaste, locales, logoSrc, onboarding, defaultCategory, houseIndicator, showCocktailGuide, backgroundTheme, headerDecor, headerDecorLeft }: Props) {
   const t = useTranslations()
   const router = useRouter()
 
@@ -369,12 +373,16 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, position: 'relative', background: 'var(--surface)' }}>
 
+      <MenuBackdrop theme={backgroundTheme ?? 'none'} />
+
       <HeaderControls
         logoSrc={logoSrc}
         locale={locale} locales={locales} fontScale={fontScale}
         onOpenLegend={() => setLegendOpen(true)}
         onLocaleChange={handleLocaleChange}
         onScaleChange={handleScaleChange}
+        headerDecor={headerDecor}
+        headerDecorLeft={headerDecorLeft}
       />
 
       {/* Category nav — hidden for food-only venues */}
@@ -397,30 +405,52 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
         </div>
       )}
 
+      {/* Tabs outside scrollable — backdrop paints over them like CategoryNav */}
+      {category === 'cocktails' && (
+        <div style={{ flexShrink: 0, background: 'var(--surface)', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center' }}>
+          <div className="scrollbar-none" style={{ flex: 1, overflowX: 'auto' }}>
+            <div style={{ display: 'flex', padding: '0 16px', width: 'max-content' }}>
+              {cocktailTabs.map(tk => {
+                const active = tab === tk
+                const sec = sectionByKey[tk]
+                const label = sec ? pl(sec.i18n).label : tk
+                return (
+                  <button key={tk} onClick={() => setTab(tk)} style={tabBtn(active)}>
+                    {label}
+                    {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+          <ViewToggle mode={viewMode} onChange={changeViewMode} />
+        </div>
+      )}
+      {category === 'food' && (
+        <div style={{ flexShrink: 0, background: 'var(--surface)', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center' }}>
+          <div className="scrollbar-none" style={{ flex: 1, overflowX: 'auto' }}>
+            <div style={{ display: 'flex', padding: '0 16px', width: 'max-content' }}>
+              {menuData.foodSections.map(sec => {
+                const active = foodTab === sec.key
+                return (
+                  <button key={sec.key} onClick={() => setFoodTab(sec.key as FoodKey)} style={tabBtn(active)}>
+                    {foodTabLabel(sec)}
+                    {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+          <ViewToggle mode={viewMode} onChange={changeViewMode} />
+        </div>
+      )}
+
       {/* Scrollable content */}
-      <div className="scrollbar-none" style={{ flex: 1, minHeight: 0, overflowY: 'auto', background: 'var(--surface)' }}>
+      <div className="scrollbar-none" style={{ flex: 1, minHeight: 0, overflowY: 'auto', position: 'relative', zIndex: 1 }}>
 
         {/* ===== COCKTAILS ===== */}
         {category === 'cocktails' && (
           <>
-            <div style={{ position: 'sticky', top: 0, zIndex: 4, background: 'var(--surface)', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center' }}>
-              <div className="scrollbar-none" style={{ flex: 1, overflowX: 'auto' }}>
-                <div style={{ display: 'flex', padding: '0 16px', width: 'max-content' }}>
-                  {cocktailTabs.map(tk => {
-                    const active = tab === tk
-                    const sec = sectionByKey[tk]
-                    const label = sec ? pl(sec.i18n).label : tk
-                    return (
-                      <button key={tk} onClick={() => setTab(tk)} style={tabBtn(active)}>
-                        {label}
-                        {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-              <ViewToggle mode={viewMode} onChange={changeViewMode} />
-            </div>
 
             <div style={{ padding: '0 18px 50px' }}>
               {pickShown && pickEntry && (() => {
@@ -496,22 +526,6 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
         {/* ===== FOOD ===== */}
         {category === 'food' && (
           <>
-            <div style={{ position: 'sticky', top: 0, zIndex: 4, background: 'var(--surface)', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center' }}>
-              <div className="scrollbar-none" style={{ flex: 1, overflowX: 'auto' }}>
-                <div style={{ display: 'flex', padding: '0 16px', width: 'max-content' }}>
-                  {menuData.foodSections.map(sec => {
-                    const active = foodTab === sec.key
-                    return (
-                      <button key={sec.key} onClick={() => setFoodTab(sec.key as FoodKey)} style={tabBtn(active)}>
-                        {foodTabLabel(sec)}
-                        {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-              <ViewToggle mode={viewMode} onChange={changeViewMode} />
-            </div>
 
             <div style={{ padding: '0 18px 50px' }}>
               {foodTab === 'pizza' && (
@@ -681,6 +695,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
             pushToCart(openItem.slug, openItem.name, openItem.rawPrice)
             setOpenItem(null)
           }}
+          backgroundTheme={backgroundTheme ?? 'none'}
         />
       )}
 

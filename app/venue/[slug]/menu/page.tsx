@@ -39,6 +39,9 @@ export default async function MenuPage({ params }: Props) {
       defaultCategory={venue.defaultCategory}
       houseIndicator={venue.houseIndicator}
       showCocktailGuide={venue.showCocktailGuide ?? true}
+      backgroundTheme={venue.backgroundTheme ?? 'none'}
+      headerDecor={venue.headerDecor}
+      headerDecorLeft={venue.headerDecorLeft}
     />
   )
 }

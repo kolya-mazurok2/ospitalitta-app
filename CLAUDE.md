@@ -437,6 +437,13 @@ Individual venue can override specific token values by appending to their own st
 
 ## Dev Rules — do not violate
 
+### Before ANY decision — state your confidence level
+Before implementing anything non-trivial, write ONE sentence:
+"Confidence: X/10 — [why I might be wrong]"
+If confidence < 8, ask before doing. This catches hallucinations before they become wasted work.
+Examples of low-confidence signals: assuming a layout without seeing a design, guessing a
+component exists, inferring what "fix X" means without seeing the current state of X.
+
 ### Never assume layout without a design spec
 If a component renders elements in a certain order (e.g. desc → name, or name → price),
 **do not reorder them** unless:

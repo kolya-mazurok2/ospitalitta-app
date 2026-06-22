@@ -265,8 +265,8 @@ const freshFish: MenuSection = {
   key: 'fresh-fish',
   type: 'food',
   i18n: {
-    en: { label: 'Fresh fish', sub: 'Per 100 g · Grilled or oven-baked, with grilled vegetables. A typical portion is about 300 to 400 g.' },
-    pl: { label: 'Świeże ryby', sub: 'Za 100 g · Z grilla lub z pieca, z grillowanymi warzywami. Typowa porcja to ok. 300–400 g.' },
+    en: { label: 'Fresh fish', sub: 'Per 100 g' },
+    pl: { label: 'Świeże ryby', sub: 'Za 100 g' },
   },
   items: [
     { id: 'levrek', slug: 'levrek', price: 'L650/100g', glass: 'wine',

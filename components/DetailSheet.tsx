@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import TasteMark from '@/components/TasteMark'
+import MenuBackdrop from '@/components/MenuBackdrop'
 
 interface DishRow {
   name: string
@@ -30,12 +31,13 @@ interface Props {
   foodWhy?: string       // food pairing single-string why
   onClose: () => void
   onAdd: () => void
+  backgroundTheme?: 'seafood' | 'cocktail' | 'none'
 }
 
 export default function DetailSheet({
   name, desc, price, taste, n, single, loved, house,
   pairLabel, dishes, hasWhy, whyIsCocktail, whyLead, whyDrink, whyPost, foodWhy,
-  onClose, onAdd,
+  onClose, onAdd, backgroundTheme,
 }: Props) {
   const [tipOpen, setTipOpen] = useState(false)
 
@@ -61,11 +63,13 @@ export default function DetailSheet({
           background: 'var(--sheet-bg)',
           borderRadius: 'var(--sheet-radius)',
           display: 'flex', flexDirection: 'column',
-          overflow: 'visible',
+          overflow: 'hidden',
           zIndex: 6,
           boxShadow: '0 -20px 50px rgb(0 0 0 / 0.3)',
         }}
       >
+        <MenuBackdrop theme={backgroundTheme ?? 'none'} />
+
         {/* drag handle */}
         <div style={{ flexShrink: 0, padding: '14px 0 6px', display: 'flex', justifyContent: 'center' }}>
           <div

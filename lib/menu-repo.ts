@@ -35,8 +35,11 @@ export interface VenueConfig {
   onboarding: VenueOnboarding
   logoSrc: string
   defaultCategory?: 'cocktails' | 'food'
-  houseIndicator?: 'olive' | 'shell'  // venue signature mark shown after house item names
-  showCocktailGuide?: boolean         // show bitter/sour/sweet legend rows (default true; false for food-led venues)
+  houseIndicator?: 'olive' | 'shell'
+  showCocktailGuide?: boolean
+  backgroundTheme?: 'seafood' | 'cocktail' | 'none'
+  headerDecor?: string
+  headerDecorLeft?: string
 }
 
 const venues: Record<string, VenueConfig> = {
@@ -56,6 +59,8 @@ const venues: Record<string, VenueConfig> = {
     logoSrc: '/venue-assets/saly/saly-inverse-pine-on-sand.png',
     defaultCategory: 'food',
     showCocktailGuide: false,
+    backgroundTheme: 'seafood',
+    headerDecor: '/decor/seafood/snapper-2.png',
     onboarding: {
       pricesNote: 'Prices in Lekë',
     },
@@ -75,6 +80,7 @@ const venues: Record<string, VenueConfig> = {
     },
     logoSrc: '/assets/bb-logo-crop.png',
     houseIndicator: 'olive',
+    backgroundTheme: 'cocktail',
     onboarding: {
       pricesNote: 'Prices in Lekë',
     },

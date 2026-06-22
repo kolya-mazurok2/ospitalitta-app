@@ -77,24 +77,13 @@ export default function ItemCard({
             </span>
             {showIndicator && <OliveSvg size={9} inline style={{ marginLeft: 3 }} />}
           </div>
-          {/* Line 2: desc truncates, price always fits — same font so they read as one text */}
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 0, marginTop: 2 }}>
-            <p style={{
-              flex: 1, minWidth: 0, margin: 0,
-              fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.6875rem',
-              color: 'var(--ink-faint)',
-              overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-            }}>
-              {desc}
-            </p>
-            <span style={{
-              flexShrink: 0,
-              fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.6875rem',
-              color: 'var(--ink-faint)',
-            }}>
-              {desc ? ' ' : ''}{price}
-            </span>
-          </div>
+          <p style={{
+            fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.6875rem',
+            color: 'var(--ink-faint)', margin: '2px 0 0',
+            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+          }}>
+            {desc ? `${desc} ${price}` : price}
+          </p>
         </div>
         <button
           onClick={(e) => { e.stopPropagation(); onAdd(e) }}
