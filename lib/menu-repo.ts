@@ -37,7 +37,9 @@ export interface VenueConfig {
   onboarding: VenueOnboarding
   logoSrc?: string       // image path — use when venue has a logo file
   logoText?: string      // text wordmark — use when venue wordmark is live type (e.g. Côte)
-  defaultCategory?: 'cocktails' | 'food'
+  defaultCategory?: 'cocktails' | 'drinks' | 'food'
+  drinksCategoryLabel?: 'cocktails' | 'drinks'  // label for left category tab (default: 'cocktails')
+  forceCompact?: boolean  // always render items in compact list mode, hide view toggle
   houseIndicator?: 'olive' | 'shell'
   showCocktailGuide?: boolean
   backgroundTheme?: 'seafood' | 'cocktail' | 'none'
@@ -82,7 +84,9 @@ const venues: Record<string, VenueConfig> = {
       ],
     },
     logoText: 'Côte',
-    defaultCategory: 'food',
+    defaultCategory: 'drinks',
+    drinksCategoryLabel: 'drinks',
+    forceCompact: true,
     showCocktailGuide: false,
     backgroundTheme: 'none',
     onboarding: {

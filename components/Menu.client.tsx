@@ -60,7 +60,9 @@ interface Props {
   logoSrc?: string
   logoText?: string
   onboarding: { pricesNote: string; welcome?: string }
-  defaultCategory?: 'cocktails' | 'food'
+  defaultCategory?: 'cocktails' | 'drinks' | 'food'
+  drinksCategoryLabel?: 'cocktails' | 'drinks'
+  forceCompact?: boolean
   houseIndicator?: string
   showCocktailGuide?: boolean
   backgroundTheme?: 'seafood' | 'cocktail' | 'none'
@@ -130,16 +132,18 @@ function ViewToggle({ mode, onChange }: { mode: 'expanded' | 'compact'; onChange
   )
 }
 
-export default function MenuClient({ menuData, venueSlug, locale, leadTaste, locales, logoSrc, logoText, onboarding, defaultCategory, houseIndicator, showCocktailGuide, backgroundTheme, headerDecor, headerDecorLeft }: Props) {
+export default function MenuClient({ menuData, venueSlug, locale, leadTaste, locales, logoSrc, logoText, onboarding, defaultCategory, drinksCategoryLabel, forceCompact, houseIndicator, showCocktailGuide, backgroundTheme, headerDecor, headerDecorLeft }: Props) {
   const t = useTranslations()
   const router = useRouter()
 
   const hasCocktails = menuData.sections.length > 0
   const hasFoodSections = menuData.foodSections.length > 0
   const isTasteBased = hasCocktails && TASTE_KEYS.has(menuData.sections[0].key)
-  const initialCategory: 'cocktails' | 'food' = defaultCategory ?? (hasCocktails ? 'cocktails' : 'food')
+  const rawDefault = defaultCategory ?? (hasCocktails ? 'cocktails' : 'food')
+  const initialCategory: 'cocktails' | 'food' = rawDefault === 'drinks' ? 'cocktails' : rawDefault
   const [category, setCategory] = useState<'cocktails' | 'food'>(initialCategory)
   const [viewMode, setViewMode] = useState<'expanded' | 'compact'>(() => {
+    if (forceCompact) return 'compact'
     if (typeof window !== 'undefined') {
       const saved = sessionStorage.getItem(`osp_view_${venueSlug}`)
       return saved === 'compact' ? 'compact' : 'expanded'
@@ -397,7 +401,9 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
               const active = category === cat
               return (
                 <button key={cat} onClick={() => { setCategory(cat); setOpenItem(null) }} style={tabBtn(active)}>
-                  {cat === 'cocktails' ? t('category.cocktails') : t('category.food')}
+                  {cat === 'cocktails'
+                    ? t(`category.${drinksCategoryLabel ?? 'cocktails'}`)
+                    : t('category.food')}
                   {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
                 </button>
               )
@@ -424,7 +430,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
               })}
             </div>
           </div>
-          <ViewToggle mode={viewMode} onChange={changeViewMode} />
+          {!forceCompact && <ViewToggle mode={viewMode} onChange={changeViewMode} />}
         </div>
       )}
       {category === 'food' && (
@@ -442,7 +448,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
               })}
             </div>
           </div>
-          <ViewToggle mode={viewMode} onChange={changeViewMode} />
+          {!forceCompact && <ViewToggle mode={viewMode} onChange={changeViewMode} />}
         </div>
       )}
 
@@ -472,20 +478,33 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
               })()}
 
               {currentSection && (() => {
-                const secText = pl(currentSection.i18n) as { label: string; sub: string }
+                const secText = pl(currentSection.i18n) as { label: string; sub?: string; note?: string }
                 const hasIcon = tab === 'bitter' || tab === 'sour' || tab === 'sweet'
                 return (
-                  <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 10, marginTop: 24, borderBottom: '1px solid var(--line-strong)', paddingBottom: 7 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 9, minWidth: 0 }}>
-                      {hasIcon && <SectionIcon taste={tab} />}
-                      <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.3125rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-heading)', lineHeight: 1 }}>
-                        {secText.label}
-                      </h3>
+                  <div style={{ marginTop: 24, borderBottom: '1px solid var(--line-strong)', paddingBottom: 7 }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 10 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 9, minWidth: 0 }}>
+                        {hasIcon && <SectionIcon taste={tab} />}
+                        <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.3125rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-heading)', lineHeight: 1 }}>
+                          {secText.label}
+                        </h3>
+                      </div>
+                      {secText.sub && (
+                        <span style={{ fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.625rem', letterSpacing: '0.02em', color: 'var(--ink-faint)', textAlign: 'right', maxWidth: 150 }}>
+                          {secText.sub}
+                        </span>
+                      )}
                     </div>
-                    {secText.sub && (
-                      <span style={{ fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.625rem', letterSpacing: '0.02em', color: 'var(--ink-faint)', textAlign: 'right', maxWidth: 150 }}>
-                        {secText.sub}
-                      </span>
+                    {secText.note && (
+                      <div style={{
+                        background: 'var(--note-bg, var(--surface-frame))',
+                        borderLeft: '3px solid var(--note-border-color, var(--brand))',
+                        padding: '10px 14px', marginTop: 12,
+                        fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.75rem', lineHeight: 1.5,
+                        color: 'var(--note-text-color, var(--ink-body))',
+                      }}>
+                        {secText.note}
+                      </div>
                     )}
                   </div>
                 )

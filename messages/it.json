@@ -1,6 +1,7 @@
 {
   "category": {
     "cocktails": "Cocktail",
+    "drinks": "Bevande",
     "food": "Cibo"
   },
   "taste": {

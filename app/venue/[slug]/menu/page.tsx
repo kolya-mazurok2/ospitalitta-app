@@ -38,6 +38,8 @@ export default async function MenuPage({ params }: Props) {
       logoText={venue.logoText}
       onboarding={{ pricesNote: venue.onboarding.pricesNote, welcome }}
       defaultCategory={venue.defaultCategory}
+      drinksCategoryLabel={venue.drinksCategoryLabel}
+      forceCompact={venue.forceCompact}
       houseIndicator={venue.houseIndicator}
       showCocktailGuide={venue.showCocktailGuide ?? true}
       backgroundTheme={venue.backgroundTheme ?? 'none'}
