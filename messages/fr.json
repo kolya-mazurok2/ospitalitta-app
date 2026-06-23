@@ -1,0 +1,56 @@
+{
+  "category": {
+    "cocktails": "Cocktails",
+    "food": "Plats"
+  },
+  "taste": {
+    "bitter": "Amer",
+    "sour": "Acide",
+    "sweet": "Sucré",
+    "spicy": "Épicé",
+    "zero": "Sans alcool"
+  },
+  "food": {
+    "pizza": "Pizza",
+    "burgers": "Burgers",
+    "sharing": "À partager"
+  },
+  "pick": {
+    "label": "Les Brothers recommandent"
+  },
+  "pizza_note": {
+    "text": "Nos pizzas arrivent en 5 à 7 minutes du four. Ça vaut la petite attente.",
+    "bold": "Faites à la commande."
+  },
+  "legend": {
+    "title": "Comment lire ce menu",
+    "sub": "Nous trions par goût, pas par nom.\nVoici ce que signifient les marques.",
+    "bitter_name": "Amer",
+    "bitter_desc": "amertume",
+    "sour_name": "Acide",
+    "sour_desc": "acidité",
+    "sweet_name": "Sucré",
+    "sweet_desc": "douceur",
+    "marks_name": "Marques",
+    "marks_desc": "intensité",
+    "olive_name": "Olive",
+    "olive_desc": "nos signatures",
+    "loved_name": "Aimé ici",
+    "loved_desc": "best-sellers",
+    "cta": "Compris"
+  },
+  "cart": {
+    "show_waiter": "Montrer au serveur",
+    "open_list": "Montrez ceci au serveur",
+    "keep_browsing": "Continuer à explorer",
+    "total_label": "Total · Lekë",
+    "clear": "Effacer la commande"
+  },
+  "pairing": {
+    "drink_label": "Ce que ce drink aime dans l'assiette :",
+    "plate_label": "Ce que ce plat aime dans le verre :"
+  },
+  "footer": {
+    "powered": "powered by Ospitalitta"
+  }
+}

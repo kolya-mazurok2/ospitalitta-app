@@ -84,7 +84,11 @@ export interface VenueMenuData {
 const bitter: MenuSection = {
   key: 'bitter',
   type: 'cocktail',
-  i18n: { en: { label: 'Bitter', sub: 'Grown-up and bittersweet, the before-dinner ones' } },
+  i18n: {
+    en: { label: 'Bitter', sub: 'Grown-up and bittersweet, the before-dinner ones' },
+    sq: { label: 'Të hidhura' },
+    it: { label: 'Amaro' },
+  },
   items: [
     { id: 'aperol-spritz', slug: 'aperol-spritz', price: 'L500', glass: 'wine', lvl: 1, loved: true,
       videoSrc: '/venue-assets/bottle-brothers/bb-cocktail-1.webm',
@@ -108,7 +112,11 @@ const bitter: MenuSection = {
 const sour: MenuSection = {
   key: 'sour',
   type: 'cocktail',
-  i18n: { en: { label: 'Sour', sub: 'Bright and sharp, wakes you up' } },
+  i18n: {
+    en: { label: 'Sour', sub: 'Bright and sharp, wakes you up' },
+    sq: { label: 'Të thartat' },
+    it: { label: 'Aspro' },
+  },
   items: [
     { id: 'bergamot-spritz', slug: 'bergamot-spritz', price: 'L500', glass: 'wine', lvl: 1,
       i18n: { en: { name: 'Bergamot Spritz', desc: 'Bergamot, lemon and a whisper of basil. Fresh, a little fancy.' } } },
@@ -126,7 +134,11 @@ const sour: MenuSection = {
 const sweet: MenuSection = {
   key: 'sweet',
   type: 'cocktail',
-  i18n: { en: { label: 'Sweet', sub: 'Fruit-forward and easy, the crowd-pleasers' } },
+  i18n: {
+    en: { label: 'Sweet', sub: 'Fruit-forward and easy, the crowd-pleasers' },
+    sq: { label: 'Të ëmbla' },
+    it: { label: 'Dolce' },
+  },
   items: [
     { id: 'hugo', slug: 'hugo', price: 'L500', glass: 'wine', lvl: 1,
       i18n: { en: { name: 'Hugo', desc: 'Elderflower and mint, barely there. For talking, not drinking fast.' } } },
@@ -150,7 +162,11 @@ const sweet: MenuSection = {
 const spicy: MenuSection = {
   key: 'spicy',
   type: 'cocktail',
-  i18n: { en: { label: 'Spicy', sub: 'A little heat' } },
+  i18n: {
+    en: { label: 'Spicy', sub: 'A little heat' },
+    sq: { label: 'Pikante' },
+    it: { label: 'Speziato' },
+  },
   items: [
     { id: 'brothers-mule', slug: 'brothers-mule', price: 'L750', glass: 'collins', house: true,
       i18n: { en: { name: "Brother's Mule", desc: 'Like a spa, but with vodka and ice.' } } },
@@ -162,7 +178,11 @@ const spicy: MenuSection = {
 const zero: MenuSection = {
   key: 'zero',
   type: 'cocktail',
-  i18n: { en: { label: 'Zero', sub: 'No alcohol, same hands, same care' } },
+  i18n: {
+    en: { label: 'Zero', sub: 'No alcohol, same hands, same care' },
+    sq: { label: 'Pa alkool' },
+    it: { label: 'Analcolici' },
+  },
   items: [
     { id: 'virgin-hugo', slug: 'virgin-hugo', price: 'L450', glass: 'wine', flavor: 'sweet',
       i18n: { en: { name: 'Virgin Hugo', desc: 'Elderflower and mint, all of the lift and none of the gin.' } } },
@@ -182,7 +202,11 @@ const zero: MenuSection = {
 const pizza: MenuSection = {
   key: 'pizza',
   type: 'food',
-  i18n: { en: { label: 'Pizza', sub: '' } },
+  i18n: {
+    en: { label: 'Pizza', sub: '' },
+    sq: { label: 'Pizza' },
+    it: { label: 'Pizza' },
+  },
   items: [
     { id: 'margherita', slug: 'margherita', price: 'L600', glass: 'wine',
       i18n: { en: { name: 'Margherita', desc: 'Tomato sauce, mozzarella, basil' } } },
@@ -207,7 +231,11 @@ const pizza: MenuSection = {
 const burgers: MenuSection = {
   key: 'burgers',
   type: 'food',
-  i18n: { en: { label: 'Burgers', sub: '' } },
+  i18n: {
+    en: { label: 'Burgers', sub: '' },
+    sq: { label: 'Hamburgerë' },
+    it: { label: 'Hamburger' },
+  },
   items: [
     { id: 'classic-burger', slug: 'classic-burger', price: 'L500', glass: 'wine',
       i18n: { en: { name: 'Classic Burger', desc: 'Beef patty, tomato, arugula, Gouda cheese, sauce of your choice' } } },
@@ -221,7 +249,11 @@ const burgers: MenuSection = {
 const sharing: MenuSection = {
   key: 'sharing',
   type: 'food',
-  i18n: { en: { label: 'Sharing', sub: '' } },
+  i18n: {
+    en: { label: 'Sharing', sub: '' },
+    sq: { label: 'Për ndarje' },
+    it: { label: 'Da condividere' },
+  },
   items: [
     { id: 'finger-food-mix', slug: 'finger-food-mix', price: 'L1000', glass: 'wine',
       i18n: { en: { name: 'Finger Food Mix', desc: 'Chicken nuggets, onion rings, potato croquettes, and French fries' } } },

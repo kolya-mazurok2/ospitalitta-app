@@ -1,0 +1,56 @@
+{
+  "category": {
+    "cocktails": "Cocktails",
+    "food": "Speisen"
+  },
+  "taste": {
+    "bitter": "Bitter",
+    "sour": "Sauer",
+    "sweet": "Süß",
+    "spicy": "Scharf",
+    "zero": "Alkoholfrei"
+  },
+  "food": {
+    "pizza": "Pizza",
+    "burgers": "Burger",
+    "sharing": "Zum Teilen"
+  },
+  "pick": {
+    "label": "Brothers empfehlen"
+  },
+  "pizza_note": {
+    "text": "Unsere Pizzen kommen in 5–7 Minuten aus dem Ofen. Die kurze Wartezeit lohnt sich.",
+    "bold": "Frisch auf Bestellung."
+  },
+  "legend": {
+    "title": "So liest man diese Karte",
+    "sub": "Wir sortieren nach Geschmack, nicht nach Name.\nDas bedeuten die Zeichen.",
+    "bitter_name": "Bitter",
+    "bitter_desc": "Bitterkeit",
+    "sour_name": "Sauer",
+    "sour_desc": "Säure",
+    "sweet_name": "Süß",
+    "sweet_desc": "Süße",
+    "marks_name": "Zeichen",
+    "marks_desc": "Intensität",
+    "olive_name": "Olive",
+    "olive_desc": "unsere Signature",
+    "loved_name": "Beliebt hier",
+    "loved_desc": "Bestseller",
+    "cta": "Verstanden"
+  },
+  "cart": {
+    "show_waiter": "Zeig dem Kellner",
+    "open_list": "Zeig das dem Kellner",
+    "keep_browsing": "Weiter stöbern",
+    "total_label": "Gesamt · Lekë",
+    "clear": "Bestellung löschen"
+  },
+  "pairing": {
+    "drink_label": "Was dieser Drink am Teller liebt:",
+    "plate_label": "Was dieses Gericht im Glas liebt:"
+  },
+  "footer": {
+    "powered": "powered by Ospitalitta"
+  }
+}

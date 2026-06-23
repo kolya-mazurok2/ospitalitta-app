@@ -14,6 +14,7 @@ const ALL_LOCALES: { code: string; label: string }[] = [
   { code: 'sq', label: 'Shqip' },
   { code: 'de', label: 'Deutsch' },
   { code: 'no', label: 'Norsk' },
+  { code: 'hu', label: 'Magyar' },
   { code: 'en', label: 'English' },
 ]
 

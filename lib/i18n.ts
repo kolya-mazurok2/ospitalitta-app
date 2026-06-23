@@ -3,7 +3,7 @@ import { cookies, headers } from 'next/headers'
 import { localeFromAcceptLanguage } from './locale'
 
 // Supported UI-chrome locales (Ospitalitta-level, not venue-level)
-export const supportedLocales = ['en', 'sq', 'it', 'pl', 'de', 'fr', 'no'] as const
+export const supportedLocales = ['en', 'sq', 'it', 'pl', 'hu', 'de', 'fr', 'no'] as const
 export type SupportedLocale = typeof supportedLocales[number]
 
 export default getRequestConfig(async () => {

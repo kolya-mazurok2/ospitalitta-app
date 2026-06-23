@@ -1,0 +1,56 @@
+{
+  "category": {
+    "cocktails": "Cocktails",
+    "food": "Mat"
+  },
+  "taste": {
+    "bitter": "Bitter",
+    "sour": "Surt",
+    "sweet": "Søtt",
+    "spicy": "Krydret",
+    "zero": "Alkoholfritt"
+  },
+  "food": {
+    "pizza": "Pizza",
+    "burgers": "Burgere",
+    "sharing": "Til deling"
+  },
+  "pick": {
+    "label": "Brothers anbefaler"
+  },
+  "pizza_note": {
+    "text": "Pizzaene våre er klare på 5–7 minutter fra ovnen. Verdt den lille ventetiden.",
+    "bold": "Laget på bestilling."
+  },
+  "legend": {
+    "title": "Slik leser du denne menyen",
+    "sub": "Vi sorterer etter smak, ikke navn.\nHer er hva merkene betyr.",
+    "bitter_name": "Bitter",
+    "bitter_desc": "bitterhet",
+    "sour_name": "Surt",
+    "sour_desc": "syre",
+    "sweet_name": "Søtt",
+    "sweet_desc": "sødme",
+    "marks_name": "Merker",
+    "marks_desc": "intensitet",
+    "olive_name": "Oliven",
+    "olive_desc": "våre signaturer",
+    "loved_name": "Elsket her",
+    "loved_desc": "bestselgere",
+    "cta": "Forstått"
+  },
+  "cart": {
+    "show_waiter": "Vis kelneren",
+    "open_list": "Vis dette til kelneren",
+    "keep_browsing": "Fortsett å bla",
+    "total_label": "Totalt · Lekë",
+    "clear": "Fjern bestilling"
+  },
+  "pairing": {
+    "drink_label": "Hva denne drinken elsker på tallerkenen:",
+    "plate_label": "Hva denne retten elsker i glasset:"
+  },
+  "footer": {
+    "powered": "powered by Ospitalitta"
+  }
+}
