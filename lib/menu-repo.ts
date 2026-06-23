@@ -42,7 +42,7 @@ export interface VenueConfig {
   forceCompact?: boolean  // always render items in compact list mode, hide view toggle
   houseIndicator?: 'olive' | 'shell'
   showCocktailGuide?: boolean
-  backgroundTheme?: 'seafood' | 'cocktail' | 'none'
+  backgroundTheme?: 'seafood' | 'cocktail' | 'patisserie' | 'none'
   headerDecor?: string
   headerDecorLeft?: string
 }
@@ -87,7 +87,7 @@ const venues: Record<string, VenueConfig> = {
     defaultCategory: 'drinks',
     drinksCategoryLabel: 'drinks',
     showCocktailGuide: false,
-    backgroundTheme: 'none',
+    backgroundTheme: 'patisserie',
     onboarding: {
       pricesNote: 'Prices in Albanian Lek',
     },

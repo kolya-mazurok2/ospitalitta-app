@@ -36,15 +36,23 @@ export function tabOrder(lead: TasteKey): TasteKey[] {
   return [lead, ...rest, 'spicy', 'zero']
 }
 
+/** Every UI locale Ospitalitta ships messages for. Single source of truth. */
+export const SUPPORTED_LOCALES = ['en', 'sq', 'it', 'pl', 'hu', 'de', 'fr', 'no'] as const
+export type SupportedLocale = typeof SUPPORTED_LOCALES[number]
+
 /**
- * Derive UI locale from Accept-Language.
- * Supports sq/it detection; anything else → 'en'.
+ * Derive UI locale from the browser Accept-Language header.
+ * Walks the header in its listed (priority) order, e.g.
+ *   "pl-PL,pl;q=0.9,en;q=0.8" → 'pl'
+ * and returns the first language we actually support; anything else → 'en'.
  */
 export function localeFromAcceptLanguage(acceptLanguage: string | null): string {
   if (!acceptLanguage) return 'en'
-  const tag = acceptLanguage.split(',')[0].trim().toLowerCase()
-  if (tag.startsWith('sq')) return 'sq'
-  if (tag.startsWith('it')) return 'it'
+  for (const part of acceptLanguage.split(',')) {
+    const tag = part.split(';')[0].trim().toLowerCase()  // strip q-weight: "pl-pl"
+    const primary = tag.split('-')[0]                     // primary subtag: "pl"
+    if ((SUPPORTED_LOCALES as readonly string[]).includes(primary)) return primary
+  }
   return 'en'
 }
 

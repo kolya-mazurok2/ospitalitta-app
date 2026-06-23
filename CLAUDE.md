@@ -437,6 +437,10 @@ Individual venue can override specific token values by appending to their own st
 
 ## Dev Rules — do not violate
 
+### Banned word — "Чесний" / "чесно" (honest)
+NEVER use the word «Чесний», «Чесно», or any form of it (in any language: "honest",
+"honestly", "to be honest"). Say the thing directly without framing it as honesty.
+
 ### Before ANY decision — state your confidence level
 Before implementing anything non-trivial, write ONE sentence:
 "Confidence: X/10 — [why I might be wrong]"

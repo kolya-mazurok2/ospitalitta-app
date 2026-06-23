@@ -46,6 +46,17 @@
     padding: 0;
   }
 
+  /*
+    Universal media-zone separation. The empty photo/video placeholder must always
+    read as a distinct zone, a touch darker than the card body. Derive it from the
+    venue's own --surface-card so it works for ANY venue without a hand-picked hex.
+    A venue that wants a specific media tone sets --surface-media in its own
+    (unlayered) stylesheet — that override always wins over this layered default.
+  */
+  [data-venue] {
+    --surface-media: color-mix(in srgb, var(--surface-card) 92%, var(--surface-dark) 8%);
+  }
+
   html {
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;

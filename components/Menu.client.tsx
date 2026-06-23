@@ -65,7 +65,7 @@ interface Props {
   forceCompact?: boolean
   houseIndicator?: string
   showCocktailGuide?: boolean
-  backgroundTheme?: 'seafood' | 'cocktail' | 'none'
+  backgroundTheme?: 'seafood' | 'cocktail' | 'patisserie' | 'none'
   headerDecor?: string
   headerDecorLeft?: string
 }

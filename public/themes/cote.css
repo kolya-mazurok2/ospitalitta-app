@@ -32,7 +32,7 @@
   --surface-card:   var(--cote-card);
   --surface-card-a: var(--cote-card-active);
   --surface-frame:  var(--cote-frame);
-  --surface-media:  var(--cote-card);
+  /* --surface-media: derived universally in globals.css from --surface-card */
   --surface-dark:   var(--cote-espresso);
   --surface-dark-2: var(--cote-espresso-deep);
 

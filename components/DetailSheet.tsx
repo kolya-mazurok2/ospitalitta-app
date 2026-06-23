@@ -31,7 +31,7 @@ interface Props {
   foodWhy?: string       // food pairing single-string why
   onClose: () => void
   onAdd: () => void
-  backgroundTheme?: 'seafood' | 'cocktail' | 'none'
+  backgroundTheme?: 'seafood' | 'cocktail' | 'patisserie' | 'none'
 }
 
 export default function DetailSheet({

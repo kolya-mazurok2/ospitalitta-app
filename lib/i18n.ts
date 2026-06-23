@@ -1,10 +1,10 @@
 import { getRequestConfig } from 'next-intl/server'
 import { cookies, headers } from 'next/headers'
-import { localeFromAcceptLanguage } from './locale'
+import { localeFromAcceptLanguage, SUPPORTED_LOCALES, type SupportedLocale } from './locale'
 
-// Supported UI-chrome locales (Ospitalitta-level, not venue-level)
-export const supportedLocales = ['en', 'sq', 'it', 'pl', 'hu', 'de', 'fr', 'no'] as const
-export type SupportedLocale = typeof supportedLocales[number]
+// Supported UI-chrome locales (Ospitalitta-level, not venue-level) — sourced from locale.ts
+export const supportedLocales = SUPPORTED_LOCALES
+export type { SupportedLocale }
 
 export default getRequestConfig(async () => {
   // Locale resolution without next-intl middleware (DEC-009):
