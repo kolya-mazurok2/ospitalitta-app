@@ -86,7 +86,6 @@ const venues: Record<string, VenueConfig> = {
     logoText: 'Côte',
     defaultCategory: 'drinks',
     drinksCategoryLabel: 'drinks',
-    forceCompact: true,
     showCocktailGuide: false,
     backgroundTheme: 'none',
     onboarding: {
