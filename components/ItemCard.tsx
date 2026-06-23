@@ -7,7 +7,7 @@ interface Props {
   name: string
   desc: string
   price: string
-  glass: GlassType
+  glass?: GlassType
   taste: string
   lvl?: 1 | 2 | 3
   flavor?: 'sweet' | 'sour'
@@ -130,9 +130,9 @@ export default function ItemCard({
             autoPlay loop playsInline muted
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
           />
-        ) : (
+        ) : glass ? (
           <Glass type={glass} style={{ width: 40, height: 56, color: 'rgb(84 89 90 / 0.3)' }} />
-        )}
+        ) : null}
 
         <button
           onClick={(e) => { e.stopPropagation(); onAdd(e) }}

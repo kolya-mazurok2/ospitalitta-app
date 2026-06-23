@@ -5,10 +5,12 @@
  */
 import { bbMenuData, type VenueMenuData } from './menu-data'
 import { salyMenuData } from './saly-data'
+import { coteMenuData } from './cote-data'
 
 const menuData: Record<string, VenueMenuData> = {
   'bottle-brothers': bbMenuData,
   'saly': salyMenuData,
+  'cote': coteMenuData,
 }
 
 export async function getPublishedMenu(slug: string): Promise<VenueMenuData | null> {
@@ -33,7 +35,8 @@ export interface VenueConfig {
   defaultLocale: string
   brand: VenueBrand
   onboarding: VenueOnboarding
-  logoSrc: string
+  logoSrc?: string       // image path — use when venue has a logo file
+  logoText?: string      // text wordmark — use when venue wordmark is live type (e.g. Côte)
   defaultCategory?: 'cocktails' | 'food'
   houseIndicator?: 'olive' | 'shell'
   showCocktailGuide?: boolean
@@ -46,7 +49,7 @@ const venues: Record<string, VenueConfig> = {
   'saly': {
     slug: 'saly',
     name: 'Saly',
-    locales: ['en', 'pl'],
+    locales: ['en', 'sq', 'it', 'pl', 'hu', 'de', 'fr', 'no'],
     defaultLocale: 'en',
     brand: {
       themeAttr: 'saly',
@@ -65,10 +68,31 @@ const venues: Record<string, VenueConfig> = {
       pricesNote: 'Prices in Lekë',
     },
   },
+  'cote': {
+    slug: 'cote',
+    name: 'Côte',
+    locales: ['en', 'sq', 'it', 'pl', 'hu', 'de', 'fr', 'no'],
+    defaultLocale: 'en',
+    brand: {
+      themeAttr: 'cote',
+      stylesheet: '/themes/cote.css',
+      fonts: [
+        { family: 'Playfair Display', href: 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap' },
+        { family: 'Mulish', href: 'https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700&display=swap' },
+      ],
+    },
+    logoText: 'Côte',
+    defaultCategory: 'food',
+    showCocktailGuide: false,
+    backgroundTheme: 'none',
+    onboarding: {
+      pricesNote: 'Prices in Albanian Lek',
+    },
+  },
   'bottle-brothers': {
     slug: 'bottle-brothers',
     name: 'Bottle Brothers',
-    locales: ['en', 'sq', 'it'],
+    locales: ['en', 'sq', 'it', 'pl', 'hu', 'de', 'fr', 'no'],
     defaultLocale: 'en',
     brand: {
       themeAttr: 'bottle-brothers',

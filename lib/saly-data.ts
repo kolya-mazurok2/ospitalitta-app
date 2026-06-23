@@ -10,7 +10,13 @@ const salyBitter: MenuSection = {
   type: 'cocktail',
   i18n: {
     en: { label: 'Bitter', sub: '' },
-    pl: { label: 'Gorzkie', sub: '' },
+    pl: { label: 'Gorzkie' },
+    sq: { label: 'Të hidhura' },
+    it: { label: 'Amaro' },
+    hu: { label: 'Keserű' },
+    de: { label: 'Bitter' },
+    fr: { label: 'Amer' },
+    no: { label: 'Bitter' },
   },
   items: [
     { id: 'saly-campari-spritz', slug: 'saly-campari-spritz', price: 'L600', glass: 'wine',
@@ -31,7 +37,13 @@ const salySour: MenuSection = {
   type: 'cocktail',
   i18n: {
     en: { label: 'Sour', sub: '' },
-    pl: { label: 'Kwaśne', sub: '' },
+    pl: { label: 'Kwaśne' },
+    sq: { label: 'Të thartat' },
+    it: { label: 'Aspro' },
+    hu: { label: 'Savanyú' },
+    de: { label: 'Sauer' },
+    fr: { label: 'Acide' },
+    no: { label: 'Surt' },
   },
   items: [
     { id: 'saly-vodka-sour', slug: 'saly-vodka-sour', price: 'L700', glass: 'rocks',
@@ -54,7 +66,13 @@ const salySweet: MenuSection = {
   type: 'cocktail',
   i18n: {
     en: { label: 'Sweet', sub: '' },
-    pl: { label: 'Słodkie', sub: '' },
+    pl: { label: 'Słodkie' },
+    sq: { label: 'Të ëmbla' },
+    it: { label: 'Dolce' },
+    hu: { label: 'Édes' },
+    de: { label: 'Süß' },
+    fr: { label: 'Sucré' },
+    no: { label: 'Søtt' },
   },
   items: [
     { id: 'saly-mojito', slug: 'saly-mojito', price: 'L600', glass: 'collins',

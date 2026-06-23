@@ -57,7 +57,8 @@ interface Props {
   locale: string
   leadTaste: TasteKey
   locales: string[]
-  logoSrc: string
+  logoSrc?: string
+  logoText?: string
   onboarding: { pricesNote: string; welcome?: string }
   defaultCategory?: 'cocktails' | 'food'
   houseIndicator?: string
@@ -129,7 +130,7 @@ function ViewToggle({ mode, onChange }: { mode: 'expanded' | 'compact'; onChange
   )
 }
 
-export default function MenuClient({ menuData, venueSlug, locale, leadTaste, locales, logoSrc, onboarding, defaultCategory, houseIndicator, showCocktailGuide, backgroundTheme, headerDecor, headerDecorLeft }: Props) {
+export default function MenuClient({ menuData, venueSlug, locale, leadTaste, locales, logoSrc, logoText, onboarding, defaultCategory, houseIndicator, showCocktailGuide, backgroundTheme, headerDecor, headerDecorLeft }: Props) {
   const t = useTranslations()
   const router = useRouter()
 
@@ -376,7 +377,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
       <MenuBackdrop theme={backgroundTheme ?? 'none'} />
 
       <HeaderControls
-        logoSrc={logoSrc}
+        logoSrc={logoSrc} logoText={logoText}
         locale={locale} locales={locales} fontScale={fontScale}
         onOpenLegend={() => setLegendOpen(true)}
         onLocaleChange={handleLocaleChange}
@@ -458,7 +459,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
                 return (
                   <FeaturedPick
                     name={text.name} desc={text.desc} price={money(pickEntry.item.price)}
-                    glass={pickEntry.item.glass} taste={pickEntry.taste} n={pickEntry.item.lvl}
+                    glass={pickEntry.item.glass ?? 'wine'} taste={pickEntry.taste} n={pickEntry.item.lvl}
                     house={pickEntry.item.house} label={t('pick.label')}
                     onTap={handlePickTap}
                     onDismiss={() => {

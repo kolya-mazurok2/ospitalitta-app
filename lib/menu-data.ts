@@ -9,6 +9,10 @@ export type TasteKey = 'bitter' | 'sour' | 'sweet' | 'spicy' | 'zero'
 export type TierKey  = 'tier-600' | 'tier-700' | 'tier-800' | 'tier-900' | 'tier-1000'
 export type FoodKey  = 'pizza' | 'burgers' | 'sharing'
                      | 'cold' | 'warm' | 'salads' | 'pasta' | 'mains' | 'fresh-fish'
+                     | 'hot-drinks' | 'cold-coffees' | 'soft-drinks' | 'bio-juices'
+                     | 'beers' | 'wine' | 'cocktails'
+                     | 'breakfast' | 'sandwiches' | 'small-plates'
+                     | 'pastries' | 'waffles' | 'crepes' | 'ice-cream'
 
 export const TASTE_KEYS: ReadonlySet<string> = new Set<TasteKey>(['bitter','sour','sweet','spicy','zero'])
 export type Locale = string
@@ -21,7 +25,7 @@ export interface MenuItem {
   id: string
   slug: string
   price: string          // 'L500' — flat
-  glass: GlassType
+  glass?: GlassType
   lvl?: 1 | 2 | 3       // intensity marks (bitter/sour/sweet)
   flavor?: 'sweet' | 'sour' // zero items only
   loved?: boolean
@@ -88,6 +92,11 @@ const bitter: MenuSection = {
     en: { label: 'Bitter', sub: 'Grown-up and bittersweet, the before-dinner ones' },
     sq: { label: 'Të hidhura' },
     it: { label: 'Amaro' },
+    pl: { label: 'Gorzkie' },
+    hu: { label: 'Keserű' },
+    de: { label: 'Bitter' },
+    fr: { label: 'Amer' },
+    no: { label: 'Bitter' },
   },
   items: [
     { id: 'aperol-spritz', slug: 'aperol-spritz', price: 'L500', glass: 'wine', lvl: 1, loved: true,
@@ -116,6 +125,11 @@ const sour: MenuSection = {
     en: { label: 'Sour', sub: 'Bright and sharp, wakes you up' },
     sq: { label: 'Të thartat' },
     it: { label: 'Aspro' },
+    pl: { label: 'Kwaśne' },
+    hu: { label: 'Savanyú' },
+    de: { label: 'Sauer' },
+    fr: { label: 'Acide' },
+    no: { label: 'Surt' },
   },
   items: [
     { id: 'bergamot-spritz', slug: 'bergamot-spritz', price: 'L500', glass: 'wine', lvl: 1,
@@ -138,6 +152,11 @@ const sweet: MenuSection = {
     en: { label: 'Sweet', sub: 'Fruit-forward and easy, the crowd-pleasers' },
     sq: { label: 'Të ëmbla' },
     it: { label: 'Dolce' },
+    pl: { label: 'Słodkie' },
+    hu: { label: 'Édes' },
+    de: { label: 'Süß' },
+    fr: { label: 'Sucré' },
+    no: { label: 'Søtt' },
   },
   items: [
     { id: 'hugo', slug: 'hugo', price: 'L500', glass: 'wine', lvl: 1,
@@ -166,6 +185,11 @@ const spicy: MenuSection = {
     en: { label: 'Spicy', sub: 'A little heat' },
     sq: { label: 'Pikante' },
     it: { label: 'Speziato' },
+    pl: { label: 'Ostre' },
+    hu: { label: 'Csípős' },
+    de: { label: 'Scharf' },
+    fr: { label: 'Épicé' },
+    no: { label: 'Krydret' },
   },
   items: [
     { id: 'brothers-mule', slug: 'brothers-mule', price: 'L750', glass: 'collins', house: true,
@@ -182,6 +206,11 @@ const zero: MenuSection = {
     en: { label: 'Zero', sub: 'No alcohol, same hands, same care' },
     sq: { label: 'Pa alkool' },
     it: { label: 'Analcolici' },
+    pl: { label: 'Bez alkoholu' },
+    hu: { label: 'Alkoholmentes' },
+    de: { label: 'Alkoholfrei' },
+    fr: { label: 'Sans alcool' },
+    no: { label: 'Alkoholfritt' },
   },
   items: [
     { id: 'virgin-hugo', slug: 'virgin-hugo', price: 'L450', glass: 'wine', flavor: 'sweet',
@@ -206,6 +235,11 @@ const pizza: MenuSection = {
     en: { label: 'Pizza', sub: '' },
     sq: { label: 'Pizza' },
     it: { label: 'Pizza' },
+    pl: { label: 'Pizza' },
+    hu: { label: 'Pizza' },
+    de: { label: 'Pizza' },
+    fr: { label: 'Pizza' },
+    no: { label: 'Pizza' },
   },
   items: [
     { id: 'margherita', slug: 'margherita', price: 'L600', glass: 'wine',
@@ -235,6 +269,11 @@ const burgers: MenuSection = {
     en: { label: 'Burgers', sub: '' },
     sq: { label: 'Hamburgerë' },
     it: { label: 'Hamburger' },
+    pl: { label: 'Burgery' },
+    hu: { label: 'Hamburgerek' },
+    de: { label: 'Burger' },
+    fr: { label: 'Burgers' },
+    no: { label: 'Burgere' },
   },
   items: [
     { id: 'classic-burger', slug: 'classic-burger', price: 'L500', glass: 'wine',
@@ -253,6 +292,11 @@ const sharing: MenuSection = {
     en: { label: 'Sharing', sub: '' },
     sq: { label: 'Për ndarje' },
     it: { label: 'Da condividere' },
+    pl: { label: 'Do podziału' },
+    hu: { label: 'Közösen' },
+    de: { label: 'Zum Teilen' },
+    fr: { label: 'À partager' },
+    no: { label: 'Til deling' },
   },
   items: [
     { id: 'finger-food-mix', slug: 'finger-food-mix', price: 'L1000', glass: 'wine',

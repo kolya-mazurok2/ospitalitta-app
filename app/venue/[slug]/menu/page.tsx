@@ -35,6 +35,7 @@ export default async function MenuPage({ params }: Props) {
       leadTaste={leadTaste}
       locales={venue.locales}
       logoSrc={venue.logoSrc}
+      logoText={venue.logoText}
       onboarding={{ pricesNote: venue.onboarding.pricesNote, welcome }}
       defaultCategory={venue.defaultCategory}
       houseIndicator={venue.houseIndicator}

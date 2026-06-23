@@ -19,7 +19,8 @@ const ALL_LOCALES: { code: string; label: string }[] = [
 ]
 
 interface Props {
-  logoSrc: string
+  logoSrc?: string
+  logoText?: string
   locale: string
   locales: string[]
   fontScale: number
@@ -31,7 +32,7 @@ interface Props {
 }
 
 export default function HeaderControls({
-  logoSrc, locale, locales, fontScale,
+  logoSrc, logoText, locale, locales, fontScale,
   onOpenLegend, onLocaleChange, onScaleChange, headerDecor, headerDecorLeft,
 }: Props) {
   const [aaOpen, setAaOpen] = useState(false)
@@ -82,16 +83,26 @@ export default function HeaderControls({
         />
       )}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-        {/* logo */}
-        <Image
-          src={logoSrc}
-          alt=""
-          width={300}
-          height={40}
-          className="venue-logo"
-          style={{ height: '40px', width: 'auto', display: 'block' }}
-          priority
-        />
+        {/* logo — image or live-text wordmark */}
+        {logoText ? (
+          <span style={{
+            fontFamily: 'var(--font-display)', fontWeight: 800,
+            fontSize: '1.625rem', letterSpacing: '0.06em',
+            color: 'var(--brand)', lineHeight: 1, display: 'block',
+          }}>
+            {logoText}
+          </span>
+        ) : logoSrc ? (
+          <Image
+            src={logoSrc}
+            alt=""
+            width={300}
+            height={40}
+            className="venue-logo"
+            style={{ height: '40px', width: 'auto', display: 'block' }}
+            priority
+          />
+        ) : null}
 
         {/* controls */}
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 18 }}>

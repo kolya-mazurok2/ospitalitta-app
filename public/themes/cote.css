@@ -1,0 +1,98 @@
+/* =============================================================
+   Côte Durrës — venue theme (3-layer token system, DEC-007)
+   Source of truth: design_handoff_cote/tokens/venues.css +
+   Côte Brand Foundations.dc.html
+   ============================================================= */
+
+/* ---------- 1 · PRIMITIVES ---------- */
+:root {
+  --cote-marble:        #F4F1E9;  /* warm marble paper, main surface      */
+  --cote-marble-light:  #FBFAF6;  /* sign ground, bright print            */
+  --cote-card:          #EDE7D8;  /* raised cards                         */
+  --cote-card-active:   #E4DCC8;  /* card on press                        */
+  --cote-frame:         #E8DFD0;  /* framed callouts (note, pick)         */
+  --cote-espresso:      #241813;  /* espresso ground / dark surfaces      */
+  --cote-espresso-deep: #1B120D;  /* deepest: cart bar, footer            */
+
+  --cote-ink:           #211812;  /* warm espresso near-black             */
+  --cote-ink-body:      rgba(33, 24, 18, 0.65);
+  --cote-on-dark:       #E8DDD0;  /* warm light text on espresso          */
+  --cote-on-dark-2:     #C6B8A2;  /* secondary on dark (inactive nav)     */
+
+  --cote-forest:        #3C6E47;  /* prices, labels, borders on marble    */
+  --cote-forest-ui:     #4E7E57;  /* tab underline, badge, selection      */
+  --cote-forest-dark:   #6FA277;  /* headings on espresso                 */
+  --cote-gold:          #E9A526;  /* wordmark / logo only                 */
+  --cote-spark:         #BE3A2B;  /* DeGiusti red — tiny accent only      */
+}
+
+/* ---------- 2 · SEMANTIC / ALIAS — the ONLY layer app UI reads ---------- */
+[data-venue="cote"] {
+  --surface:        var(--cote-marble);
+  --surface-card:   var(--cote-card);
+  --surface-card-a: var(--cote-card-active);
+  --surface-frame:  var(--cote-frame);
+  --surface-media:  var(--cote-card);
+  --surface-dark:   var(--cote-espresso);
+  --surface-dark-2: var(--cote-espresso-deep);
+
+  --ink:            var(--cote-ink);
+  --ink-heading:    rgba(33, 24, 18, 0.78);
+  --ink-body:       var(--cote-ink-body);
+  --ink-body-2:     var(--cote-ink-body);
+  --on-dark:        var(--cote-on-dark);
+  --on-dark-2:      var(--cote-on-dark-2);
+
+  --brand:          var(--cote-forest);
+  --brand-on-dark:  var(--cote-forest-ui);
+  --brand-bright:   var(--cote-forest-dark);
+  --hairline:       var(--cote-forest);
+  --accent-pit:     var(--cote-spark);
+
+  --line:           rgba(33, 24, 18, 0.14);
+  --line-strong:    rgba(33, 24, 18, 0.26);
+  --line-soft:      rgba(33, 24, 18, 0.09);
+  --ink-faint:      rgba(33, 24, 18, 0.40);
+
+  --font-display:   'Playfair Display', serif;
+  --font-text:      'Mulish', sans-serif;
+}
+
+/* ---------- 3 · COMPONENT ---------- */
+[data-venue="cote"] {
+  --card-bg:        var(--surface-card);
+  --card-bg-active: var(--surface-card-a);
+  --card-border:    var(--line-soft);
+  --card-radius:    0;
+
+  --sheet-bg:       var(--surface);
+  --sheet-radius:   20px 20px 0 0;
+  --sheet-scrim:    rgba(27, 18, 13, 0.55);
+
+  --bar-bg:         var(--surface-dark-2);
+  --bar-fg:         var(--on-dark);
+  --bar-accent:     var(--brand-bright);
+
+  --fab-bg:         var(--surface-dark-2);
+  --fab-fg:         var(--on-dark);
+  --fab-radius:     50%;
+
+  --tab-underline:  var(--brand-on-dark);
+
+  --badge-weight:      600;
+  --badge-size:        0.5rem;
+  --badge-color:       var(--brand);
+  --badge-bg:          transparent;
+  --badge-border:      1px solid var(--brand);
+  --badge-radius:      0px;
+  --badge-padding:     2px 6px;
+
+  --note-bg:           var(--surface-frame);
+  --note-border-color: var(--brand);
+  --note-text-color:   var(--ink-body);
+
+  --section-sub-color: var(--ink-faint);
+  --section-sub-size:  0.625rem;
+
+  --font-scale: 1;
+}
