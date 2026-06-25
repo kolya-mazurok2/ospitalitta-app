@@ -16,14 +16,26 @@ export default function LoginPage() {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexWrap: 'wrap' }}>
 
-      {/* LEFT · platform brand (the shared door) */}
+      {/* LEFT · platform brand (the shared door) — full-bleed hero */}
       <div style={{
         flex: '1 1 460px', minHeight: '100vh', background: '#15110E', padding: '48px 56px',
-        display: 'flex', flexDirection: 'column', justifyContent: 'space-between', overflow: 'hidden',
+        display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
+        position: 'relative', overflow: 'hidden',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/admin/login-hero.jpg"
+          alt=""
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+        />
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to bottom, rgba(21,17,14,0.62), rgba(21,17,14,0.28) 42%, rgba(21,17,14,0.82))',
+        }} />
+
+        <div className="osp-logo-build" style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', gap: 14 }}>
           <Brandmark size={40} />
-          <div style={{
+          <div className="osp-word" style={{
             fontFamily: 'var(--font-display)', fontSize: 34, lineHeight: 0.9,
             letterSpacing: '0.01em', textTransform: 'uppercase', color: '#F2E9DA',
           }}>
@@ -31,24 +43,10 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* reserved image slot — fill later */}
-        <div style={{ width: '100%', maxWidth: 380 }}>
-          <div style={{
-            width: '100%', height: 260, border: '1px solid #2A231C',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            <span style={{
-              fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.12em',
-              textTransform: 'uppercase', color: '#5A4E3F',
-            }}>
-              Image slot
-            </span>
-          </div>
-        </div>
-
         <span style={{
+          position: 'relative', zIndex: 1,
           fontFamily: 'var(--font-mono)', fontSize: 12, letterSpacing: '0.12em',
-          textTransform: 'uppercase', color: '#8C8067',
+          textTransform: 'uppercase', color: '#C6B8A2',
         }}>
           Digital Waiter · one door, every venue
         </span>

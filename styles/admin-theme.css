@@ -138,6 +138,26 @@
 [data-admin] .admin-btn-primary { transition: background var(--motion-fast); }
 [data-admin] .admin-btn-primary:hover { background: #000000; }
 
+/* logo build-in (mirrors the mark: gold soft, ember snap, wordmark wipe) */
+[data-admin] .osp-logo-build svg {
+  opacity: 0;
+  animation: osp-mark-rise 820ms cubic-bezier(0.2, 0, 0, 1) 60ms forwards;
+}
+[data-admin] .osp-logo-build svg polygon {
+  opacity: 0;                                   /* ember hidden until it snaps in */
+  animation: osp-ember-snap 1ms steps(1, end) 560ms forwards;
+}
+[data-admin] .osp-logo-build .osp-word {
+  clip-path: inset(0 100% 0 0);
+  animation: osp-word-wipe 360ms cubic-bezier(0.2, 0, 0, 1) 720ms forwards;
+}
+@keyframes osp-mark-rise {
+  from { opacity: 0; transform: translateY(10px) scale(0.86); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes osp-ember-snap { to { opacity: 1; } }
+@keyframes osp-word-wipe { to { clip-path: inset(0 0 0 0); } }
+
 @media (prefers-reduced-motion: reduce) {
   [data-admin] *,
   [data-admin] *::before,
