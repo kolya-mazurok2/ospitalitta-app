@@ -1,9 +1,11 @@
 /**
  * getPublishedMenu — data abstraction layer (DEC-004, DEC-005).
- * Currently returns static BB data. When Supabase is ready, replace the
- * implementation here; all callers (page.tsx) stay unchanged.
+ * Dual-mode: venues in DB_VENUES read sections/items from Supabase via a tagged fetch
+ * (→ Vercel Data Cache). Everything else — and any Supabase miss/error — falls back to
+ * the static *-data.ts. Venue-level extras (pairings/featured) stay static for now and
+ * are merged in at read time (one merge point; moves to DB later).
  */
-import { bbMenuData, type VenueMenuData } from './menu-data'
+import { bbMenuData, type VenueMenuData, type MenuSection, type MenuItem } from './menu-data'
 import { salyMenuData } from './saly-data'
 import { coteMenuData } from './cote-data'
 
@@ -13,8 +15,115 @@ const menuData: Record<string, VenueMenuData> = {
   'cote': coteMenuData,
 }
 
+// Venues whose sections/items live in Supabase. The rest stay on static data.
+const DB_VENUES = new Set(['saly'])
+
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
+const hasSupabaseEnv = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY)
+
 export async function getPublishedMenu(slug: string): Promise<VenueMenuData | null> {
+  if (hasSupabaseEnv && DB_VENUES.has(slug)) {
+    try {
+      const fromDb = await fetchMenuFromSupabase(slug)
+      if (fromDb) return fromDb
+    } catch (err) {
+      console.error(`[getPublishedMenu] Supabase read failed for "${slug}", using static fallback:`, err)
+    }
+  }
   return menuData[slug] ?? null
+}
+
+// ----- Supabase read (DEC-004: raw tagged fetch to PostgREST, edge-friendly) -----
+// Conversion lives here so the guest contract (VenueMenuData/MenuSection/MenuItem) is unchanged:
+//  - DB menu_category (2-level tree) → MenuSection[] with `type` derived from the top-level ancestor
+//  - DB price_minor + venue.currency → the legacy 'L600' display string (until guest goes numeric, B5)
+
+interface ItemRow {
+  id: string; slug: string
+  price_minor: number | null; price_unit: string | null
+  glass: string | null; lvl: number | null; flavor: string | null
+  loved: boolean | null; house: boolean | null; badge: string | null
+  image_url: string | null; video_url: string | null
+  sort_order: number; i18n: MenuItem['i18n']
+}
+interface CategoryRow {
+  id: string; parent_id: string | null; key: string; sort_order: number
+  i18n: MenuSection['i18n']; menu_item: ItemRow[]
+}
+
+// minor units → legacy guest display string. 'L' prefix is Lek-specific until the guest goes numeric.
+const CURRENCY_DECIMALS: Record<string, number> = { ALL: 0, EUR: 2, USD: 2 }
+function composeDisplayPrice(minor: number | null, currency: string, unit: string | null): string {
+  if (minor == null) return ''
+  const decimals = CURRENCY_DECIMALS[currency] ?? 0
+  const amount = decimals === 0 ? String(minor) : (minor / 10 ** decimals).toFixed(decimals)
+  return `L${amount}${unit ? `/${unit}` : ''}`
+}
+
+function mapItem(r: ItemRow, currency: string): MenuItem {
+  return {
+    id: r.id,
+    slug: r.slug,
+    price: composeDisplayPrice(r.price_minor, currency, r.price_unit),
+    glass: (r.glass ?? undefined) as MenuItem['glass'],
+    lvl: (r.lvl ?? undefined) as MenuItem['lvl'],
+    flavor: (r.flavor ?? undefined) as MenuItem['flavor'],
+    loved: r.loved ?? undefined,
+    house: r.house ?? undefined,
+    badge: r.badge ?? undefined,
+    videoSrc: r.video_url ?? undefined,
+    posterSrc: r.image_url ?? undefined,
+    i18n: r.i18n ?? {},
+  }
+}
+
+async function pgFetch<T>(path: string, slug: string): Promise<T> {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
+    next: { tags: [`venue:${slug}`] },
+  })
+  if (!res.ok) throw new Error(`PostgREST ${res.status}: ${await res.text()}`)
+  return res.json() as Promise<T>
+}
+
+async function fetchMenuFromSupabase(slug: string): Promise<VenueMenuData | null> {
+  const venues = await pgFetch<Array<{ id: string; currency: string | null }>>(
+    `venue?slug=eq.${encodeURIComponent(slug)}&select=id,currency`, slug)
+  const v = venues[0]
+  if (!v) return null
+  const currency = v.currency ?? 'ALL'
+
+  const itemSelect =
+    'menu_item(id,slug,price_minor,price_unit,glass,lvl,flavor,loved,house,badge,image_url,video_url,sort_order,i18n)'
+  const cats = await pgFetch<CategoryRow[]>(
+    `menu_category?venue_id=eq.${v.id}&select=id,parent_id,key,sort_order,i18n,${itemSelect}&order=sort_order`, slug)
+
+  // Top-level categories (parent_id null) are the Drinks/Food buckets; their key is the section type.
+  const typeByTop: Record<string, MenuSection['type']> = {}
+  for (const c of cats) {
+    if (c.parent_id == null) typeByTop[c.id] = c.key === 'food' ? 'food' : 'cocktail'
+  }
+
+  const children = cats.filter(c => c.parent_id != null).sort((a, b) => a.sort_order - b.sort_order)
+  const toSection = (c: CategoryRow): MenuSection => ({
+    key: c.key as MenuSection['key'],
+    type: typeByTop[c.parent_id as string] ?? 'cocktail',
+    i18n: c.i18n ?? {},
+    items: [...(c.menu_item ?? [])].sort((a, b) => a.sort_order - b.sort_order).map(i => mapItem(i, currency)),
+  })
+
+  // Static merge: venue-level extras not yet in the DB.
+  const stat = menuData[slug]
+  return {
+    sections: children.filter(c => typeByTop[c.parent_id as string] === 'cocktail').map(toSection),
+    foodSections: children.filter(c => typeByTop[c.parent_id as string] === 'food').map(toSection),
+    pairings: stat?.pairings ?? [],
+    foodPairings: stat?.foodPairings ?? [],
+    featuredPick: stat?.featuredPick ?? { cocktailRef: '' },
+    foodFeaturedPick: stat?.foodFeaturedPick,
+    tasteWhy: stat?.tasteWhy,
+  }
 }
 
 export interface VenueBrand {

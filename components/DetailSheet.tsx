@@ -78,46 +78,6 @@ export default function DetailSheet({
           />
         </div>
 
-        {/* why tooltip — floats above drag handle */}
-        {tipOpen && (
-          <div style={{
-            position: 'absolute',
-            left: 24, right: 24,
-            bottom: 'calc(100% - 30px)',
-            zIndex: 99999,
-            padding: '13px 15px',
-            background: 'var(--surface-dark)',
-            boxShadow: '0 12px 34px rgb(0 0 0 / 0.4)',
-          }}>
-            {whyIsCocktail ? (
-              <p style={{
-                fontFamily: 'var(--font-text)', fontSize: '0.8125rem',
-                lineHeight: 1.5, color: 'var(--on-dark-2)', margin: 0,
-              }}>
-                <span style={{ fontWeight: 500, color: 'var(--brand-bright)' }}>{whyLead}</span>
-                {' '}
-                <span style={{ textDecoration: 'underline', textUnderlineOffset: 3 }}>{whyDrink}</span>
-                {whyPost}
-              </p>
-            ) : (
-              <p style={{
-                fontFamily: 'var(--font-text)', fontSize: '0.8125rem',
-                lineHeight: 1.5, color: 'var(--on-dark-2)', margin: 0,
-              }}>
-                {foodWhy}
-              </p>
-            )}
-            {/* caret */}
-            <div style={{
-              position: 'absolute', top: '100%', right: 88,
-              width: 0, height: 0,
-              borderLeft: '7px solid transparent',
-              borderRight: '7px solid transparent',
-              borderTop: '8px solid var(--surface-dark)',
-            }} />
-          </div>
-        )}
-
         {/* scrollable body */}
         <div
           className="scrollbar-none"
@@ -149,6 +109,28 @@ export default function DetailSheet({
                   </button>
                 )}
               </div>
+
+              {/* why tooltip — renders inside the sheet, under the "?" (no overlap with the raised cart bar) */}
+              {hasWhy && tipOpen && (
+                <div style={{
+                  marginTop: 10, padding: '12px 14px',
+                  background: 'var(--surface-dark)',
+                  boxShadow: '0 8px 24px rgb(0 0 0 / 0.28)',
+                }}>
+                  {whyIsCocktail ? (
+                    <p style={{ fontFamily: 'var(--font-text)', fontSize: '0.8125rem', lineHeight: 1.5, color: 'var(--on-dark-2)', margin: 0 }}>
+                      <span style={{ fontWeight: 500, color: 'var(--brand-bright)' }}>{whyLead}</span>
+                      {' '}
+                      <span style={{ textDecoration: 'underline', textUnderlineOffset: 3 }}>{whyDrink}</span>
+                      {whyPost}
+                    </p>
+                  ) : (
+                    <p style={{ fontFamily: 'var(--font-text)', fontSize: '0.8125rem', lineHeight: 1.5, color: 'var(--on-dark-2)', margin: 0 }}>
+                      {foodWhy}
+                    </p>
+                  )}
+                </div>
+              )}
 
               <div style={{ display: 'flex', flexDirection: 'column', marginTop: 10 }}>
                 {dishes.map((d, i) => (

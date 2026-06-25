@@ -46,16 +46,26 @@ export default function ListSheet({
           overflowY: 'auto',
         }}
       >
-        {/* drag handle */}
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <div
-            onClick={onClose}
-            style={{ width: 42, height: 4, borderRadius: 4, background: 'rgb(84 89 90 / 0.28)', cursor: 'pointer' }}
-          />
-        </div>
+        {/* close button — replaces the non-functional drag handle */}
+        <button
+          onClick={onClose}
+          style={{
+            position: 'absolute', top: 10, right: 14,
+            width: 32, height: 32, zIndex: 1,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: 'transparent', border: 'none', cursor: 'pointer',
+            color: 'rgb(84 89 90 / 0.5)', padding: 0,
+          }}
+          aria-label="Close"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" strokeWidth="2" strokeLinecap="round" style={{ display: 'block' }}>
+            <path d="M5 5l14 14M19 5L5 19" />
+          </svg>
+        </button>
 
         {/* heading */}
-        <div style={{ textAlign: 'center', marginTop: 16 }}>
+        <div style={{ textAlign: 'center', marginTop: 12 }}>
           <h3 style={{
             fontFamily: 'var(--font-display)', fontSize: '1.4375rem',
             letterSpacing: '0.04em', color: 'var(--ink-heading)', lineHeight: 1.1,
