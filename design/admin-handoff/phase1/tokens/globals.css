@@ -1,0 +1,146 @@
+@import "tailwindcss";
+
+/* =============================================================
+   Digital Waiter — Admin Design Tokens
+   Base: Ospitalitta core (DEC-016, 3 levels). This file = core
+   PRIMITIVES + a thin ADMIN layer (warm neutral ramp + states)
+   that core deliberately left to the admin project.
+   Active theme: life (light) only, for now.
+   ============================================================= */
+
+/* ---------- 1 · PRIMITIVES — core Set 1 (Gold & Char) ---------- */
+:root {
+  --p-gold:   #E0992E;   /* life accent  */
+  --p-ember:  #D6431C;   /* burn accent / danger */
+  --p-molten: #E8801F;   /* sun core / action through-line */
+  --p-cream:  #FAF4E8;   /* life surface */
+  --p-char:   #15110E;   /* burn surface */
+  --p-ink:    #1A1411;   /* life ink     */
+  --p-ash:    #F2E9DA;   /* burn ink     */
+
+  /* --- ADMIN warm-neutral ramp (new, light/life) --- */
+  --n-canvas:  #F1E9D8;
+  --n-surface: #FBF7EE;
+  --n-raised:  #FFFFFF;
+  --n-sunken:  #ECE3D0;
+  --n-line-subtle: #EAE0CD;
+  --n-line:        #DACEB6;
+  --n-line-strong: #C3B496;
+  --n-ink:   #1A1411;
+  --n-ink-2: #5E5243;
+  --n-ink-3: #8C8067;
+  --n-ink-4: #AC9D82;
+  --n-fill-hover:    #EFE6D3;
+  --n-fill-selected: #F6E7CE;
+
+  /* --- ADMIN state ramp (new) --- */
+  --s-success: #1F8A5B; --s-success-tint: #DCEDE1; --s-success-ink: #15633F;
+  --s-warn:    #C2820C; --s-warn-tint:    #F6E7C5; --s-warn-ink:    #7E5403;
+  --s-danger:  #D6431C; --s-danger-tint:  #F8DFD3; --s-danger-ink:  #9A2E10;
+  --s-accent:  #E8801F; /* = core, info/attention */
+
+  /* --- type scale (modular 1.333, admin-tuned base) --- */
+  --fs-label:   0.75rem;    /* 12px mono */
+  --fs-caption: 0.8125rem;  /* 13px */
+  --fs-ui:      0.875rem;   /* 14px — base UI */
+  --fs-body:    0.9375rem;  /* 15px — long text */
+  --fs-h-card:  1rem;       /* 16px */
+  --fs-h-sec:   1.25rem;    /* 20px */
+  --fs-h4:      1.75rem;    /* 28px */
+  --fs-h3:      2.375rem;   /* 38px */
+  --fs-title:   3rem;       /* 48px — Anton page title */
+  --fs-kpi:     3.5rem;     /* 56px — Anton KPI */
+
+  /* --- spacing: 4px base --- */
+  --sp-3xs: 4px;  --sp-2xs: 8px;  --sp-xs: 12px;  --sp-sm: 16px;
+  --sp-md:  24px; --sp-lg:  32px; --sp-xl: 48px;  --sp-2xl: 64px;
+  --sp-3xl: 96px; --sp-4xl: 128px;
+
+  /* --- radius: left round / right sharp; inputs square --- */
+  --r-sm: 8px;  --r-md: 14px;
+  --r-asym-sm: var(--r-sm) 0 0 var(--r-sm);
+  --r-asym-md: var(--r-md) 0 0 var(--r-md);
+  --r-input: 0;
+
+  /* --- motion --- */
+  --motion-fast: 120ms;
+  --motion-base: 200ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* ---------- 2 · SEMANTIC / ALIAS — the ONLY layer UI reads ---------- */
+:root,
+[data-theme="life"] {
+  --surface:        var(--n-canvas);
+  --surface-panel:  var(--n-surface);
+  --surface-raised: var(--n-raised);
+  --surface-sunken: var(--n-sunken);
+
+  --line:        var(--n-line);
+  --line-subtle: var(--n-line-subtle);
+  --line-strong: var(--n-line-strong);
+
+  --ink:   var(--n-ink);
+  --ink-2: var(--n-ink-2);
+  --ink-3: var(--n-ink-3);
+  --ink-4: var(--n-ink-4);
+
+  --brand:    var(--p-gold);
+  --on-brand: var(--p-ink);
+  --core:     var(--p-molten);
+
+  --fill-hover:    var(--n-fill-hover);
+  --fill-selected: var(--n-fill-selected);
+
+  --success: var(--s-success); --warn: var(--s-warn); --danger: var(--s-danger);
+}
+
+/* ---------- 3 · COMPONENT — local, pulls from semantic ---------- */
+:root {
+  --btn-primary-bg: var(--ink);     --btn-primary-fg: var(--p-cream);
+  --btn-accent-bg:  var(--core);    --btn-accent-fg:  var(--p-ink);
+  --btn-danger-bg:  var(--danger);  --btn-danger-fg:  var(--p-ash);
+  --btn-radius:     var(--r-asym-sm);
+
+  --card-bg:     var(--surface-panel);
+  --card-radius: var(--r-asym-sm);
+  --card-line:   var(--line);
+
+  --field-bg:     var(--surface-raised);
+  --field-line:   var(--line);
+  --field-focus:  var(--core);
+  --field-radius: var(--r-input);
+
+  --nav-active-bg: var(--fill-selected);
+  --nav-active-fg: var(--ink);
+}
+
+/* ---------- expose to Tailwind v4 utilities ---------- */
+@theme inline {
+  --color-surface:        var(--surface);
+  --color-surface-panel:  var(--surface-panel);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-ink:   var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-ink-4: var(--ink-4);
+  --color-brand: var(--brand);
+  --color-core:  var(--core);
+  --color-line:  var(--line);
+  --color-success: var(--success);
+  --color-warn:    var(--warn);
+  --color-danger:  var(--danger);
+
+  --font-display: 'Anton', sans-serif;
+  --font-sans:    'Space Grotesk', sans-serif;
+  --font-mono:    'Space Mono', monospace;
+}
+
+body {
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+.font-display { font-family: var(--font-display); text-transform: uppercase; }

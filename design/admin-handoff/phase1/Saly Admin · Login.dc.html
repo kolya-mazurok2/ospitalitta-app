@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<title>Digital Waiter · Sign in</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  body{background:#F1E9D8;font-family:'Space Grotesk',sans-serif}
+  ::selection{background:#E8801F;color:#15120D}
+  input::placeholder{color:#AC9D82}
+  input:focus{border-color:#E8801F!important;box-shadow:0 0 0 3px rgba(232,128,31,0.18)}
+</style>
+<script src="./image-slot.js"></script>
+</helmet>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="100" fill="#15110E"></rect>
+    <circle cx="42" cy="50" r="22" fill="#E0992E" clip-path="inset(0 52% 0 0)"></circle>
+    <polygon points="76,50 67.3,41.6 67.5,29.5 55.4,29.7 47,21.3 38.6,29.7 26.5,29.5 26.7,41.6 18,50 26.7,58.4 26.5,70.5 38.6,70.3 47,78.7 55.4,70.3 67.5,70.5 67.3,58.4" fill="#D6431C" clip-path="inset(0 0 0 56%)"></polygon>
+  </svg>
+</template>
+
+<div style="min-height:100vh;display:flex;flex-wrap:wrap">
+
+  <!-- ============ LEFT · platform brand (shared door) ============ -->
+  <div style="flex:1 1 460px;min-height:100vh;background:#15110E;padding:48px 56px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden">
+
+    <!-- top · platform brand -->
+    <div style="display:flex;align-items:center;gap:14px;position:relative;z-index:1">
+      <svg viewBox="0 0 200 200" style="width:40px;height:40px;display:block;flex-shrink:0">
+        <defs><clipPath id="lgL"><rect x="0" y="0" width="96" height="200"></rect></clipPath><clipPath id="lgR"><rect x="104" y="0" width="96" height="200"></rect></clipPath></defs>
+        <circle cx="100" cy="100" r="50" fill="#E0992E" clip-path="url(#lgL)"></circle>
+        <polygon points="166,100 146.2,80.9 146.7,53.3 119.1,53.8 100,34 80.9,53.8 53.3,53.3 53.8,80.9 34,100 53.8,119.1 53.3,146.7 80.9,146.2 100,166 119.1,146.2 146.7,146.7 146.2,119.1" fill="#D6431C" clip-path="url(#lgR)"></polygon>
+      </svg>
+      <div style="font-family:'Anton',sans-serif;font-size:34px;line-height:0.9;letter-spacing:0.01em;text-transform:uppercase;color:#F2E9DA">Ospitalitta</div>
+    </div>
+
+    <!-- middle · reserved image (fill later) -->
+    <div style="position:relative;z-index:1;width:100%;max-width:380px">
+      <image-slot id="login-hero" shape="rect" placeholder="Drop an image" style="display:block;width:100%;height:260px;border:1px solid #2A231C"></image-slot>
+    </div>
+
+    <!-- bottom -->
+    <div style="position:relative;z-index:1">
+      <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#8C8067">Digital Waiter · one door, every venue</span>
+    </div>
+  </div>
+
+  <!-- ============ RIGHT · sign-in form ============ -->
+  <div style="flex:1 1 540px;min-height:100vh;background:#FBF7EE;display:flex;align-items:center;justify-content:center;padding:48px 40px">
+    <form onSubmit="{{ onSubmit }}" style="width:100%;max-width:400px">
+      <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#8C8067">Digital Waiter</div>
+      <h1 style="font-family:'Anton',sans-serif;font-size:52px;line-height:0.95;letter-spacing:0.01em;text-transform:uppercase;color:#1A1411;margin-top:14px">Sign in</h1>
+      <p style="font-size:15px;line-height:1.55;color:#5E5243;margin-top:14px">Your venue loads from your account</p>
+
+      <div style="margin-top:30px">
+        <label style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067;display:block;margin-bottom:8px">Email</label>
+        <input type="email" placeholder="you@company.com" autocomplete="username" style="width:100%;font-family:'Space Grotesk',sans-serif;font-size:15px;color:#1A1411;background:#FFFFFF;border:1px solid #DACEB6;padding:12px 14px;outline:none;transition:border-color 120ms,box-shadow 120ms">
+      </div>
+
+      <div style="margin-top:18px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px">
+          <label style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067">Password</label>
+          <button type="button" onClick="{{ toggleShow }}" style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#B06A1E;background:none;border:none;cursor:pointer;padding:0">{{ eyeText }}</button>
+        </div>
+        <input ref="{{ pwRef }}" type="password" placeholder="••••••••" autocomplete="current-password" style="width:100%;font-family:'Space Grotesk',sans-serif;font-size:15px;color:#1A1411;background:#FFFFFF;border:1px solid #DACEB6;padding:12px 14px;outline:none;transition:border-color 120ms,box-shadow 120ms">
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px">
+        <label style="display:flex;align-items:center;gap:9px;cursor:pointer" onClick="{{ toggleRemember }}">
+          <span style="width:18px;height:18px;background:{{ rememberBg }};border:1px solid {{ rememberBorder }};display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <sc-if value="{{ remember }}" hint-placeholder-val="{{ true }}"><span style="color:#FAF4E8;font-size:12px;line-height:1">✓</span></sc-if>
+          </span>
+          <span style="font-size:14px;color:#5E5243">Remember me</span>
+        </label>
+        <a href="#" style="font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:500;color:#B06A1E;text-decoration:none">Forgot password</a>
+      </div>
+
+      <button type="submit" style="width:100%;margin-top:26px;font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;color:#FAF4E8;background:#1A1411;border:none;padding:14px 22px;border-radius:8px 0 0 8px;cursor:pointer;transition:background 120ms" style-hover="background:#000000">Sign in</button>
+    </form>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { show: false, remember: true };
+  pwRef = React.createRef();
+  renderVals() {
+    return {
+      remember: this.state.remember,
+      rememberBg: this.state.remember ? '#1A1411' : '#FFFFFF',
+      rememberBorder: this.state.remember ? '#1A1411' : '#C3B496',
+      pwRef: this.pwRef,
+      eyeText: this.state.show ? 'hide' : 'show',
+      toggleShow: () => {
+        const el = this.pwRef.current;
+        if (el) el.type = el.type === 'password' ? 'text' : 'password';
+        this.setState(s => ({ show: !s.show }));
+      },
+      toggleRemember: () => this.setState(s => ({ remember: !s.remember })),
+      onSubmit: (e) => { e.preventDefault(); }
+    };
+  }
+}
+</script>
+</body>
+</html>

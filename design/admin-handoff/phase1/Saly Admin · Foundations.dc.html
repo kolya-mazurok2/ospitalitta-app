@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<title>Saly Admin · Design foundations</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  body{background:#F1E9D8;font-family:'Space Grotesk',sans-serif}
+  ::selection{background:#E8801F;color:#15120D}
+  input::placeholder,textarea::placeholder{color:#AC9D82}
+</style>
+</helmet>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="100" fill="#F1E9D8"></rect>
+    <circle cx="42" cy="50" r="22" fill="#E0992E" clip-path="inset(0 52% 0 0)"></circle>
+    <polygon points="76,50 67.3,41.6 67.5,29.5 55.4,29.7 47,21.3 38.6,29.7 26.5,29.5 26.7,41.6 18,50 26.7,58.4 26.5,70.5 38.6,70.3 47,78.7 55.4,70.3 67.5,70.5 67.3,58.4" fill="#D6431C" clip-path="inset(0 0 0 56%)"></polygon>
+  </svg>
+</template>
+
+<div style="background:#F1E9D8;color:#1A1411;min-height:100vh;padding:0 0 140px">
+
+  <!-- ============ HEADER ============ -->
+  <header style="max-width:1180px;margin:0 auto;padding:64px 40px 0">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:14px">
+        <!-- client logo (Saly) -->
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="width:26px;height:26px;background:#1A1411;display:flex;align-items:center;justify-content:center;border-radius:7px 0 0 7px;flex-shrink:0"><span style="width:8px;height:8px;background:#E8801F;display:block;transform:rotate(45deg)"></span></span>
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;letter-spacing:0.04em;color:#1A1411">Saly</span>
+        </div>
+        <span style="width:1px;height:26px;background:#DACEB6;display:block"></span>
+        <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#8C8067">Digital Waiter · Admin</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:9px">
+        <svg viewBox="0 0 200 200" style="width:18px;height:18px;display:block;flex-shrink:0">
+          <defs><clipPath id="pfL"><rect x="0" y="0" width="96" height="200"></rect></clipPath><clipPath id="pfR"><rect x="104" y="0" width="96" height="200"></rect></clipPath></defs>
+          <circle cx="100" cy="100" r="50" fill="#E0992E" clip-path="url(#pfL)"></circle>
+          <polygon points="166,100 146.2,80.9 146.7,53.3 119.1,53.8 100,34 80.9,53.8 53.3,53.3 53.8,80.9 34,100 53.8,119.1 53.3,146.7 80.9,146.2 100,166 119.1,146.2 146.7,146.7 146.2,119.1" fill="#D6431C" clip-path="url(#pfR)"></polygon>
+        </svg>
+        <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#A8997E">powered by Ospitalitta</span>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:40px;flex-wrap:wrap;margin-top:40px">
+      <h1 style="font-family:'Anton',sans-serif;font-size:72px;line-height:0.9;letter-spacing:0.01em;color:#1A1411;text-transform:uppercase">Admin<br>Foundations</h1>
+      <div style="font-family:'Space Mono',monospace;font-size:12px;color:#8C8067;text-align:right;padding-bottom:8px;line-height:1.8">light / life · v0.1<br>client: Saly<br>система: Ospitalitta core</div>
+    </div>
+    <p style="max-width:680px;margin-top:24px;font-size:16px;line-height:1.62;color:#5E5243">База для адмінки Digital Waiter. Бренд-система — Ospitalitta core. Адмінка white-label: тип, колір, відступи наші, лого клієнтське. Тут зафіксовано те, що core лишив проєкту: теплі нейтралі, стани, патерни tool-UI.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:26px">
+      <span style="font-family:'Space Grotesk',sans-serif;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#15120D;background:#E8801F;padding:7px 13px;border-radius:8px 0 0 8px;font-weight:600">light only</span>
+      <span style="font-family:'Space Grotesk',sans-serif;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#1A1411;border:1px solid #C3B496;padding:7px 13px;border-radius:8px 0 0 8px">hard edges</span>
+      <span style="font-family:'Space Grotesk',sans-serif;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#1A1411;border:1px solid #C3B496;padding:7px 13px;border-radius:8px 0 0 8px">теплі нейтралі</span>
+      <span style="font-family:'Space Grotesk',sans-serif;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#1A1411;border:1px solid #C3B496;padding:7px 13px;border-radius:8px 0 0 8px">Anton стримано</span>
+    </div>
+  </header>
+
+  <!-- ============ 00 BRAND / LOGO ============ -->
+  <section style="max-width:1180px;margin:80px auto 0;padding:0 40px">
+    <div style="display:flex;align-items:baseline;gap:16px;border-top:1px solid #DACEB6;padding-top:20px">
+      <span style="font-family:'Space Mono',monospace;font-size:13px;color:#8C8067">00</span>
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:#8C8067">Бренд · лого клієнта vs платформа</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:18px;margin-top:24px">
+      <div style="background:#FBF7EE;border:1px solid #EAE0CD;border-radius:14px 0 0 14px;padding:32px 34px">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8C8067">Головне лого · client slot</div>
+        <div style="display:flex;align-items:center;gap:14px;margin-top:24px">
+          <span style="width:48px;height:48px;background:#1A1411;display:flex;align-items:center;justify-content:center;border-radius:12px 0 0 12px;flex-shrink:0"><span style="width:15px;height:15px;background:#E8801F;display:block;transform:rotate(45deg)"></span></span>
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:40px;letter-spacing:0.03em;color:#1A1411">Saly</span>
+        </div>
+        <p style="font-size:14px;line-height:1.6;color:#5E5243;margin-top:24px">Wordmark-плейсхолдер. Реальне лого Saly падає сюди (sidebar / шапка / login / favicon). Нейтральна подача, бо це їхній бренд, не наш. Anton тут НЕ застосовуємо.</p>
+      </div>
+      <div style="background:#15110E;border-radius:14px 0 0 14px;padding:32px 34px">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8C8067">Маркер платформи</div>
+        <div style="display:flex;align-items:center;gap:16px;margin-top:24px">
+          <svg viewBox="0 0 200 200" style="width:44px;height:44px;display:block;flex-shrink:0">
+            <defs><clipPath id="plL"><rect x="0" y="0" width="96" height="200"></rect></clipPath><clipPath id="plR"><rect x="104" y="0" width="96" height="200"></rect></clipPath></defs>
+            <circle cx="100" cy="100" r="50" fill="#E0992E" clip-path="url(#plL)"></circle>
+            <polygon points="166,100 146.2,80.9 146.7,53.3 119.1,53.8 100,34 80.9,53.8 53.3,53.3 53.8,80.9 34,100 53.8,119.1 53.3,146.7 80.9,146.2 100,166 119.1,146.2 146.7,146.7 146.2,119.1" fill="#D6431C" clip-path="url(#plR)"></polygon>
+          </svg>
+          <div style="font-family:'Anton',sans-serif;font-size:24px;line-height:0.9;color:#F2E9DA;text-transform:uppercase">Ospitalitta</div>
+        </div>
+        <p style="font-size:14px;line-height:1.6;color:#B8AA96;margin-top:24px">House-mark живе дрібно: «powered by», футер, splash. Ніколи не конкурує з лого клієнта.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 01 COLOR ============ -->
+  <section style="max-width:1180px;margin:80px auto 0;padding:0 40px">
+    <div style="display:flex;align-items:baseline;gap:16px;border-top:1px solid #DACEB6;padding-top:20px">
+      <span style="font-family:'Space Mono',monospace;font-size:13px;color:#8C8067">01</span>
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:#8C8067">Колір · core + admin layer</h2>
+    </div>
+
+    <h3 style="font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:#8C8067;margin-top:24px">Brand / core · зафіксовано</h3>
+    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:#DACEB6;border:1px solid #DACEB6;margin-top:14px;border-radius:12px 0 0 12px;overflow:hidden">
+      <div style="background:#FBF7EE"><div style="height:64px;background:#E0992E"></div><div style="padding:10px 12px"><div style="font-family:'Space Mono',monospace;font-size:11px;color:#1A1411">gold</div><div style="font-family:'Space Mono',monospace;font-size:10px;color:#8C8067;margin-top:2px">#E0992E</div></div></div>
+      <div style="background:#FBF7EE"><div style="height:64px;background:#D6431C"></div><div style="padding:10px 12px"><div style="font-family:'Space Mono',monospace;font-size:11px;color:#1A1411">ember</div><div style="font-family:'Space Mono',monospace;font-size:10px;color:#8C8067;margin-top:2px">#D6431C</div></div></div>
+      <div style="background:#FBF7EE"><div style="height:64px;background:#E8801F"></div><div style="padding:10px 12px"><div style="font-family:'Space Mono',monospace;font-size:11px;color:#1A1411">molten·core</div><div style="font-family:'Space Mono',monospace;font-size:10px;color:#8C8067;margin-top:2px">#E8801F</div></div></div>
+      <div style="background:#FBF7EE"><div style="height:64px;background:#FAF4E8;border-bottom:1px solid #EAE0CD"></div><div style="padding:10px 12px"><div style="font-family:'Space Mono',monospace;font-size:11px;color:#1A1411">cream</div><div style="font-family:'Space Mono',monospace;font-size:10px;color:#8C8067;margin-top:2px">#FAF4E8</div></div></div>
+      <div style="background:#FBF7EE"><div style="height:64px;background:#15110E"></div><div style="padding:10px 12px"><div style="font-family:'Space Mono',monospace;font-size:11px;color:#1A1411">char</div><div style="font-family:'Space Mono',monospace;font-size:10px;color:#8C8067;margin-top:2px">#15110E</div></div></div>
+      <div style="background:#FBF7EE"><div style="height:64px;background:#1A1411"></div><div style="padding:10px 12px"><div style="font-family:'Space Mono',monospace;font-size:11px;color:#1A1411">ink</div><div style="font-family:'Space Mono',monospace;font-size:10px;color:#8C8067;margin-top:2px">#1A1411</div></div></div>
+      <div style="background:#FBF7EE"><div style="height:64px;background:#F2E9DA;border-bottom:1px solid #EAE0CD"></div><div style="padding:10px 12px"><div style="font-family:'Space Mono',monospace;font-size:11px;color:#1A1411">ash</div><div style="font-family:'Space Mono',monospace;font-size:10px;color:#8C8067;margin-top:2px">#F2E9DA</div></div></div>
+    </div>
+
+    <h3 style="font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:#8C8067;margin-top:28px">Surfaces · теплі, не білі <span style="color:#B06A1E">(нове)</span></h3>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#DACEB6;border:1px solid #DACEB6;margin-top:14px;border-radius:12px 0 0 12px;overflow:hidden">
+      <div style="background:#FBF7EE"><div style="height:56px;background:#F1E9D8;border-bottom:1px solid #EAE0CD"></div><div style="padding:10px 12px"><div style="font-size:12px;color:#1A1411">canvas</div><div style="font-family:'Space Mono',monospace;font-size:10px;color:#8C8067;margin-top:2px">#F1E9D8</div></div></div>
+      <div style="background:#FBF7EE"><div style="height:56px;background:#FBF7EE;border-bottom:1px solid #EAE0CD"></div><div style="padding:10px 12px"><div style="font-size:12px;color:#1A1411">surface</div><div style="font-family:'Space Mono',monospace;font-size:10px;color:#8C8067;margin-top:2px">#FBF7EE</div></div></div>
+      <div style="background:#FBF7EE"><div style="height:56px;background:#FFFFFF;border-bottom:1px solid #EAE0CD"></div><div style="padding:10px 12px"><div style="font-size:12px;color:#1A1411">raised</div><div style="font-family:'Space Mono',monospace;font-size:10px;color:#8C8067;margin-top:2px">#FFFFFF</div></div></div>
+      <div style="background:#FBF7EE"><div style="height:56px;background:#ECE3D0;border-bottom:1px solid #EAE0CD"></div><div style="padding:10px 12px"><div style="font-size:12px;color:#1A1411">sunken</div><div style="font-family:'Space Mono',monospace;font-size:10px;color:#8C8067;margin-top:2px">#ECE3D0</div></div></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px">
+      <div>
+        <h3 style="font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:#8C8067">Text ramp · тепла ink</h3>
+        <div style="background:#FBF7EE;border:1px solid #EAE0CD;border-radius:12px 0 0 12px;margin-top:14px;padding:8px 0">
+          <div style="display:flex;align-items:center;gap:14px;padding:10px 18px"><span style="width:22px;height:22px;background:#1A1411;flex-shrink:0"></span><span style="font-size:15px;color:#1A1411;font-weight:500">ink · primary</span><span style="font-family:'Space Mono',monospace;font-size:11px;color:#8C8067;margin-left:auto">#1A1411</span></div>
+          <div style="display:flex;align-items:center;gap:14px;padding:10px 18px"><span style="width:22px;height:22px;background:#5E5243;flex-shrink:0"></span><span style="font-size:15px;color:#5E5243;font-weight:500">ink-2 · body</span><span style="font-family:'Space Mono',monospace;font-size:11px;color:#8C8067;margin-left:auto">#5E5243</span></div>
+          <div style="display:flex;align-items:center;gap:14px;padding:10px 18px"><span style="width:22px;height:22px;background:#8C8067;flex-shrink:0"></span><span style="font-size:15px;color:#8C8067;font-weight:500">ink-3 · label</span><span style="font-family:'Space Mono',monospace;font-size:11px;color:#8C8067;margin-left:auto">#8C8067</span></div>
+          <div style="display:flex;align-items:center;gap:14px;padding:10px 18px"><span style="width:22px;height:22px;background:#AC9D82;flex-shrink:0"></span><span style="font-size:15px;color:#AC9D82;font-weight:500">ink-4 · faint</span><span style="font-family:'Space Mono',monospace;font-size:11px;color:#8C8067;margin-left:auto">#AC9D82</span></div>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:#8C8067">Lines · fills</h3>
+        <div style="background:#FBF7EE;border:1px solid #EAE0CD;border-radius:12px 0 0 12px;margin-top:14px;padding:8px 0">
+          <div style="display:flex;align-items:center;gap:14px;padding:10px 18px"><span style="width:22px;height:22px;background:#EAE0CD;border:1px solid #DACEB6;flex-shrink:0"></span><span style="font-size:14px;color:#5E5243">line-subtle</span><span style="font-family:'Space Mono',monospace;font-size:11px;color:#8C8067;margin-left:auto">#EAE0CD</span></div>
+          <div style="display:flex;align-items:center;gap:14px;padding:10px 18px"><span style="width:22px;height:22px;background:#DACEB6;flex-shrink:0"></span><span style="font-size:14px;color:#5E5243">line</span><span style="font-family:'Space Mono',monospace;font-size:11px;color:#8C8067;margin-left:auto">#DACEB6</span></div>
+          <div style="display:flex;align-items:center;gap:14px;padding:10px 18px"><span style="width:22px;height:22px;background:#C3B496;flex-shrink:0"></span><span style="font-size:14px;color:#5E5243">line-strong</span><span style="font-family:'Space Mono',monospace;font-size:11px;color:#8C8067;margin-left:auto">#C3B496</span></div>
+          <div style="display:flex;align-items:center;gap:14px;padding:10px 18px"><span style="width:22px;height:22px;background:#F6E7CE;border:1px solid #DACEB6;flex-shrink:0"></span><span style="font-size:14px;color:#5E5243">fill-selected</span><span style="font-family:'Space Mono',monospace;font-size:11px;color:#8C8067;margin-left:auto">#F6E7CE</span></div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:#8C8067;margin-top:28px">Стани · 4, не більше <span style="color:#B06A1E">(нове — warn визначено тут)</span></h3>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:14px">
+      <div style="background:#DCEDE1;border:1px solid #1F8A5B;border-radius:10px 0 0 10px;padding:18px 20px">
+        <div style="display:flex;align-items:center;gap:8px"><span style="width:9px;height:9px;background:#1F8A5B;display:block"></span><span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#15633F">success</span></div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:#15633F;margin-top:12px;line-height:1.7">#1F8A5B<br>tint #DCEDE1</div>
+      </div>
+      <div style="background:#F6E7C5;border:1px solid #C2820C;border-radius:10px 0 0 10px;padding:18px 20px">
+        <div style="display:flex;align-items:center;gap:8px"><span style="width:9px;height:9px;background:#C2820C;display:block"></span><span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#7E5403">warn</span></div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:#7E5403;margin-top:12px;line-height:1.7">#C2820C<br>tint #F6E7C5</div>
+      </div>
+      <div style="background:#F8DFD3;border:1px solid #D6431C;border-radius:10px 0 0 10px;padding:18px 20px">
+        <div style="display:flex;align-items:center;gap:8px"><span style="width:9px;height:9px;background:#D6431C;display:block"></span><span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#9A2E10">danger</span></div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:#9A2E10;margin-top:12px;line-height:1.7">#D6431C ember<br>tint #F8DFD3</div>
+      </div>
+      <div style="background:#FBF7EE;border:1px solid #E8801F;border-radius:10px 0 0 10px;padding:18px 20px">
+        <div style="display:flex;align-items:center;gap:8px"><span style="width:9px;height:9px;background:#E8801F;display:block"></span><span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#B06A1E">accent · info</span></div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:#B06A1E;margin-top:12px;line-height:1.7">#E8801F core<br>не синій</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 02 TYPOGRAPHY ============ -->
+  <section style="max-width:1180px;margin:80px auto 0;padding:0 40px">
+    <div style="display:flex;align-items:baseline;gap:16px;border-top:1px solid #DACEB6;padding-top:20px">
+      <span style="font-family:'Space Mono',monospace;font-size:13px;color:#8C8067">02</span>
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:#8C8067">Типографіка · Anton стримано</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:24px">
+      <div style="background:#FBF7EE;border:1px solid #EAE0CD;border-radius:14px 0 0 14px;padding:24px">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:#8C8067">display</div>
+        <div style="font-family:'Anton',sans-serif;font-size:46px;line-height:0.9;color:#1A1411;margin-top:12px;text-transform:uppercase">Anton</div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:#8C8067;margin-top:12px;line-height:1.6">тільки page titles + KPI-числа</div>
+      </div>
+      <div style="background:#FBF7EE;border:1px solid #EAE0CD;border-radius:14px 0 0 14px;padding:24px">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:#8C8067">text / UI</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:34px;line-height:1;color:#1A1411;margin-top:12px">Grotesk</div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:#8C8067;margin-top:12px;line-height:1.6">весь UI, body, форми · 300–700</div>
+      </div>
+      <div style="background:#FBF7EE;border:1px solid #EAE0CD;border-radius:14px 0 0 14px;padding:24px">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:#8C8067">meta</div>
+        <div style="font-family:'Space Mono',monospace;font-weight:700;font-size:30px;line-height:1;color:#1A1411;margin-top:12px">Mono</div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:#8C8067;margin-top:12px;line-height:1.6">labels, ID, coords, суми</div>
+      </div>
+    </div>
+
+    <div style="border:1px solid #EAE0CD;border-radius:14px 0 0 14px;overflow:hidden;margin-top:16px">
+      <div style="display:flex;align-items:baseline;gap:24px;padding:16px 24px;background:#FBF7EE;border-bottom:1px solid #EAE0CD">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:#8C8067;width:200px;flex-shrink:0">page title · Anton 48 / .98<br>UPPERCASE</div>
+        <div style="font-family:'Anton',sans-serif;font-size:44px;line-height:0.98;color:#1A1411;text-transform:uppercase">Live orders</div>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:24px;padding:16px 24px;background:#FFFFFF;border-bottom:1px solid #EAE0CD">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:#8C8067;width:200px;flex-shrink:0">kpi · Anton 56 / .9</div>
+        <div style="font-family:'Anton',sans-serif;font-size:52px;line-height:0.9;color:#1A1411">₴ 184 920</div>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:24px;padding:16px 24px;background:#FBF7EE;border-bottom:1px solid #EAE0CD">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:#8C8067;width:200px;flex-shrink:0">h-section · Grotesk 600 · 20</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;color:#1A1411">Today at Saly</div>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:24px;padding:16px 24px;background:#FFFFFF;border-bottom:1px solid #EAE0CD">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:#8C8067;width:200px;flex-shrink:0">ui-base · Grotesk 400 · 14</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:400;font-size:14px;line-height:1.5;color:#5E5243;max-width:520px">Базовий UI-розмір для адмінки. Трохи щільніший за маркетинг (16), бо tool читають довго і близько.</div>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:24px;padding:16px 24px;background:#FBF7EE">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:#8C8067;width:200px;flex-shrink:0">label · Mono 12 · +0.12em</div>
+        <div style="font-family:'Space Mono',monospace;font-weight:400;font-size:12px;line-height:1.4;letter-spacing:0.12em;text-transform:uppercase;color:#8C8067">Table #14 · order id 0042</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 03 SPACING + RADIUS ============ -->
+  <section style="max-width:1180px;margin:80px auto 0;padding:0 40px">
+    <div style="display:flex;align-items:baseline;gap:16px;border-top:1px solid #DACEB6;padding-top:20px">
+      <span style="font-family:'Space Mono',monospace;font-size:13px;color:#8C8067">03</span>
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:#8C8067">Spacing 4px · radius asym</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:24px;align-items:start">
+      <div>
+        <h3 style="font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#8C8067;margin-bottom:16px">Spacing scale</h3>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:16px"><div style="width:4px;height:16px;background:#E8801F;flex-shrink:0"></div><span style="font-family:'Space Mono',monospace;font-size:12px;color:#8C8067">3xs · 4</span></div>
+          <div style="display:flex;align-items:center;gap:16px"><div style="width:8px;height:16px;background:#E8801F;flex-shrink:0"></div><span style="font-family:'Space Mono',monospace;font-size:12px;color:#8C8067">2xs · 8</span></div>
+          <div style="display:flex;align-items:center;gap:16px"><div style="width:12px;height:16px;background:#E8801F;flex-shrink:0"></div><span style="font-family:'Space Mono',monospace;font-size:12px;color:#8C8067">xs · 12</span></div>
+          <div style="display:flex;align-items:center;gap:16px"><div style="width:16px;height:16px;background:#E8801F;flex-shrink:0"></div><span style="font-family:'Space Mono',monospace;font-size:12px;color:#8C8067">sm · 16</span></div>
+          <div style="display:flex;align-items:center;gap:16px"><div style="width:24px;height:16px;background:#E8801F;flex-shrink:0"></div><span style="font-family:'Space Mono',monospace;font-size:12px;color:#8C8067">md · 24</span></div>
+          <div style="display:flex;align-items:center;gap:16px"><div style="width:32px;height:16px;background:#E8801F;flex-shrink:0"></div><span style="font-family:'Space Mono',monospace;font-size:12px;color:#8C8067">lg · 32</span></div>
+          <div style="display:flex;align-items:center;gap:16px"><div style="width:48px;height:16px;background:#E8801F;flex-shrink:0"></div><span style="font-family:'Space Mono',monospace;font-size:12px;color:#8C8067">xl · 48</span></div>
+          <div style="display:flex;align-items:center;gap:16px"><div style="width:64px;height:16px;background:#E8801F;flex-shrink:0"></div><span style="font-family:'Space Mono',monospace;font-size:12px;color:#8C8067">2xl · 64</span></div>
+        </div>
+        <div style="font-family:'Space Mono',monospace;font-size:12px;color:#8C8067;margin-top:20px;line-height:1.7">density: рядок таблиці ~44px<br>поле інпута ~40px · hit-target ≥ 40</div>
+      </div>
+      <div>
+        <h3 style="font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#8C8067;margin-bottom:8px">Radius · ліво кругле / право гостре</h3>
+        <p style="font-size:14px;line-height:1.55;color:#8C8067;margin-bottom:18px">Ехо розрізаного знака: <span style="font-family:'Space Mono',monospace">R 0 0 R</span>. Інпути навмисно квадратні.</p>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;gap:16px"><div style="width:120px;height:44px;background:#FBF7EE;border:1px solid #C3B496;border-radius:8px 0 0 8px;flex-shrink:0"></div><span style="font-family:'Space Mono',monospace;font-size:12px;color:#8C8067">sm · 8 0 0 8 · кнопки/картки</span></div>
+          <div style="display:flex;align-items:center;gap:16px"><div style="width:120px;height:44px;background:#FBF7EE;border:1px solid #C3B496;border-radius:14px 0 0 14px;flex-shrink:0"></div><span style="font-family:'Space Mono',monospace;font-size:12px;color:#8C8067">md · 14 0 0 14 · модалки</span></div>
+          <div style="display:flex;align-items:center;gap:16px"><div style="width:120px;height:44px;background:#FFFFFF;border:1px solid #C3B496;border-radius:0;flex-shrink:0"></div><span style="font-family:'Space Mono',monospace;font-size:12px;color:#8C8067">input · 0 · поля</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 04 COMPONENTS ============ -->
+  <section style="max-width:1180px;margin:80px auto 0;padding:0 40px">
+    <div style="display:flex;align-items:baseline;gap:16px;border-top:1px solid #DACEB6;padding-top:20px">
+      <span style="font-family:'Space Mono',monospace;font-size:13px;color:#8C8067">04</span>
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:#8C8067">Компоненти · джерело патернів</h2>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:24px">
+
+      <!-- buttons -->
+      <div style="background:#FBF7EE;border:1px solid #EAE0CD;border-radius:14px 0 0 14px;padding:26px 28px">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067;margin-bottom:18px">Кнопки · ієрархія</div>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+          <button style="font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:#FAF4E8;background:#1A1411;border:none;padding:11px 20px;border-radius:8px 0 0 8px;cursor:pointer">Primary</button>
+          <button style="font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:#1A1411;background:#E8801F;border:none;padding:11px 20px;border-radius:8px 0 0 8px;cursor:pointer">Accent</button>
+          <button style="font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:500;color:#1A1411;background:transparent;border:1px solid #C3B496;padding:10px 18px;border-radius:8px 0 0 8px;cursor:pointer">Secondary</button>
+          <button style="font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:#F2E9DA;background:#D6431C;border:none;padding:11px 20px;border-radius:8px 0 0 8px;cursor:pointer">Danger</button>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:14px">
+          <button style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:500;color:#5E5243;background:transparent;border:none;padding:8px 12px;cursor:pointer">Ghost</button>
+          <button style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:#AC9D82;background:#ECE3D0;border:none;padding:11px 20px;border-radius:8px 0 0 8px;cursor:not-allowed">Disabled</button>
+          <button style="font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;color:#FAF4E8;background:#1A1411;border:none;padding:8px 14px;border-radius:6px 0 0 6px;cursor:pointer">Small</button>
+        </div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:#8C8067;margin-top:18px;line-height:1.6">primary = ink · accent = molten · danger = ember · radius sm asym</div>
+      </div>
+
+      <!-- form fields -->
+      <div style="background:#FBF7EE;border:1px solid #EAE0CD;border-radius:14px 0 0 14px;padding:26px 28px">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067;margin-bottom:18px">Поля · square</div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div>
+            <label style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067;display:block;margin-bottom:7px">Item name</label>
+            <input type="text" value="Aperol Spritz" style="width:100%;font-family:'Space Grotesk',sans-serif;font-size:14px;color:#1A1411;background:#FFFFFF;border:1px solid #DACEB6;padding:10px 12px;outline:none">
+          </div>
+          <div>
+            <label style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067;display:block;margin-bottom:7px">Category</label>
+            <div style="position:relative">
+              <select style="width:100%;font-family:'Space Grotesk',sans-serif;font-size:14px;color:#1A1411;background:#FFFFFF;border:1px solid #DACEB6;padding:10px 12px;outline:none;appearance:none;cursor:pointer">
+                <option>Cocktails</option><option>Wine</option><option>Food</option>
+              </select>
+              <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#8C8067;pointer-events:none;font-size:11px">▼</span>
+            </div>
+          </div>
+          <div>
+            <label style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#E8801F;display:block;margin-bottom:7px">Focus</label>
+            <input type="text" value="redirecting focus" style="width:100%;font-family:'Space Grotesk',sans-serif;font-size:14px;color:#1A1411;background:#FFFFFF;border:1px solid #E8801F;box-shadow:0 0 0 3px rgba(232,128,31,0.18);padding:10px 12px;outline:none">
+          </div>
+          <div>
+            <input type="text" value="-12" style="width:100%;font-family:'Space Grotesk',sans-serif;font-size:14px;color:#1A1411;background:#FFFFFF;border:1px solid #D6431C;padding:10px 12px;outline:none">
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:12px;color:#9A2E10;margin-top:6px">Price canʼt be negative</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- status + badges -->
+      <div style="background:#FBF7EE;border:1px solid #EAE0CD;border-radius:14px 0 0 14px;padding:26px 28px">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067;margin-bottom:18px">Статус-піли · бейджі</div>
+        <div style="display:flex;flex-wrap:wrap;gap:9px">
+          <span style="display:inline-flex;align-items:center;gap:7px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;color:#15633F;background:#DCEDE1;border:1px solid #1F8A5B;padding:5px 11px;border-radius:7px 0 0 7px"><span style="width:7px;height:7px;background:#1F8A5B;display:block;border-radius:50%"></span>Served</span>
+          <span style="display:inline-flex;align-items:center;gap:7px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;color:#7E5403;background:#F6E7C5;border:1px solid #C2820C;padding:5px 11px;border-radius:7px 0 0 7px"><span style="width:7px;height:7px;background:#C2820C;display:block;border-radius:50%"></span>Waiting</span>
+          <span style="display:inline-flex;align-items:center;gap:7px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;color:#9A2E10;background:#F8DFD3;border:1px solid #D6431C;padding:5px 11px;border-radius:7px 0 0 7px"><span style="width:7px;height:7px;background:#D6431C;display:block;border-radius:50%"></span>Cancelled</span>
+          <span style="display:inline-flex;align-items:center;gap:7px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;color:#5E5243;background:#ECE3D0;border:1px solid #C3B496;padding:5px 11px;border-radius:7px 0 0 7px"><span style="width:7px;height:7px;background:#8C8067;display:block;border-radius:50%"></span>Draft</span>
+        </div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067;margin:20px 0 12px">tags · mono</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#B06A1E;border:1px solid rgba(176,106,30,0.5);padding:4px 9px">live</span>
+          <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#5E5243;border:1px solid #C3B496;padding:4px 9px">86 · sold out</span>
+          <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#15633F;border:1px solid rgba(31,138,91,0.5);padding:4px 9px">new</span>
+        </div>
+      </div>
+
+      <!-- checkbox / toggle -->
+      <div style="background:#FBF7EE;border:1px solid #EAE0CD;border-radius:14px 0 0 14px;padding:26px 28px">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067;margin-bottom:18px">Чекбокси · тогли</div>
+        <div style="display:flex;flex-direction:column;gap:13px">
+          <label style="display:flex;align-items:center;gap:11px;cursor:pointer"><span style="width:18px;height:18px;background:#1A1411;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="color:#FAF4E8;font-size:12px;line-height:1">✓</span></span><span style="font-size:14px;color:#1A1411">Show in menu</span></label>
+          <label style="display:flex;align-items:center;gap:11px;cursor:pointer"><span style="width:18px;height:18px;background:#FFFFFF;border:1px solid #C3B496;display:block;flex-shrink:0"></span><span style="font-size:14px;color:#5E5243">Stop-list (86)</span></label>
+          <div style="display:flex;align-items:center;gap:11px;margin-top:4px">
+            <span style="width:38px;height:22px;background:#1F8A5B;border-radius:11px;position:relative;flex-shrink:0;display:block"><span style="position:absolute;top:2px;right:2px;width:18px;height:18px;background:#FFFFFF;border-radius:50%"></span></span>
+            <span style="font-size:14px;color:#1A1411">Accept orders</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:11px">
+            <span style="width:38px;height:22px;background:#DACEB6;border-radius:11px;position:relative;flex-shrink:0;display:block"><span style="position:absolute;top:2px;left:2px;width:18px;height:18px;background:#FFFFFF;border-radius:50%"></span></span>
+            <span style="font-size:14px;color:#8C8067">Busy mode</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI stat -->
+      <div style="background:#FFFFFF;border:1px solid #EAE0CD;border-radius:14px 0 0 14px;padding:26px 28px">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067;margin-bottom:18px">KPI / stat card</div>
+        <div style="display:flex;gap:14px">
+          <div style="flex:1;background:#FBF7EE;border:1px solid #EAE0CD;border-radius:8px 0 0 8px;padding:18px 20px">
+            <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067">revenue · today</div>
+            <div style="font-family:'Anton',sans-serif;font-size:40px;line-height:0.9;color:#1A1411;margin-top:10px">₴ 32 480</div>
+            <div style="display:inline-flex;align-items:center;gap:5px;margin-top:10px;font-family:'Space Mono',monospace;font-size:12px;color:#15633F">▲ 12% · vs yesterday</div>
+          </div>
+          <div style="flex:1;background:#FBF7EE;border:1px solid #EAE0CD;border-radius:8px 0 0 8px;padding:18px 20px">
+            <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067">avg ticket</div>
+            <div style="font-family:'Anton',sans-serif;font-size:40px;line-height:0.9;color:#1A1411;margin-top:10px">₴ 412</div>
+            <div style="display:inline-flex;align-items:center;gap:5px;margin-top:10px;font-family:'Space Mono',monospace;font-size:12px;color:#9A2E10">▼ 3%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- nav items -->
+      <div style="background:#15110E;border-radius:14px 0 0 14px;padding:20px 18px">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067;margin:0 10px 16px">Sidebar nav · стани</div>
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <div style="position:relative;display:flex;align-items:center;gap:12px;padding:11px 14px;background:#241C15;border-radius:8px 0 0 8px"><span style="position:absolute;left:0;top:8px;bottom:8px;width:3px;background:#E8801F"></span><span style="width:18px;height:18px;border:1.5px solid #F2E9DA;display:block;flex-shrink:0;border-radius:5px 0 0 5px"></span><span style="font-size:14px;font-weight:600;color:#F2E9DA">Overview</span></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:11px 14px"><span style="width:18px;height:18px;border:1.5px solid #8C8067;display:block;flex-shrink:0;border-radius:5px 0 0 5px"></span><span style="font-size:14px;color:#B8AA96">Orders</span><span style="margin-left:auto;font-family:'Space Mono',monospace;font-size:11px;color:#15120D;background:#E8801F;padding:1px 7px;border-radius:6px 0 0 6px">7</span></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:11px 14px"><span style="width:18px;height:18px;border:1.5px solid #8C8067;display:block;flex-shrink:0;border-radius:5px 0 0 5px"></span><span style="font-size:14px;color:#B8AA96">Menu</span></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:11px 14px"><span style="width:18px;height:18px;border:1.5px solid #8C8067;display:block;flex-shrink:0;border-radius:5px 0 0 5px"></span><span style="font-size:14px;color:#B8AA96">Tables</span></div>
+        </div>
+        <div style="font-family:'Space Mono',monospace;font-size:10px;color:#5C5443;margin:14px 10px 0;line-height:1.6">active = warm fill + molten bar (ехо розрізу)</div>
+      </div>
+
+      <!-- tabs -->
+      <div style="background:#FBF7EE;border:1px solid #EAE0CD;border-radius:14px 0 0 14px;padding:26px 28px">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067;margin-bottom:18px">Tabs</div>
+        <div style="display:flex;gap:24px;border-bottom:1px solid #DACEB6">
+          <div style="padding:0 2px 12px;font-size:14px;font-weight:600;color:#1A1411;border-bottom:2px solid #E8801F;margin-bottom:-1px">Active</div>
+          <div style="padding:0 2px 12px;font-size:14px;font-weight:500;color:#8C8067">Done</div>
+          <div style="padding:0 2px 12px;font-size:14px;font-weight:500;color:#8C8067">Cancelled</div>
+        </div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:#8C8067;margin-top:16px;line-height:1.6">активний таб = molten underline · решта ink-3</div>
+      </div>
+
+    </div>
+
+    <!-- table -->
+    <div style="margin-top:18px;background:#FFFFFF;border:1px solid #EAE0CD;border-radius:14px 0 0 14px;overflow:hidden">
+      <div style="display:grid;grid-template-columns:90px 1fr 130px 110px 120px;gap:16px;padding:13px 22px;background:#ECE3D0;border-bottom:1px solid #DACEB6">
+        <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067">order</span>
+        <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067">table · items</span>
+        <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067">status</span>
+        <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067;text-align:right">total</span>
+        <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067;text-align:right">time</span>
+      </div>
+      <div style="display:grid;grid-template-columns:90px 1fr 130px 110px 120px;gap:16px;padding:15px 22px;border-bottom:1px solid #EAE0CD;align-items:center">
+        <span style="font-family:'Space Mono',monospace;font-size:13px;color:#1A1411">#0042</span>
+        <span style="font-size:14px;color:#1A1411">Table 14 · 3 items</span>
+        <span><span style="display:inline-flex;align-items:center;gap:6px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;color:#7E5403;background:#F6E7C5;border:1px solid #C2820C;padding:3px 9px;border-radius:7px 0 0 7px"><span style="width:6px;height:6px;background:#C2820C;display:block;border-radius:50%"></span>Waiting</span></span>
+        <span style="font-family:'Space Mono',monospace;font-size:13px;color:#1A1411;text-align:right">₴ 640</span>
+        <span style="font-family:'Space Mono',monospace;font-size:12px;color:#8C8067;text-align:right">2 min</span>
+      </div>
+      <div style="display:grid;grid-template-columns:90px 1fr 130px 110px 120px;gap:16px;padding:15px 22px;border-bottom:1px solid #EAE0CD;align-items:center;background:#FBF7EE">
+        <span style="font-family:'Space Mono',monospace;font-size:13px;color:#1A1411">#0041</span>
+        <span style="font-size:14px;color:#1A1411">Table 6 · 5 items</span>
+        <span><span style="display:inline-flex;align-items:center;gap:6px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;color:#15633F;background:#DCEDE1;border:1px solid #1F8A5B;padding:3px 9px;border-radius:7px 0 0 7px"><span style="width:6px;height:6px;background:#1F8A5B;display:block;border-radius:50%"></span>Served</span></span>
+        <span style="font-family:'Space Mono',monospace;font-size:13px;color:#1A1411;text-align:right">₴ 1 120</span>
+        <span style="font-family:'Space Mono',monospace;font-size:12px;color:#8C8067;text-align:right">11 min</span>
+      </div>
+      <div style="display:grid;grid-template-columns:90px 1fr 130px 110px 120px;gap:16px;padding:15px 22px;align-items:center">
+        <span style="font-family:'Space Mono',monospace;font-size:13px;color:#1A1411">#0040</span>
+        <span style="font-size:14px;color:#1A1411">Table 2 · 1 item</span>
+        <span><span style="display:inline-flex;align-items:center;gap:6px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;color:#9A2E10;background:#F8DFD3;border:1px solid #D6431C;padding:3px 9px;border-radius:7px 0 0 7px"><span style="width:6px;height:6px;background:#D6431C;display:block;border-radius:50%"></span>Cancelled</span></span>
+        <span style="font-family:'Space Mono',monospace;font-size:13px;color:#8C8067;text-align:right">₴ 180</span>
+        <span style="font-family:'Space Mono',monospace;font-size:12px;color:#8C8067;text-align:right">18 min</span>
+      </div>
+    </div>
+
+    <!-- banners -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px">
+      <div style="display:flex;gap:13px;background:#DCEDE1;border-left:3px solid #1F8A5B;padding:14px 18px;align-items:flex-start">
+        <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#15633F;flex-shrink:0;padding-top:1px">ok</span>
+        <span style="font-size:14px;line-height:1.5;color:#15633F">Menu published · guests see changes instantly</span>
+      </div>
+      <div style="display:flex;gap:13px;background:#F6E7C5;border-left:3px solid #C2820C;padding:14px 18px;align-items:flex-start">
+        <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#7E5403;flex-shrink:0;padding-top:1px">warn</span>
+        <span style="font-size:14px;line-height:1.5;color:#7E5403">3 items have no photo · guests see a placeholder</span>
+      </div>
+      <div style="display:flex;gap:13px;background:#F8DFD3;border-left:3px solid #D6431C;padding:14px 18px;align-items:flex-start">
+        <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#9A2E10;flex-shrink:0;padding-top:1px">err</span>
+        <span style="font-size:14px;line-height:1.5;color:#9A2E10">Couldnʼt save · check your connection and try again</span>
+      </div>
+      <div style="display:flex;gap:13px;background:#FBF7EE;border-left:3px solid #E8801F;padding:14px 18px;align-items:flex-start">
+        <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#B06A1E;flex-shrink:0;padding-top:1px">info</span>
+        <span style="font-size:14px;line-height:1.5;color:#5E5243">New Digital Waiter release · details in settings</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer style="max-width:1180px;margin:90px auto 0;padding:32px 40px 0;border-top:1px solid #DACEB6;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:10px">
+      <svg viewBox="0 0 200 200" style="width:18px;height:18px;display:block;flex-shrink:0">
+        <defs><clipPath id="ftL"><rect x="0" y="0" width="96" height="200"></rect></clipPath><clipPath id="ftR"><rect x="104" y="0" width="96" height="200"></rect></clipPath></defs>
+        <circle cx="100" cy="100" r="50" fill="#E0992E" clip-path="url(#ftL)"></circle>
+        <polygon points="166,100 146.2,80.9 146.7,53.3 119.1,53.8 100,34 80.9,53.8 53.3,53.3 53.8,80.9 34,100 53.8,119.1 53.3,146.7 80.9,146.2 100,166 119.1,146.2 146.7,146.7 146.2,119.1" fill="#D6431C" clip-path="url(#ftR)"></polygon>
+      </svg>
+      <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#8C8067">Saly admin · foundations v0.1 · Ospitalitta core</span>
+    </div>
+    <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.08em;color:#B06A1E">light / life</div>
+  </footer>
+
+</div>
+</x-dc>
+</body>
+</html>

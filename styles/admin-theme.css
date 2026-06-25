@@ -1,0 +1,148 @@
+/* =============================================================
+   Ospitalitta Admin — design tokens (DEC-016, 3 levels)
+   Scoped under [data-admin] so it NEVER touches the guest theme.
+   Tailwind is loaded once by the root (styles/globals.css); this file
+   adds only scoped CSS variables. Admin components consume them via
+   inline style={{ … var(--token) }} (the codebase pattern) — no @theme
+   conflict with the guest layer.
+   Theme: life (light) only, for now.
+
+   Naming note: design "surface" (panels/cards) = --surface-panel here;
+   --surface = canvas (the app background).
+   ============================================================= */
+
+[data-admin] {
+  /* ---------- 1 · PRIMITIVES ---------- */
+  /* brand / core — fixed, do not change */
+  --p-gold: #E0992E;  --p-ember: #D6431C;  --p-molten: #E8801F;
+  --p-cream: #FAF4E8; --p-char: #15110E;   --p-ink: #1A1411;  --p-ash: #F2E9DA;
+
+  /* admin warm-neutral ramp (light/life) */
+  --n-canvas: #F1E9D8;  --n-surface: #FBF7EE;  --n-raised: #FFFFFF;  --n-sunken: #ECE3D0;
+  --n-line-subtle: #EAE0CD;  --n-line: #DACEB6;  --n-line-strong: #C3B496;
+  --n-ink: #1A1411;  --n-ink-2: #5E5243;  --n-ink-3: #8C8067;  --n-ink-4: #AC9D82;
+  --n-fill-hover: #EFE6D3;  --n-fill-selected: #F6E7CE;
+
+  /* state ramp */
+  --s-success: #1F8A5B;  --s-success-tint: #DCEDE1;  --s-success-ink: #15633F;
+  --s-warn: #C2820C;     --s-warn-tint: #F6E7C5;     --s-warn-ink: #7E5403;
+  --s-danger: #D6431C;   --s-danger-tint: #F8DFD3;   --s-danger-ink: #9A2E10;
+  --s-accent: #E8801F;
+
+  /* chart neutral — non-tallest bars (from dashboard spec) */
+  --chart-bar: #E7DBC4;
+
+  /* type scale (admin-tuned, modular 1.333) */
+  --fs-label: 0.75rem;    --fs-caption: 0.8125rem;  --fs-ui: 0.875rem;   --fs-body: 0.9375rem;
+  --fs-h-card: 1rem;      --fs-h-sec: 1.25rem;      --fs-h4: 1.75rem;    --fs-h3: 2.375rem;
+  --fs-title: 3rem;       --fs-kpi: 3.5rem;
+  --tracking-label: 0.12em;
+
+  /* spacing (4px base) */
+  --sp-3xs: 4px; --sp-2xs: 8px; --sp-xs: 12px; --sp-sm: 16px;
+  --sp-md: 24px; --sp-lg: 32px; --sp-xl: 48px; --sp-2xl: 64px; --sp-3xl: 96px; --sp-4xl: 128px;
+
+  /* radius — left round / right sharp; inputs square */
+  --r-sm: 8px;  --r-md: 14px;
+  --r-asym-sm: var(--r-sm) 0 0 var(--r-sm);
+  --r-asym-md: var(--r-md) 0 0 var(--r-md);
+  --r-input: 0;
+
+  /* motion */
+  --motion-fast: 120ms;  --motion-base: 200ms;  --ease: cubic-bezier(0.2, 0, 0, 1);
+
+  /* ---------- 2 · SEMANTIC — the ONLY layer components read ---------- */
+  --surface: var(--n-canvas);       /* app canvas (background) */
+  --surface-panel: var(--n-surface);/* panels, cards (design calls this "surface") */
+  --surface-raised: var(--n-raised);
+  --surface-sunken: var(--n-sunken);
+
+  --line: var(--n-line);
+  --line-subtle: var(--n-line-subtle);
+  --line-strong: var(--n-line-strong);
+
+  --ink: var(--n-ink);
+  --ink-2: var(--n-ink-2);
+  --ink-3: var(--n-ink-3);
+  --ink-4: var(--n-ink-4);
+
+  --brand: var(--p-gold);
+  --on-brand: var(--p-ink);
+  --core: var(--p-molten);
+
+  --fill-hover: var(--n-fill-hover);
+  --fill-selected: var(--n-fill-selected);
+
+  --success: var(--s-success);
+  --warn: var(--s-warn);
+  --danger: var(--s-danger);
+
+  /* fonts — wired to next/font CSS variables set on the admin root */
+  --font-display: var(--font-anton), 'Anton', sans-serif;
+  --font-sans: var(--font-grotesk), 'Space Grotesk', sans-serif;
+  --font-mono: var(--font-space-mono), 'Space Mono', monospace;
+
+  /* ---------- 3 · COMPONENT ---------- */
+  --btn-primary-bg: var(--ink);    --btn-primary-fg: var(--p-cream);
+  --btn-accent-bg: var(--core);    --btn-accent-fg: var(--p-ink);
+  --btn-danger-bg: var(--danger);  --btn-danger-fg: var(--p-ash);
+  --btn-radius: var(--r-asym-sm);
+
+  --card-bg: var(--surface-panel);  --card-radius: var(--r-asym-sm);  --card-line: var(--line);
+
+  --field-bg: var(--surface-raised);  --field-line: var(--line);
+  --field-focus: var(--core);         --field-radius: var(--r-input);
+
+  --nav-active-bg: var(--fill-selected);  --nav-active-fg: var(--ink);
+
+  /* base */
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+[data-admin] .font-display {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+}
+
+/* sidebar nav hover (inline styles can't do :hover) */
+[data-admin] .admin-nav-link:hover { background: var(--fill-hover); }
+
+/* form field — square, warm; molten focus ring */
+[data-admin] .admin-field {
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--r-input);
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color var(--motion-fast), box-shadow var(--motion-fast);
+}
+[data-admin] .admin-field::placeholder { color: var(--ink-4); }
+[data-admin] .admin-field:focus {
+  border-color: var(--field-focus);
+  box-shadow: 0 0 0 3px rgba(232, 128, 31, 0.18);
+}
+[data-admin] .admin-field[aria-invalid="true"] {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(214, 67, 28, 0.16);
+}
+
+/* primary button (ink fill) */
+[data-admin] .admin-btn-primary { transition: background var(--motion-fast); }
+[data-admin] .admin-btn-primary:hover { background: #000000; }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-admin] *,
+  [data-admin] *::before,
+  [data-admin] *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

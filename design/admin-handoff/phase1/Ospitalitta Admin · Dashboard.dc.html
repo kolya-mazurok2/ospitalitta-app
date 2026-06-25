@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<title>Ospitalitta admin · Dashboard</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  body{background:#F1E9D8;font-family:'Space Grotesk',sans-serif}
+  ::selection{background:#E8801F;color:#15120D}
+  .nav-link:hover{background:#EFE6D3}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-thumb{background:#DACEB6}
+  ::-webkit-scrollbar-track{background:transparent}
+</style>
+</helmet>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="100" fill="#F1E9D8"></rect>
+    <circle cx="42" cy="50" r="20" fill="#E0992E" clip-path="inset(0 52% 0 0)"></circle>
+    <polygon points="74,50 65.8,42.1 66,30.7 54.6,30.9 46.7,23 38.8,30.9 27.4,30.7 27.6,42.1 19.4,50 27.6,57.9 27.4,69.3 38.8,69.1 46.7,77 54.6,69.1 66,69.3 65.8,57.9" fill="#D6431C" clip-path="inset(0 0 0 56%)"></polygon>
+  </svg>
+</template>
+
+<div style="display:flex;height:100vh;background:#F1E9D8;color:#1A1411;overflow:hidden">
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true"><symbol id="ic-dashboard" viewBox="0 0 512 512"><g fill="currentColor" stroke="none"><path d="m176 476h-116c-33.084 0-60-26.916-60-60v-320c0-33.084 26.916-60 60-60h116c33.084 0 60 26.916 60 60v320c0 33.084-26.916 60-60 60zm-116-400c-11.028 0-20 8.972-20 20v320c0 11.028 8.972 20 20 20h116c11.028 0 20-8.972 20-20v-320c0-11.028-8.972-20-20-20z"/><path d="m452 236h-116c-33.084 0-60-26.916-60-60v-80c0-33.084 26.916-60 60-60h116c33.084 0 60 26.916 60 60v80c0 33.084-26.916 60-60 60zm-116-160c-11.028 0-20 8.972-20 20v80c0 11.028 8.972 20 20 20h116c11.028 0 20-8.972 20-20v-80c0-11.028-8.972-20-20-20z"/><path d="m452 476h-116c-33.084 0-60-26.916-60-60v-80c0-33.084 26.916-60 60-60h116c33.084 0 60 26.916 60 60v80c0 33.084-26.916 60-60 60zm-116-160c-11.028 0-20 8.972-20 20v80c0 11.028 8.972 20 20 20h116c11.028 0 20-8.972 20-20v-80c0-11.028-8.972-20-20-20z"/></g></symbol><symbol id="ic-menu" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="3.5" y1="6" x2="4.6" y2="6"/><line x1="7.5" y1="6" x2="20.5" y2="6"/><line x1="3.5" y1="12" x2="4.6" y2="12"/><line x1="7.5" y1="12" x2="20.5" y2="12"/><line x1="3.5" y1="18" x2="4.6" y2="18"/><line x1="7.5" y1="18" x2="20.5" y2="18"/></g></symbol><symbol id="ic-translate" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><ellipse cx="12" cy="12" rx="4" ry="9"/></g></symbol><symbol id="ic-qr" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="14" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="3.5" y="14" width="6.5" height="6.5" rx="1"/><rect x="14.4" y="14.4" width="2.3" height="2.3"/><rect x="18.2" y="18.2" width="2.3" height="2.3"/><line x1="14.4" y1="20.5" x2="16.7" y2="20.5"/></g></symbol><symbol id="ic-collapse" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="15" rx="1.5"/><line x1="9.2" y1="4.5" x2="9.2" y2="19.5"/><path d="M16 9.5 13.5 12 16 14.5"/></g></symbol><symbol id="ic-settings" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="3.5" y1="8" x2="20.5" y2="8"/><line x1="3.5" y1="16" x2="20.5" y2="16"/><circle cx="9" cy="8" r="2.3"/><circle cx="15" cy="16" r="2.3"/></g></symbol><symbol id="ic-house" viewBox="0 0 512 512"><g fill="currentColor"><path d="M414.042,149.67l-84.529-12.283L291.71,60.791c-14.601-29.587-56.822-29.578-71.418-0.001l-37.803,76.596L97.96,149.67c-32.653,4.744-45.687,44.899-22.069,67.923l61.166,59.622L122.618,361.4c-5.577,32.521,28.582,57.325,57.779,41.98l75.605-39.75l75.606,39.75c29.156,15.327,63.355-9.464,57.779-41.98l-14.439-84.186l61.167-59.622C459.737,194.56,446.681,154.413,414.042,149.67z M412.286,193.151l-67.591,65.884c-4.022,3.921-5.857,9.57-4.908,15.106l15.956,93.031c0.801,4.672-4.06,8.2-8.254,5.997l-83.547-43.923c-4.971-2.613-10.912-2.613-15.883,0l-83.547,43.923c-4.196,2.205-9.055-1.326-8.254-5.997l15.956-93.031c0.949-5.536-0.886-11.185-4.908-15.106l-67.591-65.884c-3.395-3.309-1.538-9.021,3.153-9.704l93.408-13.573c5.558-0.808,10.364-4.298,12.85-9.335l41.774-84.643c2.097-4.248,8.104-4.251,10.202,0.001l41.774,84.642c2.486,5.037,7.292,8.528,12.85,9.335l93.408,13.573C413.824,184.13,415.68,189.843,412.286,193.151z"/><path d="M134.731,47.152L114.32,19.059c-5.542-7.624-16.214-9.316-23.838-3.774c-7.625,5.54-9.316,16.213-3.775,23.838l20.411,28.092c5.544,7.628,16.216,9.313,23.838,3.774C138.581,65.45,140.272,54.777,134.731,47.152z"/><path d="M66.997,298.907c-2.911-8.963-12.539-13.873-21.505-10.957l-33.696,10.949c-8.964,2.913-13.869,12.54-10.957,21.505c2.917,8.979,12.561,13.867,21.505,10.957l33.696-10.949C65.005,317.499,69.91,307.871,66.997,298.907z"/><path d="M421.519,15.286c-7.624-5.54-18.297-3.851-23.838,3.774l-20.411,28.092c-5.541,7.625-3.85,18.299,3.775,23.838c7.628,5.542,18.3,3.848,23.838-3.774l20.411-28.092C430.834,31.499,429.144,20.825,421.519,15.286z"/><path d="M500.203,298.899l-33.696-10.949c-8.964-2.918-18.592,1.993-21.505,10.957c-2.913,8.964,1.992,18.593,10.957,21.505l33.696,10.949c8.945,2.909,18.588-1.979,21.505-10.957C514.073,311.44,509.167,301.812,500.203,298.899z"/><path d="M256,431.205c-9.425,0-17.066,7.641-17.066,17.066v34.638c0,9.425,7.641,17.066,17.066,17.066c9.425,0,17.066-7.641,17.066-17.066v-34.638C273.067,438.845,265.426,431.205,256,431.205z"/></g></symbol><symbol id="ic-loved" viewBox="0 0 24 24"><g fill="currentColor"><path d="m8.061 11.166c1.244-2.448 4.08-3.011 5.894-2.133 1.97.952 2.864 3.671 2.009 6.861-.522 2.17-2.616 4.787-4.47 6.637-.189.189-.465.263-.723.194-2.531-.675-5.653-1.895-7.19-3.513-2.336-2.335-2.921-5.136-1.691-6.946 1.132-1.668 3.87-2.598 6.171-1.1zm-.2 1.763c-1.634-1.631-3.871-1.085-4.73.179-.418.615-.475 1.394-.255 2.215.252.941.861 1.926 1.772 2.834.005.006.01.011.015.016 1.295 1.369 3.879 2.368 6.076 2.987 1.593-1.634 3.332-3.792 3.768-5.624.002-.008.004-.015.006-.022.334-1.242.369-2.4.117-3.341-.22-.821-.659-1.467-1.328-1.79-1.376-.666-3.586-.02-4.187 2.21-.069.258-.271.46-.53.529-.258.069-.534-.004-.724-.193z"/><path d="m15.987 14.449c-.386.148-.82-.046-.968-.432-.149-.387.045-.821.431-.969 1.534-.588 3.012-1.338 3.887-2.263.005-.006.01-.011.015-.016.911-.909 1.52-1.894 1.772-2.835.22-.821.163-1.6-.255-2.214-.859-1.265-3.096-1.811-4.73-.18-.19.189-.466.263-.724.193-.259-.069-.461-.271-.53-.529-.601-2.23-2.811-2.876-4.187-2.21-.669.324-1.108.97-1.328 1.79-.252.941-.217 2.099.117 3.342.002.007.004.014.006.021.123.52.359 1.068.664 1.624.2.363.067.819-.296 1.018-.363.2-.819.067-1.018-.296-.373-.68-.654-1.352-.807-1.989-.855-3.19.039-5.907 2.009-6.86 1.814-.878 4.65-.315 5.894 2.134 2.301-1.499 5.039-.568 6.171 1.099 1.229 1.81.645 4.611-1.684 6.939-1.005 1.062-2.679 1.958-4.439 2.633z"/><path d="m6.171 5.165c.185.37.035.821-.336 1.006-.37.185-.821.035-1.006-.336l-.5-1c-.185-.37-.035-.821.336-1.006.37-.185.821-.035 1.006.336z"/><path d="m17.329 18.835c-.185-.37-.035-.821.336-1.006.37-.185.821-.035 1.006.336l.5 1c.185.37.035.821-.336 1.006-.37.185-.821.035-1.006-.336z"/><path d="m3.835 9.671c-.37.185-.821.035-1.006-.336-.185-.37-.035-.821.336-1.006l1-.5c.37-.185.821-.035 1.006.336.185.37.035.821-.336 1.006z"/><path d="m19.665 14.329c.37-.185.821-.035 1.006.336.185.37.035.821-.336 1.006l-1 .5c-.37.185-.821.035-1.006-.336-.185-.37-.035-.821.336-1.006z"/></g></symbol><symbol id="ic-chevron" viewBox="0 0 24 24"><g fill="currentColor"><path clip-rule="evenodd" d="m18.5303 9.46967c.2929.29289.2929.76773 0 1.06063l-6 6c-.2929.2929-.7677.2929-1.0606 0l-6.00003-6c-.29289-.2929-.29289-.76774 0-1.06063s.76777-.29289 1.06066 0l5.46967 5.46963 5.4697-5.46963c.2929-.29289.7677-.29289 1.0606 0z" fill-rule="evenodd"/></g></symbol></svg>
+
+  <!-- ============ SIDEBAR (collapsible) ============ -->
+  <aside style="width:{{ navW }}px;flex-shrink:0;background:#FBF7EE;border-right:1px solid #DACEB6;display:flex;flex-direction:column;transition:width 180ms cubic-bezier(0.2,0,0,1);overflow:hidden">
+    <div style="display:flex;align-items:center;gap:11px;height:58px;padding:0 18px;border-bottom:1px solid #EAE0CD;flex-shrink:0">
+      <svg viewBox="0 0 200 200" style="width:24px;height:24px;display:block;flex-shrink:0">
+        <defs><clipPath id="bL"><rect x="0" y="0" width="96" height="200"></rect></clipPath><clipPath id="bR"><rect x="104" y="0" width="96" height="200"></rect></clipPath></defs>
+        <circle cx="100" cy="100" r="50" fill="#E0992E" clip-path="url(#bL)"></circle>
+        <polygon points="166,100 146.2,80.9 146.7,53.3 119.1,53.8 100,34 80.9,53.8 53.3,53.3 53.8,80.9 34,100 53.8,119.1 53.3,146.7 80.9,146.2 100,166 119.1,146.2 146.7,146.7 146.2,119.1" fill="#D6431C" clip-path="url(#bR)"></polygon>
+      </svg>
+      <sc-if value="{{ expanded }}" hint-placeholder-val="{{ true }}">
+        <span style="font-family:'Anton',sans-serif;font-size:18px;letter-spacing:0.01em;text-transform:uppercase;color:#1A1411;white-space:nowrap">Saly</span>
+        <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#8C8067;padding-top:2px">admin</span>
+      </sc-if>
+    </div>
+
+    <nav style="flex:1;display:flex;flex-direction:column;gap:2px;padding:12px 10px;overflow-y:auto;overflow-x:hidden">
+      <a href="#" class="nav-link" title="Dashboard" style="position:relative;display:flex;align-items:center;justify-content:{{ navJustify }};gap:13px;height:42px;padding:0 13px;text-decoration:none;background:#F6E7CE;border-radius:8px 0 0 8px;white-space:nowrap">
+        <span style="position:absolute;left:0;top:7px;bottom:7px;width:3px;background:#E8801F"></span>
+        <svg style="width:20px;height:20px;fill:currentColor;color:#1A1411;flex-shrink:0"><use href="#ic-dashboard"></use></svg>
+        <sc-if value="{{ expanded }}" hint-placeholder-val="{{ true }}"><span style="font-size:14px;font-weight:600;color:#1A1411">Dashboard</span></sc-if>
+      </a>
+      <a href="Ospitalitta%20Admin%20%C2%B7%20Menu%20Editor.dc.html" class="nav-link" title="Menu" style="display:flex;align-items:center;justify-content:{{ navJustify }};gap:13px;height:42px;padding:0 13px;text-decoration:none;border-radius:8px 0 0 8px;white-space:nowrap">
+        <svg style="width:20px;height:20px;fill:currentColor;color:#8C8067;flex-shrink:0"><use href="#ic-menu"></use></svg>
+        <sc-if value="{{ expanded }}" hint-placeholder-val="{{ true }}"><span style="font-size:14px;color:#5E5243">Menu</span></sc-if>
+      </a>
+      <a href="#" class="nav-link" title="QR code" style="display:flex;align-items:center;justify-content:{{ navJustify }};gap:13px;height:42px;padding:0 13px;text-decoration:none;border-radius:8px 0 0 8px;white-space:nowrap">
+        <svg style="width:20px;height:20px;fill:currentColor;color:#8C8067;flex-shrink:0"><use href="#ic-qr"></use></svg>
+        <sc-if value="{{ expanded }}" hint-placeholder-val="{{ true }}"><span style="font-size:14px;color:#5E5243">QR code</span></sc-if>
+      </a>
+      <a href="#" class="nav-link" title="Settings" style="display:flex;align-items:center;justify-content:{{ navJustify }};gap:13px;height:42px;padding:0 13px;text-decoration:none;border-radius:8px 0 0 8px;white-space:nowrap">
+        <svg style="width:20px;height:20px;fill:currentColor;color:#8C8067;flex-shrink:0"><use href="#ic-settings"></use></svg>
+        <sc-if value="{{ expanded }}" hint-placeholder-val="{{ true }}"><span style="font-size:14px;color:#5E5243">Settings</span></sc-if>
+      </a>
+    </nav>
+
+    <!-- toggle -->
+    <button onClick="{{ toggleNav }}" style="display:flex;align-items:center;justify-content:{{ navJustify }};gap:12px;height:42px;margin:8px 10px;padding:0 14px;background:transparent;border:none;border-top:1px solid #EAE0CD;cursor:pointer;color:#8C8067">
+      <svg style="width:18px;height:18px;fill:currentColor;color:#8C8067;flex-shrink:0;transition:transform 180ms;transform:{{ navToggleRot }}"><use href="#ic-collapse"></use></svg>
+      <sc-if value="{{ expanded }}" hint-placeholder-val="{{ true }}"><span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase">Collapse</span></sc-if>
+    </button>
+
+    <!-- user -->
+    <div style="display:flex;align-items:center;gap:11px;height:60px;padding:0 16px;border-top:1px solid #EAE0CD;flex-shrink:0">
+      <span style="width:32px;height:32px;background:#ECE3D0;border:1px solid #DACEB6;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:12px;color:#B06A1E;flex-shrink:0">M</span>
+      <sc-if value="{{ expanded }}" hint-placeholder-val="{{ true }}">
+        <div style="min-width:0">
+          <div style="font-size:13px;font-weight:600;color:#1A1411">Manager</div>
+          <div style="font-family:'Space Mono',monospace;font-size:10px;color:#8C8067;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">you@company.com</div>
+        </div>
+      </sc-if>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main style="flex:1;min-width:0;display:flex;flex-direction:column">
+
+    <!-- topbar -->
+    <header style="display:flex;align-items:center;justify-content:space-between;gap:20px;height:58px;padding:0 28px;border-bottom:1px solid #DACEB6;flex-shrink:0">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067">menu analytics</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="display:flex;border:1px solid #DACEB6;border-radius:8px 0 0 8px;overflow:hidden">
+          <button onClick="{{ setDay }}" style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;padding:8px 14px;border:none;cursor:pointer;{{ segDay }}">Day</button>
+          <button onClick="{{ setWeek }}" style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;padding:8px 14px;border:none;cursor:pointer;{{ segWeek }}">Week</button>
+          <button onClick="{{ setMonth }}" style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;padding:8px 14px;border:none;cursor:pointer;{{ segMonth }}">Month</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- content -->
+    <div style="flex:1;overflow-y:auto;padding:26px 28px 48px">
+      <div style="display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap">
+        <h1 style="font-family:'Anton',sans-serif;font-size:38px;line-height:0.9;text-transform:uppercase;color:#1A1411">Dashboard</h1>
+        <span style="font-family:'Space Mono',monospace;font-size:12px;color:#8C8067;margin-bottom:5px;margin-left:auto">{{ rangeWord }}</span>
+      </div>
+
+      <!-- KPI -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px">
+        <div style="background:#FBF7EE;border:1px solid #EAE0CD;border-radius:8px 0 0 8px;padding:20px 22px">
+          <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067">Unique visitors</div>
+          <div style="font-family:'Anton',sans-serif;font-size:44px;line-height:0.9;color:#1A1411;margin-top:12px">{{ unique }}</div>
+          <div style="font-family:'Space Mono',monospace;font-size:12px;color:#15633F;margin-top:10px">▲ {{ dUnique }}</div>
+        </div>
+        <div style="background:#FBF7EE;border:1px solid #EAE0CD;border-radius:8px 0 0 8px;padding:20px 22px">
+          <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067">Menu views</div>
+          <div style="font-family:'Anton',sans-serif;font-size:44px;line-height:0.9;color:#1A1411;margin-top:12px">{{ views }}</div>
+          <div style="font-family:'Space Mono',monospace;font-size:12px;color:#15633F;margin-top:10px">▲ {{ dViews }}</div>
+        </div>
+        <div style="background:#FBF7EE;border:1px solid #EAE0CD;border-radius:8px 0 0 8px;padding:20px 22px">
+          <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067">Bookmarks</div>
+          <div style="font-family:'Anton',sans-serif;font-size:44px;line-height:0.9;color:#1A1411;margin-top:12px">{{ bookmarks }}</div>
+          <div style="font-family:'Space Mono',monospace;font-size:12px;color:#15633F;margin-top:10px">▲ {{ dBook }}</div>
+        </div>
+      </div>
+
+      <!-- chart + countries -->
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-top:16px;align-items:start">
+        <div style="background:#FFFFFF;border:1px solid #EAE0CD;border-radius:8px 0 0 8px;padding:20px 22px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+            <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;color:#1A1411">Top picks by country</h2>
+            <span style="font-family:'Space Mono',monospace;font-size:11px;color:#8C8067">by bookmarks</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:14px;margin-top:18px;padding-bottom:10px;border-bottom:1px solid #DACEB6">
+            <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067">Country</span>
+            <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067">Top food</span>
+            <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067">Top drink</span>
+          </div>
+          <sc-for list="{{ picks }}" as="p" hint-placeholder-count="7">
+            <div style="display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:14px;padding:11px 0;border-bottom:1px solid #EAE0CD;align-items:center">
+              <span style="display:flex;align-items:center;gap:9px;min-width:0"><span style="font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:#5E5243;flex-shrink:0">{{ p.code }}</span><span style="font-size:14px;color:#1A1411;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.name }}</span></span>
+              <span style="display:flex;align-items:center;gap:8px;min-width:0"><span style="width:7px;height:7px;border-radius:50%;background:#E0992E;flex-shrink:0;display:block"></span><span style="font-size:14px;color:#1A1411;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.food }}</span></span>
+              <span style="display:flex;align-items:center;gap:8px;min-width:0"><span style="width:7px;height:7px;border-radius:50%;background:#D6431C;flex-shrink:0;display:block"></span><span style="font-size:14px;color:#1A1411;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.drink }}</span></span>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="background:#FFFFFF;border:1px solid #EAE0CD;border-radius:8px 0 0 8px;padding:20px 22px">
+          <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;color:#1A1411">Where guests are from</h2>
+          <div style="display:flex;flex-direction:column;gap:13px;margin-top:18px">
+            <sc-for list="{{ countries }}" as="c" hint-placeholder-count="6">
+              <div>
+                <div style="display:flex;align-items:baseline;gap:10px">
+                  <span style="font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:#5E5243;width:24px;flex-shrink:0">{{ c.code }}</span>
+                  <span style="font-size:14px;color:#1A1411;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.name }}</span>
+                  <span style="font-family:'Space Mono',monospace;font-size:12px;color:#8C8067">{{ c.pct }}%</span>
+                </div>
+                <div style="height:6px;background:#ECE3D0;margin-top:6px;margin-left:34px"><div style="height:6px;width:{{ c.pct }}%;background:#E0992E"></div></div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <!-- bookmarks + views + hours -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:16px;align-items:start">
+        <div style="background:#FFFFFF;border:1px solid #EAE0CD;border-radius:8px 0 0 8px;padding:20px 22px">
+          <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;color:#1A1411">Most bookmarked</h2>
+          <div style="display:flex;flex-direction:column;gap:13px;margin-top:18px">
+            <sc-for list="{{ bookmarksList }}" as="b" hint-placeholder-count="5">
+              <div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px"><span style="font-size:14px;color:#1A1411;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ b.name }}</span><span style="font-family:'Space Mono',monospace;font-size:12px;color:#8C8067">{{ b.n }}</span></div>
+                <div style="height:6px;background:#ECE3D0;margin-top:7px"><div style="height:6px;width:{{ b.pct }}%;background:#D6431C"></div></div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="background:#FFFFFF;border:1px solid #EAE0CD;border-radius:8px 0 0 8px;padding:20px 22px">
+          <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;color:#1A1411">Most viewed items</h2>
+          <div style="display:flex;flex-direction:column;gap:13px;margin-top:18px">
+            <sc-for list="{{ viewsList }}" as="v" hint-placeholder-count="5">
+              <div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px"><span style="font-size:14px;color:#1A1411;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ v.name }}</span><span style="font-family:'Space Mono',monospace;font-size:12px;color:#8C8067">{{ v.n }}</span></div>
+                <div style="height:6px;background:#ECE3D0;margin-top:7px"><div style="height:6px;width:{{ v.pct }}%;background:#E0992E"></div></div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="background:#FFFFFF;border:1px solid #EAE0CD;border-radius:8px 0 0 8px;padding:20px 22px">
+          <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;color:#1A1411">Busiest hours</h2>
+          <div style="display:flex;align-items:flex-end;gap:5px;height:120px;margin-top:18px">
+            <sc-for list="{{ hours }}" as="h" hint-placeholder-count="12">
+              <div style="flex:1;height:{{ h.pct }}%;background:{{ h.color }};min-width:2px"></div>
+            </sc-for>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:10px;font-family:'Space Mono',monospace;font-size:10px;color:#AC9D82">
+            <span>12</span><span>16</span><span>20</span><span>23</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  NAV_W_EXPANDED = 236; NAV_W_COLLAPSED = 68;
+  DATA = {
+    day:   { scans: 312, unique: 248, views: 1840, bookmarks: 64, dScans: '8%', dUnique: '5%', dViews: '7%', dBook: '11%',
+             unit: 'by hour', bars: [18, 24, 30, 38, 52, 46, 40, 58, 72, 64, 50, 32], labels: ['12', '15', '18', '21', '23'] },
+    week:  { scans: 1920, unique: 4287, views: 11200, bookmarks: 3421, dScans: '14%', dUnique: '9%', dViews: '12%', dBook: '18%',
+             unit: 'by day', bars: [210, 260, 240, 300, 420, 560, 480], labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
+    month: { scans: 8400, unique: 6300, views: 49000, bookmarks: 13680, dScans: '22%', dUnique: '15%', dViews: '19%', dBook: '24%',
+             unit: 'by day', bars: [120, 140, 130, 160, 150, 180, 210, 170, 150, 190, 210, 240, 300, 260, 220, 240, 280, 300, 340, 420, 360, 320, 300, 360, 400, 460, 520, 470, 430, 500], labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'] }
+  };
+  COUNTRIES = [
+    { code: 'PL', name: 'Poland', pct: 24 }, { code: 'DE', name: 'Germany', pct: 20 },
+    { code: 'NO', name: 'Norway', pct: 16 }, { code: 'IT', name: 'Italy', pct: 14 },
+    { code: 'FR', name: 'France', pct: 12 }, { code: 'AL', name: 'Albania', pct: 8 },
+    { code: 'GB', name: 'United Kingdom', pct: 6 }
+  ];
+  BOOKMARKS = [
+    { name: 'Gillardeau oysters', n: 142 }, { name: 'Aperol Spritz', n: 119 },
+    { name: 'Whole sea bass', n: 98 }, { name: 'Negroni', n: 87 }, { name: 'Grilled octopus', n: 74 }
+  ];
+  VIEWS = [
+    { name: 'Whole sea bass', n: 1240 }, { name: 'Aperol Spritz', n: 1180 },
+    { name: 'Gillardeau oysters', n: 980 }, { name: 'Catch of the day', n: 870 }, { name: 'Negroni', n: 760 }
+  ];
+  HOURS = [28, 34, 30, 26, 32, 44, 62, 78, 96, 88, 64, 40];
+  PICKS = [
+    { code: 'PL', name: 'Poland', food: 'Whole sea bass', drink: 'Aperol Spritz' },
+    { code: 'DE', name: 'Germany', food: 'Grilled octopus', drink: 'Negroni' },
+    { code: 'NO', name: 'Norway', food: 'Gillardeau oysters', drink: 'Gin and Tonic' },
+    { code: 'IT', name: 'Italy', food: 'Tuna tartare', drink: 'Negroni' },
+    { code: 'FR', name: 'France', food: 'Sea bass ceviche', drink: 'Aperol Spritz' },
+    { code: 'AL', name: 'Albania', food: 'Catch of the day', drink: 'Aperol Spritz' },
+    { code: 'GB', name: 'United Kingdom', food: 'Grilled octopus', drink: 'Gin and Tonic' }
+  ];
+  state = { collapsed: false, range: 'week' };
+  componentDidMount() { try { const c = localStorage.getItem('osp-admin-nav'); if (c !== null) this.setState({ collapsed: c === '1' }); } catch (e) {} }
+  toggle() { this.setState(s => { const n = !s.collapsed; try { localStorage.setItem('osp-admin-nav', n ? '1' : '0'); } catch (e) {} return { collapsed: n }; }); }
+  fmt(n) { return n.toLocaleString('en-US').replace(/,/g, ' '); }
+  renderVals() {
+    const st = this.state;
+    const d = this.DATA[st.range];
+    const max = Math.max.apply(null, d.bars);
+    const bars = d.bars.map(h => ({ pct: Math.max(4, Math.round(h / max * 100)), color: (h === max ? '#E8801F' : '#E7DBC4') }));
+    const labels = d.labels.map(t => ({ t }));
+    const bMax = Math.max.apply(null, this.BOOKMARKS.map(b => b.n));
+    const bookmarksList = this.BOOKMARKS.map(b => ({ name: b.name, n: b.n, pct: Math.round(b.n / bMax * 100) }));
+    const vMax = Math.max.apply(null, this.VIEWS.map(v => v.n));
+    const viewsList = this.VIEWS.map(v => ({ name: v.name, n: this.fmt(v.n), pct: Math.round(v.n / vMax * 100) }));
+    const hMax = Math.max.apply(null, this.HOURS);
+    const hours = this.HOURS.map(v => ({ pct: Math.round(v / hMax * 100), color: (v === hMax ? '#E8801F' : '#E7DBC4') }));
+    const seg = (on) => on ? 'background:#1A1411;color:#FAF4E8' : 'background:transparent;color:#5E5243';
+    const rangeWord = st.range === 'day' ? 'today' : (st.range === 'week' ? 'this week' : 'this month');
+    return {
+      navW: st.collapsed ? this.NAV_W_COLLAPSED : this.NAV_W_EXPANDED,
+      expanded: !st.collapsed, collapsed: st.collapsed, navJustify: st.collapsed ? 'center' : 'flex-start',
+      toggleNav: () => this.toggle(), navToggleRot: st.collapsed ? 'rotate(180deg)' : 'none',
+      unique: this.fmt(d.unique), views: this.fmt(d.views), bookmarks: this.fmt(d.bookmarks),
+      dUnique: d.dUnique, dViews: d.dViews, dBook: d.dBook,
+      chartUnit: d.unit, bars, labels, barGap: st.range === 'month' ? 3 : 7, rangeWord,
+      countries: this.COUNTRIES, picks: this.PICKS, bookmarksList, viewsList, hours,
+      setDay: () => this.setState({ range: 'day' }), setWeek: () => this.setState({ range: 'week' }), setMonth: () => this.setState({ range: 'month' }),
+      segDay: seg(st.range === 'day'), segWeek: seg(st.range === 'week'), segMonth: seg(st.range === 'month')
+    };
+  }
+}
+</script>
+</body>
+</html>

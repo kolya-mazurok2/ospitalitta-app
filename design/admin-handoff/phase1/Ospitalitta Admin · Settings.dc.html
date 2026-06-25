@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<title>Ospitalitta admin · Settings</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  body{background:#F1E9D8;font-family:'Space Grotesk',sans-serif}
+  ::selection{background:#E8801F;color:#15120D}
+  .nav-link:hover{background:#EFE6D3}
+  input:focus{border-color:#E8801F!important;box-shadow:0 0 0 3px rgba(232,128,31,0.16)}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-thumb{background:#DACEB6}
+  ::-webkit-scrollbar-track{background:transparent}
+</style>
+</helmet>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="100" fill="#F1E9D8"></rect>
+    <line x1="22" y1="36" x2="78" y2="36" stroke="#1A1411" stroke-width="6"></line>
+    <circle cx="42" cy="36" r="10" fill="#E8801F"></circle>
+    <line x1="22" y1="64" x2="78" y2="64" stroke="#1A1411" stroke-width="6"></line>
+    <circle cx="60" cy="64" r="10" fill="#E8801F"></circle>
+  </svg>
+</template>
+
+<div style="display:flex;height:100vh;background:#F1E9D8;color:#1A1411;overflow:hidden">
+
+  <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true"><symbol id="ic-dashboard" viewBox="0 0 512 512"><g fill="currentColor" stroke="none"><path d="m176 476h-116c-33.084 0-60-26.916-60-60v-320c0-33.084 26.916-60 60-60h116c33.084 0 60 26.916 60 60v320c0 33.084-26.916 60-60 60zm-116-400c-11.028 0-20 8.972-20 20v320c0 11.028 8.972 20 20 20h116c11.028 0 20-8.972 20-20v-320c0-11.028-8.972-20-20-20z"/><path d="m452 236h-116c-33.084 0-60-26.916-60-60v-80c0-33.084 26.916-60 60-60h116c33.084 0 60 26.916 60 60v80c0 33.084-26.916 60-60 60zm-116-160c-11.028 0-20 8.972-20 20v80c0 11.028 8.972 20 20 20h116c11.028 0 20-8.972 20-20v-80c0-11.028-8.972-20-20-20z"/><path d="m452 476h-116c-33.084 0-60-26.916-60-60v-80c0-33.084 26.916-60 60-60h116c33.084 0 60 26.916 60 60v80c0 33.084-26.916 60-60 60zm-116-160c-11.028 0-20 8.972-20 20v80c0 11.028 8.972 20 20 20h116c11.028 0 20-8.972 20-20v-80c0-11.028-8.972-20-20-20z"/></g></symbol><symbol id="ic-menu" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="3.5" y1="6" x2="4.6" y2="6"/><line x1="7.5" y1="6" x2="20.5" y2="6"/><line x1="3.5" y1="12" x2="4.6" y2="12"/><line x1="7.5" y1="12" x2="20.5" y2="12"/><line x1="3.5" y1="18" x2="4.6" y2="18"/><line x1="7.5" y1="18" x2="20.5" y2="18"/></g></symbol><symbol id="ic-translate" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><ellipse cx="12" cy="12" rx="4" ry="9"/></g></symbol><symbol id="ic-qr" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="14" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="3.5" y="14" width="6.5" height="6.5" rx="1"/><rect x="14.4" y="14.4" width="2.3" height="2.3"/><rect x="18.2" y="18.2" width="2.3" height="2.3"/><line x1="14.4" y1="20.5" x2="16.7" y2="20.5"/></g></symbol><symbol id="ic-collapse" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="15" rx="1.5"/><line x1="9.2" y1="4.5" x2="9.2" y2="19.5"/><path d="M16 9.5 13.5 12 16 14.5"/></g></symbol><symbol id="ic-settings" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="3.5" y1="8" x2="20.5" y2="8"/><line x1="3.5" y1="16" x2="20.5" y2="16"/><circle cx="9" cy="8" r="2.3"/><circle cx="15" cy="16" r="2.3"/></g></symbol><symbol id="ic-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></g></symbol></svg>
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside style="width:{{ navW }}px;flex-shrink:0;background:#FBF7EE;border-right:1px solid #DACEB6;display:flex;flex-direction:column;transition:width 180ms cubic-bezier(0.2,0,0,1);overflow:hidden">
+    <div style="display:flex;align-items:center;gap:11px;height:58px;padding:0 18px;border-bottom:1px solid #EAE0CD;flex-shrink:0">
+      <svg viewBox="0 0 200 200" style="width:24px;height:24px;display:block;flex-shrink:0">
+        <defs><clipPath id="bL"><rect x="0" y="0" width="96" height="200"></rect></clipPath><clipPath id="bR"><rect x="104" y="0" width="96" height="200"></rect></clipPath></defs>
+        <circle cx="100" cy="100" r="50" fill="#E0992E" clip-path="url(#bL)"></circle>
+        <polygon points="166,100 146.2,80.9 146.7,53.3 119.1,53.8 100,34 80.9,53.8 53.3,53.3 53.8,80.9 34,100 53.8,119.1 53.3,146.7 80.9,146.2 100,166 119.1,146.2 146.7,146.7 146.2,119.1" fill="#D6431C" clip-path="url(#bR)"></polygon>
+      </svg>
+      <sc-if value="{{ expanded }}" hint-placeholder-val="{{ true }}">
+        <span style="font-family:'Anton',sans-serif;font-size:18px;letter-spacing:0.01em;text-transform:uppercase;color:#1A1411;white-space:nowrap">Saly</span>
+        <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#8C8067;padding-top:2px">admin</span>
+      </sc-if>
+    </div>
+
+    <nav style="flex:1;display:flex;flex-direction:column;gap:2px;padding:12px 10px;overflow-y:auto;overflow-x:hidden">
+      <a href="Ospitalitta%20Admin%20%C2%B7%20Dashboard.dc.html" class="nav-link" title="Dashboard" style="display:flex;align-items:center;justify-content:{{ navJustify }};gap:13px;height:42px;padding:0 13px;text-decoration:none;border-radius:8px 0 0 8px;white-space:nowrap">
+        <svg style="width:20px;height:20px;fill:none;stroke:currentColor;color:#8C8067;flex-shrink:0"><use href="#ic-dashboard"></use></svg>
+        <sc-if value="{{ expanded }}" hint-placeholder-val="{{ true }}"><span style="font-size:14px;color:#5E5243">Dashboard</span></sc-if>
+      </a>
+      <a href="Ospitalitta%20Admin%20%C2%B7%20Menu%20Editor.dc.html" class="nav-link" title="Menu" style="display:flex;align-items:center;justify-content:{{ navJustify }};gap:13px;height:42px;padding:0 13px;text-decoration:none;border-radius:8px 0 0 8px;white-space:nowrap">
+        <svg style="width:20px;height:20px;fill:none;stroke:currentColor;color:#8C8067;flex-shrink:0"><use href="#ic-menu"></use></svg>
+        <sc-if value="{{ expanded }}" hint-placeholder-val="{{ true }}"><span style="font-size:14px;color:#5E5243">Menu</span></sc-if>
+      </a>
+      <a href="Ospitalitta%20Admin%20%C2%B7%20QR%20codes.dc.html" class="nav-link" title="QR code" style="display:flex;align-items:center;justify-content:{{ navJustify }};gap:13px;height:42px;padding:0 13px;text-decoration:none;border-radius:8px 0 0 8px;white-space:nowrap">
+        <svg style="width:20px;height:20px;fill:none;stroke:currentColor;color:#8C8067;flex-shrink:0"><use href="#ic-qr"></use></svg>
+        <sc-if value="{{ expanded }}" hint-placeholder-val="{{ true }}"><span style="font-size:14px;color:#5E5243">QR code</span></sc-if>
+      </a>
+      <a href="#" class="nav-link" title="Settings" style="position:relative;display:flex;align-items:center;justify-content:{{ navJustify }};gap:13px;height:42px;padding:0 13px;text-decoration:none;background:#F6E7CE;border-radius:8px 0 0 8px;white-space:nowrap">
+        <span style="position:absolute;left:0;top:7px;bottom:7px;width:3px;background:#E8801F"></span>
+        <svg style="width:20px;height:20px;fill:none;stroke:currentColor;color:#1A1411;flex-shrink:0"><use href="#ic-settings"></use></svg>
+        <sc-if value="{{ expanded }}" hint-placeholder-val="{{ true }}"><span style="font-size:14px;font-weight:600;color:#1A1411">Settings</span></sc-if>
+      </a>
+    </nav>
+
+    <button onClick="{{ toggleNav }}" style="display:flex;align-items:center;justify-content:{{ navJustify }};gap:12px;height:42px;margin:8px 10px;padding:0 14px;background:transparent;border:none;border-top:1px solid #EAE0CD;cursor:pointer;color:#8C8067">
+      <svg style="width:18px;height:18px;fill:none;stroke:currentColor;color:#8C8067;flex-shrink:0;transition:transform 180ms;transform:{{ navToggleRot }}"><use href="#ic-collapse"></use></svg>
+      <sc-if value="{{ expanded }}" hint-placeholder-val="{{ true }}"><span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase">Collapse</span></sc-if>
+    </button>
+
+    <div style="display:flex;align-items:center;gap:11px;height:60px;padding:0 16px;border-top:1px solid #EAE0CD;flex-shrink:0">
+      <span style="width:32px;height:32px;background:#ECE3D0;border:1px solid #DACEB6;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:12px;color:#B06A1E;flex-shrink:0">M</span>
+      <sc-if value="{{ expanded }}" hint-placeholder-val="{{ true }}">
+        <div style="min-width:0">
+          <div style="font-size:13px;font-weight:600;color:#1A1411">Manager</div>
+          <div style="font-family:'Space Mono',monospace;font-size:10px;color:#8C8067;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">you@company.com</div>
+        </div>
+      </sc-if>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="display:flex;align-items:center;gap:13px;height:58px;padding:0 28px;border-bottom:1px solid #DACEB6;flex-shrink:0">
+      <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067">settings</span>
+    </header>
+
+    <div style="flex:1;overflow-y:auto;padding:28px 32px 64px">
+      <h1 style="font-family:'Anton',sans-serif;font-size:38px;line-height:0.9;text-transform:uppercase;color:#1A1411">Settings</h1>
+      <p style="max-width:560px;margin-top:12px;font-size:15px;line-height:1.6;color:#5E5243">Venue-level settings for Saly. Most are read-only for now and will open up later</p>
+
+      <div style="max-width:680px">
+
+        <!-- VENUE -->
+        <div style="margin-top:34px">
+          <div style="display:flex;align-items:baseline;gap:14px;border-top:1px solid #DACEB6;padding-top:18px">
+            <span style="font-family:'Space Mono',monospace;font-size:13px;color:#8C8067">01</span>
+            <h2 style="font-family:'Space Grotesk',sans-serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:#8C8067">Venue</h2>
+          </div>
+          <div style="margin-top:18px">
+            <label style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067;display:block;margin-bottom:7px">Name</label>
+            <input type="text" value="Saly" style="max-width:360px;width:100%;font-family:'Space Grotesk',sans-serif;font-size:15px;color:#1A1411;background:#FFFFFF;border:1px solid #DACEB6;padding:11px 13px;outline:none">
+          </div>
+          <div style="margin-top:16px">
+            <label style="display:flex;align-items:center;gap:7px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067;margin-bottom:7px">Slug <svg style="width:11px;height:11px;fill:none;stroke:currentColor;color:#AC9D82" viewBox="0 0 24 24"><use href="#ic-lock"></use></svg> locked</label>
+            <input type="text" value="saly" disabled style="max-width:360px;width:100%;font-family:'Space Mono',monospace;font-size:14px;color:#8C8067;background:#ECE3D0;border:1px solid #DACEB6;padding:11px 13px;outline:none;cursor:not-allowed">
+            <div style="font-size:13px;line-height:1.5;color:#8C8067;margin-top:8px">The slug is fixed. If it ever changes, the old link keeps a 301 redirect so printed QR codes never break</div>
+          </div>
+          <div style="margin-top:16px">
+            <label style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067;display:block;margin-bottom:7px">Public guest link</label>
+            <div style="display:inline-flex;align-items:center;gap:10px;background:#ECE3D0;border:1px solid #DACEB6;padding:10px 14px;font-family:'Space Mono',monospace;font-size:13px;color:#5E5243">app.ospitalitta.com/venue/saly/menu</div>
+          </div>
+        </div>
+
+        <!-- LANGUAGES -->
+        <div style="margin-top:38px">
+          <div style="display:flex;align-items:baseline;gap:14px;border-top:1px solid #DACEB6;padding-top:18px">
+            <span style="font-family:'Space Mono',monospace;font-size:13px;color:#8C8067">02</span>
+            <h2 style="font-family:'Space Grotesk',sans-serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:#8C8067">Languages</h2>
+            <span style="margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:#AC9D82"><svg style="width:11px;height:11px;fill:none;stroke:currentColor" viewBox="0 0 24 24"><use href="#ic-lock"></use></svg>editing later</span>
+          </div>
+          <p style="font-size:14px;line-height:1.55;color:#5E5243;margin-top:14px">Content languages for the guest menu. EN is the base. Guests fall back to EN where a translation is empty</p>
+          <div style="border:1px solid #EAE0CD;border-radius:8px 0 0 8px;overflow:hidden;margin-top:16px;background:#FBF7EE">
+            <sc-for list="{{ locales }}" as="l" hint-placeholder-count="8">
+              <div style="display:flex;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid #EAE0CD;opacity:0.85">
+                <span style="font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:#5E5243;width:28px;flex-shrink:0">{{ l.code }}</span>
+                <span style="font-size:14px;color:#1A1411;flex:1">{{ l.name }}</span>
+                <sc-if value="{{ l.isBase }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:#B06A1E;border:1px solid #E8C79A;padding:3px 8px;border-radius:5px 0 0 5px">base</span></sc-if>
+                <span style="width:38px;height:22px;background:#B8CFC2;border-radius:11px;position:relative;flex-shrink:0;display:block;opacity:0.7;cursor:not-allowed"><span style="position:absolute;top:2px;right:2px;width:18px;height:18px;background:#FBF7EE;border-radius:50%"></span></span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- CURRENCY -->
+        <div style="margin-top:38px">
+          <div style="display:flex;align-items:baseline;gap:14px;border-top:1px solid #DACEB6;padding-top:18px">
+            <span style="font-family:'Space Mono',monospace;font-size:13px;color:#8C8067">03</span>
+            <h2 style="font-family:'Space Grotesk',sans-serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:#8C8067">Currency</h2>
+            <span style="margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:#AC9D82"><svg style="width:11px;height:11px;fill:none;stroke:currentColor" viewBox="0 0 24 24"><use href="#ic-lock"></use></svg>locked</span>
+          </div>
+          <div style="margin-top:16px;display:flex;gap:26px;flex-wrap:wrap;align-items:flex-end">
+            <div>
+              <label style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#8C8067;display:block;margin-bottom:7px">Venue currency</label>
+              <div style="display:inline-flex;align-items:center;gap:10px;width:200px;justify-content:space-between;background:#ECE3D0;border:1px solid #DACEB6;padding:11px 13px;cursor:not-allowed">
+                <span style="font-family:'Space Grotesk',sans-serif;font-size:14px;color:#5E5243">Lekë <span style="color:#AC9D82">· ALL</span></span>
+                <svg style="width:11px;height:11px;fill:none;stroke:currentColor;color:#AC9D82" viewBox="0 0 24 24"><use href="#ic-lock"></use></svg>
+              </div>
+            </div>
+            <div style="font-size:13px;line-height:1.5;color:#8C8067;max-width:300px;padding-bottom:11px">One currency per venue. It is applied to every price in the menu, so prices stay clean integers</div>
+          </div>
+        </div>
+
+        <!-- ACCOUNT -->
+        <div style="margin-top:38px">
+          <div style="display:flex;align-items:baseline;gap:14px;border-top:1px solid #DACEB6;padding-top:18px">
+            <span style="font-family:'Space Mono',monospace;font-size:13px;color:#8C8067">04</span>
+            <h2 style="font-family:'Space Grotesk',sans-serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:#8C8067">Account</h2>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;margin-top:18px;background:#FBF7EE;border:1px solid #EAE0CD;border-radius:8px 0 0 8px;padding:16px 18px">
+            <span style="width:40px;height:40px;background:#ECE3D0;border:1px solid #DACEB6;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:14px;color:#B06A1E;flex-shrink:0">M</span>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:15px;font-weight:600;color:#1A1411">Manager</div>
+              <div style="font-family:'Space Mono',monospace;font-size:12px;color:#8C8067">you@company.com</div>
+            </div>
+            <button style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:500;color:#9A2E10;background:transparent;border:1px solid #E6B9A6;padding:9px 15px;border-radius:7px 0 0 7px;cursor:pointer">Sign out</button>
+          </div>
+          <div style="font-size:13px;line-height:1.5;color:#8C8067;margin-top:10px">Single hardcoded user for now. Real accounts and per-venue access come later</div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  NAV_W_EXPANDED = 236; NAV_W_COLLAPSED = 68;
+  LOCALES = [
+    { code: 'EN', name: 'English', isBase: true }, { code: 'SQ', name: 'Shqip', isBase: false },
+    { code: 'IT', name: 'Italiano', isBase: false }, { code: 'PL', name: 'Polski', isBase: false },
+    { code: 'HU', name: 'Magyar', isBase: false }, { code: 'DE', name: 'Deutsch', isBase: false },
+    { code: 'FR', name: 'Français', isBase: false }, { code: 'NO', name: 'Norsk', isBase: false }
+  ];
+  state = { collapsed: false };
+  componentDidMount() { try { const c = localStorage.getItem('osp-admin-nav'); if (c !== null) this.setState({ collapsed: c === '1' }); } catch (e) {} }
+  toggle() { this.setState(s => { const n = !s.collapsed; try { localStorage.setItem('osp-admin-nav', n ? '1' : '0'); } catch (e) {} return { collapsed: n }; }); }
+  renderVals() {
+    const st = this.state;
+    return {
+      navW: st.collapsed ? this.NAV_W_COLLAPSED : this.NAV_W_EXPANDED,
+      expanded: !st.collapsed, navJustify: st.collapsed ? 'center' : 'flex-start',
+      toggleNav: () => this.toggle(), navToggleRot: st.collapsed ? 'rotate(180deg)' : 'none',
+      locales: this.LOCALES
+    };
+  }
+}
+</script>
+</body>
+</html>

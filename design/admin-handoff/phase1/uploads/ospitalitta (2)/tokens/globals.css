@@ -1,0 +1,158 @@
+@import "tailwindcss";
+
+/* =============================================================
+   Digital Waiter — Design Tokens (DEC-016)
+   3 levels: 1 primitives  →  2 semantic/alias  →  3 component
+   Components consume ONLY level 2 (and 3). Never level 1 directly.
+   Theme switches ONLY the semantic layer (life / burn).
+   Active palette: Set 1 — Gold & Char. Swap the PRIMITIVES block
+   to move to Set 2 / Set 3 (one core, no dupes).
+   ============================================================= */
+
+/* ---------- 1 · PRIMITIVES — raw values, Set 1 active ---------- */
+:root {
+  /* --- palette: Set 1 — Gold & Char (active) --- */
+  --p-gold:   #E0992E;   /* life accent  */
+  --p-ember:  #D6431C;   /* burn accent  */
+  --p-molten: #E8801F;   /* sun core / venue through-line */
+  --p-cream:  #FAF4E8;   /* life surface */
+  --p-char:   #15110E;   /* burn surface */
+  --p-ink:    #1A1411;   /* life ink     */
+  --p-ash:    #F2E9DA;   /* burn ink     */
+
+  /* --- palette: Set 2 — Honey & Oxblood (swap to activate) ---
+  --p-honey:    #F0AE3F;
+  --p-oxblood:  #7C1E10;
+  --p-cream:    #FBF3E6;
+  --p-ink:      #241813;
+  --p-whitehot: #F7ECDD;
+  --- */
+
+  /* --- palette: Set 3 — White-hot & Scorched (swap to activate) ---
+  --p-near-white: #FBF7EE;
+  --p-scorched:   #100E0C;
+  --p-sun:        #EA4F16;
+  --- */
+
+  /* --- type scale: aggressive modular 1.333 (perfect fourth) --- */
+  --fs-caption: 0.8125rem;  /* 13px */
+  --fs-body:    1rem;       /* 16px */
+  --fs-lead:    1.3125rem;  /* 21px */
+  --fs-h4:      1.75rem;    /* 28px */
+  --fs-h3:      2.375rem;   /* 38px */
+  --fs-h2:      3.1875rem;  /* 51px */
+  --fs-h1:      4.25rem;    /* 68px */
+  --fs-display: 6rem;       /* 96px */
+  --fs-mega:    10rem;      /* 160px — polar moments only */
+
+  --lh-tight: 0.92;
+  --lh-snug:  1.08;
+  --lh-base:  1.6;
+  --tracking-caption: 0.04em;
+
+  /* --- spacing: 4px base --- */
+  --sp-3xs: 4px;   --sp-2xs: 8px;  --sp-xs: 12px;  --sp-sm: 16px;
+  --sp-md:  24px;  --sp-lg:  32px; --sp-xl: 48px;  --sp-2xl: 64px;
+  --sp-3xl: 96px;  --sp-4xl: 128px; --sp-5xl: 192px;
+
+  /* --- radius: left round / right sharp (echo of split logo). PROVISIONAL --- */
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 22px;
+  --r-asym-sm: var(--r-sm) 0 0 var(--r-sm);
+  --r-asym-md: var(--r-md) 0 0 var(--r-md);
+  --r-asym-lg: var(--r-lg) 0 0 var(--r-lg);
+
+  /* --- borders / motion (fixed early per CLAUDE.md) --- */
+  --border-w: 1px;
+  --motion-fast: 120ms;
+  --motion-base: 200ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* ---------- 2 · SEMANTIC / ALIAS — roles. The ONLY layer UI reads ---------- */
+:root,
+[data-theme="life"] {
+  --surface:   var(--p-cream);
+  --surface-2: #F3E9D6;
+  --ink:       var(--p-ink);
+  --ink-2:     color-mix(in srgb, var(--p-ink) 62%, transparent);
+  --ink-3:     color-mix(in srgb, var(--p-ink) 40%, transparent);
+  --brand:     var(--p-gold);
+  --on-brand:  var(--p-ink);
+  --core:      var(--p-molten);
+  --line:      color-mix(in srgb, var(--p-ink) 16%, transparent);
+}
+
+[data-theme="burn"] {
+  --surface:   var(--p-char);
+  --surface-2: #1F1A15;
+  --ink:       var(--p-ash);
+  --ink-2:     color-mix(in srgb, var(--p-ash) 60%, transparent);
+  --ink-3:     color-mix(in srgb, var(--p-ash) 38%, transparent);
+  --brand:     var(--p-ember);
+  --on-brand:  var(--p-ash);
+  --core:      var(--p-molten);
+  --line:      color-mix(in srgb, var(--p-ash) 20%, transparent);
+}
+
+/* ---------- 3 · COMPONENT — local, pulls from semantic ---------- */
+:root {
+  --btn-bg:     var(--brand);
+  --btn-fg:     var(--on-brand);
+  --btn-radius: var(--r-asym-md);
+  --btn-pad:    13px 22px;
+
+  --card-bg:     var(--surface-2);
+  --card-radius: var(--r-asym-lg);
+
+  --field-bg:     var(--surface);
+  --field-line:   var(--line);
+  --field-radius: var(--r-asym-sm);
+}
+
+/* ---------- expose tokens as Tailwind v4 utilities ---------- */
+@theme inline {
+  --color-surface:   var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink:       var(--ink);
+  --color-ink-2:     var(--ink-2);
+  --color-brand:     var(--brand);
+  --color-core:      var(--core);
+  --color-on-brand:  var(--on-brand);
+  --color-line:      var(--line);
+
+  --font-display: 'Anton', sans-serif;
+  --font-sans:    'Space Grotesk', sans-serif;
+  --font-mono:    'Space Mono', monospace;
+
+  --text-caption: var(--fs-caption);
+  --text-body:    var(--fs-body);
+  --text-lead:    var(--fs-lead);
+  --text-h4:      var(--fs-h4);
+  --text-h3:      var(--fs-h3);
+  --text-h2:      var(--fs-h2);
+  --text-h1:      var(--fs-h1);
+  --text-display: var(--fs-display);
+  --text-mega:    var(--fs-mega);
+
+  --spacing-3xs: var(--sp-3xs); --spacing-2xs: var(--sp-2xs);
+  --spacing-xs:  var(--sp-xs);  --spacing-sm:  var(--sp-sm);
+  --spacing-md:  var(--sp-md);  --spacing-lg:  var(--sp-lg);
+  --spacing-xl:  var(--sp-xl);  --spacing-2xl: var(--sp-2xl);
+}
+
+/* asymmetric radius helper (left round / right sharp) */
+.r-asym    { border-radius: var(--r-asym-md); }
+.r-asym-sm { border-radius: var(--r-asym-sm); }
+.r-asym-lg { border-radius: var(--r-asym-lg); }
+
+body {
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* display / brand moments use Anton */
+.font-display { font-family: var(--font-display); text-transform: uppercase; }

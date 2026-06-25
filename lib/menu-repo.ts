@@ -149,7 +149,7 @@ export interface VenueConfig {
   defaultCategory?: 'cocktails' | 'drinks' | 'food'
   drinksCategoryLabel?: 'cocktails' | 'drinks'  // label for left category tab (default: 'cocktails')
   forceCompact?: boolean  // always render items in compact list mode, hide view toggle
-  houseIndicator?: 'olive' | 'shell'
+  houseIndicator?: 'olive' | 'shell' | 'fish'
   showCocktailGuide?: boolean
   backgroundTheme?: 'seafood' | 'cocktail' | 'patisserie' | 'none'
   headerDecor?: string
@@ -172,6 +172,7 @@ const venues: Record<string, VenueConfig> = {
     },
     logoSrc: '/venue-assets/saly/saly-inverse-pine-on-sand.png',
     defaultCategory: 'food',
+    houseIndicator: 'fish',
     showCocktailGuide: false,
     backgroundTheme: 'seafood',
     headerDecor: '/decor/seafood/snapper-2.png',
