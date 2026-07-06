@@ -18,6 +18,7 @@ import { tabOrder, pickLocale, money } from '@/lib/locale'
 import { type CartItem, loadCart, saveCart, addItem, changeQty, cartCount, cartTotal, parsePrice, clearCart } from '@/lib/cart'
 import { lsGet, lsSet } from '@/lib/storage'
 import { setLocaleAction } from '@/app/actions/locale'
+import { track } from '@/lib/analytics'
 import MenuBackdrop from '@/components/MenuBackdrop'
 
 const SCALE_STEPS = [0.9, 1, 1.15, 1.3] as const
@@ -182,7 +183,9 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
     // lsGet returns null both when key absent and when localStorage is blocked (iframe).
     // Treat both as first visit → show onboarding.
     if (!lsGet(`onboarding_seen_${venueSlug}`)) setLegendOpen(true)
-  }, [venueSlug])
+
+    track('menu_view', { venue_slug: venueSlug, locale })
+  }, [venueSlug, locale])
 
   useEffect(() => { saveCart(venueSlug, cart) }, [cart, venueSlug])
 
@@ -254,6 +257,13 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
 
   const pushToCart = (slug: string, name: string, rawPrice: number) => {
     setCart(prev => addItem(prev, { slug, name, price: rawPrice }))
+    // GA4 ecommerce shape → feeds native Item reports (sliceable by Country).
+    track('add_to_cart', {
+      venue_slug: venueSlug,
+      currency: 'ALL',
+      value: rawPrice,
+      items: [{ item_id: slug, item_name: name, price: rawPrice, quantity: 1 }],
+    })
   }
 
   const handleScaleChange = (v: number) => {
@@ -263,6 +273,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
   }
 
   const handleLocaleChange = async (lc: string) => {
+    track('language_change', { venue_slug: venueSlug, locale: lc })
     await setLocaleAction(lc)   // server action sets cookie via Set-Cookie header (works in iframes)
     router.refresh()
   }
@@ -272,6 +283,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
     if (skipOpenRef.current) return
     const entry = cocktailIndex[slug]
     if (!entry) return
+    track('item_detail_open', { venue_slug: venueSlug, item_slug: slug, kind: 'cocktail' })
     const { item, taste } = entry
     const text = pl(item.i18n)
     const tasteKey = (taste === 'bitter' || taste === 'sour' || taste === 'sweet')
@@ -303,6 +315,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
     if (skipOpenRef.current) return
     const item = foodIndex[slug]
     if (!item) return
+    track('item_detail_open', { venue_slug: venueSlug, item_slug: slug, kind: 'food' })
     const text = pl(item.i18n)
     const fp = foodPairingIndex[slug]
     const fpWhy = fp ? (fp.i18n[locale]?.why ?? fp.i18n['en']?.why) : undefined
@@ -359,6 +372,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
 
   const handlePickTap = () => {
     if (!pickEntry) return
+    track('featured_pick_tap', { venue_slug: venueSlug, item_slug: pickEntry.item.slug, kind: 'cocktail' })
     setCategory('cocktails')
     setTab(pickEntry.taste)   // string from cocktailIndex
     setPendingScroll(pickEntry.item.slug)
@@ -422,7 +436,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
                 const sec = sectionByKey[tk]
                 const label = sec ? pl(sec.i18n).label : tk
                 return (
-                  <button key={tk} onClick={() => setTab(tk)} style={tabBtn(active)}>
+                  <button key={tk} onClick={() => { track('taste_tab_switch', { venue_slug: venueSlug, taste: tk }); setTab(tk) }} style={tabBtn(active)}>
                     {label}
                     {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
                   </button>
@@ -634,6 +648,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
                     onClick={() => {
                       skipOpenRef.current = true
                       setTimeout(() => { skipOpenRef.current = false }, 0)
+                      track('featured_pick_tap', { venue_slug: venueSlug, item_slug: foodPickEntry.item.slug, kind: 'food' })
                       setFoodTab(foodPickEntry.sectionKey)
                       setPendingScroll(foodPickEntry.item.slug)
                     }}
@@ -724,7 +739,18 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
         <CartBar
           count={count} totalStr={String(total)} detailOpen={!!openItem}
           label={t('cart.show_waiter')}
-          onClick={() => setShowList(true)}
+          onClick={() => {
+            track('cart_show_waiter', { venue_slug: venueSlug, item_count: count })
+            // "Order" = cart at the moment it's shown to the waiter → GA4 purchase for item×country reports.
+            track('purchase', {
+              transaction_id: `${venueSlug}-${Date.now()}`,
+              venue_slug: venueSlug,
+              currency: 'ALL',
+              value: total,
+              items: cart.map(ci => ({ item_id: ci.slug, item_name: ci.name, price: ci.price, quantity: ci.qty })),
+            })
+            setShowList(true)
+          }}
         />
       )}
 
