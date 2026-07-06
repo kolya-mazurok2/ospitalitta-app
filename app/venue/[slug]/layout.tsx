@@ -47,9 +47,13 @@ export default async function VenueLayout({ children, params }: Props) {
         data-venue={venue.brand.themeAttr}
         data-locale={locale}
         data-lead-taste={leadTaste}
-        style={{ height: '100dvh', display: 'flex', flexDirection: 'column' }}
+        style={{ height: '100dvh', display: 'flex', justifyContent: 'center', background: 'var(--surface-dark, #15110e)' }}
       >
-        {children}
+        {/* Mobile menu — capped at 640, centered. Sheets (position:absolute) anchor to the
+            Menu.client root inside this frame, so they stay within the 640 column on desktop. */}
+        <div style={{ width: '100%', maxWidth: 640, display: 'flex', flexDirection: 'column', position: 'relative' }}>
+          {children}
+        </div>
       </div>
     </NextIntlClientProvider>
   )
