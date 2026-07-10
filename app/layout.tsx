@@ -27,7 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         (function() {
           var mf = document.createElement("script");
           mf.type = "text/javascript"; mf.defer = true;
-          mf.src = "//cdn.mouseflow.com/projects/ce70d7f3-98a6-4a82-884e-0d9c8739b0ee.js";
+          mf.src = "//cdn.mouseflow.com/projects/fbd30d85-a2ca-43a2-92ff-295f0e9c1829.js";
           document.getElementsByTagName("head")[0].appendChild(mf);
         })();
       `}</Script>

@@ -87,17 +87,22 @@ async function pgFetch<T>(path: string, slug: string): Promise<T> {
   return res.json() as Promise<T>
 }
 
+interface GetMenuPayload {
+  venue: { id: string; currency: string | null }
+  categories: CategoryRow[]
+}
+
 async function fetchMenuFromSupabase(slug: string): Promise<VenueMenuData | null> {
-  const venues = await pgFetch<Array<{ id: string; currency: string | null }>>(
-    `venue?slug=eq.${encodeURIComponent(slug)}&select=id,currency`, slug)
-  const v = venues[0]
+  // Single guarded read path (migration 0002): tables are not anon-readable — the whole
+  // menu comes from the get_menu(slug) RPC, which requires a slug (no enumeration surface).
+  // GET on a STABLE function → still cacheable + taggable (DEC-004).
+  const payload = await pgFetch<GetMenuPayload | null>(
+    `rpc/get_menu?p_slug=${encodeURIComponent(slug)}`, slug)
+  const v = payload?.venue
   if (!v) return null
   const currency = v.currency ?? 'ALL'
 
-  const itemSelect =
-    'menu_item(id,slug,price_minor,price_unit,glass,lvl,flavor,loved,house,badge,image_url,video_url,sort_order,i18n)'
-  const cats = await pgFetch<CategoryRow[]>(
-    `menu_category?venue_id=eq.${v.id}&select=id,parent_id,key,sort_order,i18n,${itemSelect}&order=sort_order`, slug)
+  const cats = payload!.categories ?? []
 
   // Top-level categories (parent_id null) are the Drinks/Food buckets; their key is the section type.
   const typeByTop: Record<string, MenuSection['type']> = {}

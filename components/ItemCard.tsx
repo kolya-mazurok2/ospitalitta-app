@@ -143,7 +143,7 @@ export default function ItemCard({
       {/* 16:9 media zone */}
       <div style={{
         aspectRatio: '16/9',
-        background: 'var(--surface-media)',
+        background: (posterSrc && !videoSrc) ? 'var(--surface-dark)' : 'var(--surface-media)',
         position: 'relative',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         overflow: 'hidden',
@@ -153,6 +153,11 @@ export default function ItemCard({
             src={videoSrc} poster={posterSrc}
             autoPlay loop playsInline muted
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          />
+        ) : posterSrc ? (
+          <img
+            src={posterSrc} alt={name} loading="lazy"
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
           />
         ) : glass ? (
           <Glass type={glass} style={{ width: 40, height: 56, color: 'rgb(84 89 90 / 0.3)' }} />
