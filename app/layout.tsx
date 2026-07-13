@@ -13,9 +13,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>{children}</body>
-      {/* GA4 — global, all venues. venue_slug goes on each event as a param. */}
+      {/* GA4 — global, all venues. venue_slug goes on each event as a param.
+          The shim MUST run before hydration: menu_view fires from a mount effect, and with
+          an afterInteractive shim window.gtag does not exist yet — the event was dropped.
+          Queued dataLayer calls are drained when the remote script lands. */}
       <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
-      <Script id="ga4-init" strategy="afterInteractive">{`
+      <Script id="ga4-init" strategy="beforeInteractive">{`
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());

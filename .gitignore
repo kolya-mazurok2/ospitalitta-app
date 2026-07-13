@@ -28,3 +28,9 @@ yarn-error.log*
 
 # TypeScript incremental build
 *.tsbuildinfo
+
+# Scratch notes / drafts. Files already tracked (CLAUDE.md, README.md, STATUS.md,
+# ADMIN-DECISIONS.md, docs/, design/) are unaffected — gitignore does not untrack.
+*.md
+!CLAUDE.md
+!README.md

@@ -19,6 +19,7 @@ import { type CartItem, loadCart, saveCart, addItem, changeQty, cartCount, cartT
 import { lsGet, lsSet } from '@/lib/storage'
 import { setLocaleAction } from '@/app/actions/locale'
 import { track } from '@/lib/analytics'
+import { useImpressions } from '@/lib/useImpressions'
 import MenuBackdrop from '@/components/MenuBackdrop'
 
 const SCALE_STEPS = [0.9, 1, 1.15, 1.3] as const
@@ -170,6 +171,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
   }
 
   const skipOpenRef = useRef(false)
+  const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const saved = loadCart(venueSlug)
@@ -184,7 +186,12 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
     // Treat both as first visit → show onboarding.
     if (!lsGet(`onboarding_seen_${venueSlug}`)) setLegendOpen(true)
 
-    track('menu_view', { venue_slug: venueSlug, locale })
+    // Landing tab never fires taste_tab_switch (nothing was switched) — record it here,
+    // otherwise the most-seen tab of all is the one missing from the report.
+    track('menu_view', { venue_slug: venueSlug, locale, category: initialCategory, tab })
+    // Mount-only: category/tab are read as LANDING values on purpose. Later switches are
+    // their own events — re-running this would double-count views.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [venueSlug, locale])
 
   useEffect(() => { saveCart(venueSlug, cart) }, [cart, venueSlug])
@@ -225,6 +232,37 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
       for (const item of sec.items) m[item.slug] = item
     return m
   }, [menuData])
+
+  // slug → which list the item lives in. Impressions resolve their own section instead of
+  // trusting the active tab, so a mid-scroll tab switch can't mislabel an in-flight card.
+  const sectionOfSlug = useMemo(() => {
+    const m: Record<string, { kind: 'cocktail' | 'food'; section: string }> = {}
+    for (const sec of menuData.sections)
+      for (const item of sec.items) m[item.slug] = { kind: 'cocktail', section: sec.key }
+    for (const sec of menuData.foodSections)
+      for (const item of sec.items) m[item.slug] = { kind: 'food', section: sec.key }
+    return m
+  }, [menuData])
+
+  // "Which items did nobody ever look at" — the dead-zone report. Half the card in view,
+  // held 1s, once per item per session. Rendered cards already carry id="item-{slug}".
+  useImpressions(
+    scrollRef,
+    (slug, position) => {
+      const meta = sectionOfSlug[slug]
+      if (!meta) return
+      track('item_impression', {
+        venue_slug: venueSlug,
+        item_slug: slug,
+        kind: meta.kind,
+        section: meta.section,
+        position,
+        view_mode: viewMode,
+      })
+    },
+    !legendOpen && !showList && !openItem,
+    [category, tab, foodTab, viewMode, sectionOfSlug, venueSlug],
+  )
 
   const pairingIndex = useMemo(() => {
     const m: Record<string, (typeof menuData.pairings)[0]> = {}
@@ -466,8 +504,8 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
         </div>
       )}
 
-      {/* Scrollable content */}
-      <div className="scrollbar-none" style={{ flex: 1, minHeight: 0, overflowY: 'auto', position: 'relative', zIndex: 1 }}>
+      {/* Scrollable content — also the IntersectionObserver root for item impressions */}
+      <div ref={scrollRef} className="scrollbar-none" style={{ flex: 1, minHeight: 0, overflowY: 'auto', position: 'relative', zIndex: 1 }}>
 
         {/* ===== COCKTAILS ===== */}
         {category === 'cocktails' && (

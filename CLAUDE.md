@@ -1,5 +1,8 @@
 # Ospitalitta — Architecture & Decisions
 
+## ⛳ Read first (every session)
+Прогнати запит через диспетчер тригерів **[`PLAYBOOK.md`](PLAYBOOK.md)** (патерн у промпті → дія; питає лише якщо неоднозначно/руйнівно; чекліст стану = `STATUS.md`). Архітектурні рішення — нижче.
+
 ## What this is
 Multi-tenant Digital Waiter platform. Venues (restaurants, bars) get a guest-facing mobile menu
 at `/venue/[slug]`. Guest scans QR at the table → browses menu → builds a cart → shows screen
