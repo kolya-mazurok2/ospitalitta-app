@@ -24,8 +24,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         gtag('js', new Date());
         gtag('config', '${GA_ID}');
       `}</Script>
-      {/* Mouseflow — session replay + heatmaps, all pages */}
-      <Script id="mouseflow" strategy="afterInteractive">{`
+      {/* Mouseflow — session replay + heatmaps, all pages.
+          id MUST NOT be "mouseflow": an element id becomes a global (window.mouseflow points at the
+          script tag), and the Mouseflow bundle starts with `if (typeof mouseflow === 'undefined')`.
+          With the name taken, the whole recorder silently no-ops — script loads, nothing records. */}
+      <Script id="mf-loader" strategy="afterInteractive">{`
         window._mfq = window._mfq || [];
         (function() {
           var mf = document.createElement("script");
