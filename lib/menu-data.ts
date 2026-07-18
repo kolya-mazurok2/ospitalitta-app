@@ -179,8 +179,7 @@ const sweet: MenuSection = {
       posterSrc: '/venue-assets/bottle-brothers/martini-royal.jpg',
       i18n: { en: { name: 'Martini Royal', desc: 'Medium sweet, lightly sour. Fresh and floral. White Martini, prosecco, mint, citrus. Fizzy, opens light.' } } },
     { id: 'cherry-poppins', slug: 'cherry-poppins', price: 'L500', glass: 'collins', lvl: 2,
-      videoSrc: '/venue-assets/bottle-brothers/bb-cocktail-1.webm',
-      posterSrc: '/venue-assets/bottle-brothers/cocktail-placeholder.png',
+      videoSrc: '/venue-assets/bottle-brothers/cherry-poppins.mp4',
       i18n: { en: { name: 'Cherry Poppins', desc: 'Medium sweet, lightly sour. Soft and nutty. Amaretto, hibiscus and cherry cordial, mint, lime, ginger. Cherry leads, nuts on the finish.' } } },
     // glass: CSV says martini, but the venue photo is clearly a coupe — photo wins
     { id: 'miss-lavander', slug: 'miss-lavander', price: 'L750', glass: 'coupe', lvl: 2, house: true,
