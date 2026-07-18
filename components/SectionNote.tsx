@@ -17,11 +17,12 @@ export default function SectionNote({ bodyText, onClick, bleed = 18 }: Props) {
   return (
     <div onClick={onClick} style={{
       display: 'flex', alignItems: 'flex-start', gap: 9,
-      margin: `16px ${-bleed}px 0`, padding: `10px ${bleed}px 11px`,
-      // Faint tint plus one olive hairline under it. No full frame: that is the loud
-      // treatment, reserved for what the venue is actively pushing.
+      // Bottom margin so whatever follows (a heading, a list) is not glued to the rule.
+      margin: `16px ${-bleed}px 16px`, padding: `10px ${bleed}px 11px`,
+      // Faint tint plus one olive rule down the left edge. No full frame: that is the
+      // loud treatment, reserved for what the venue is actively pushing.
       background: 'var(--surface-frame)',
-      borderBottom: '1px solid var(--hairline)',
+      borderLeft: '2px solid var(--hairline)',
       cursor: onClick ? 'pointer' : 'default',
     }}>
       <svg viewBox="0 0 24 24"

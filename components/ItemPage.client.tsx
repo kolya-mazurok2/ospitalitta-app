@@ -57,9 +57,6 @@ export default function ItemPage({ detail, venueSlug }: Props) {
     : (detail.taste && detail.n ? [{ taste: detail.taste, n: detail.n }] : [])
 
   const pairLabel = detail.isFood ? t('pairing.plate_label') : t('pairing.drink_label')
-  const whyText = detail.isFood
-    ? detail.foodWhy
-    : (detail.whyLead ? `${detail.whyLead} ${detail.whyDrink}${detail.whyPost ?? ''}` : undefined)
 
   const cartLines = cart.map(ci => ({
     slug: ci.slug, name: ci.name, qty: ci.qty,
@@ -115,7 +112,7 @@ export default function ItemPage({ detail, venueSlug }: Props) {
           </button>
         </div>
 
-        <div style={{ padding: '18px 24px 120px' }}>
+        <div style={{ padding: '18px 24px 160px' }}>
           {detail.loved && (
             <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 9 }}>
               <span style={{
@@ -175,22 +172,24 @@ export default function ItemPage({ detail, venueSlug }: Props) {
           {detail.dishes.length > 0 && (
             <div style={{ marginTop: 26 }}>
               {/* Same quiet note as the menu asides — one component, one treatment */}
-              {whyText && <SectionNote bodyText={whyText} bleed={24} />}
+              {detail.why && <SectionNote bodyText={detail.why} bleed={24} />}
 
               <span style={{
                 display: 'block',
-                fontFamily: 'var(--font-text)', fontWeight: 500, fontSize: '0.875rem',
+                fontFamily: 'var(--font-text)', fontWeight: 500, fontSize: '1.0625rem',
                 letterSpacing: '0.01em', color: 'var(--ink-heading)', lineHeight: 1.3,
               }}>
                 {pairLabel}
               </span>
 
-              <div style={{ display: 'flex', flexDirection: 'column', marginTop: 10 }}>
-                {detail.dishes.map(d => (
+              {/* Tight against the heading — the list is what the heading announces. */}
+              <div style={{ display: 'flex', flexDirection: 'column', marginTop: 4 }}>
+                {detail.dishes.map((d, i) => (
                   <div key={d.slug} style={{
                     display: 'flex', alignItems: 'center', gap: 10,
                     padding: '8px 0',
-                    borderTop: '1px solid var(--line-soft)',
+                    // Rules separate rows from each other, so the first one goes without.
+                    borderTop: i === 0 ? 'none' : '1px solid var(--line-soft)',
                   }}>
                     <span
                       onClick={() => openDish(d.slug)}
@@ -236,7 +235,8 @@ export default function ItemPage({ detail, venueSlug }: Props) {
         </div>
       </div>
 
-      {/* add to cart */}
+      {/* add to cart — hidden while the waiter list is up, it would float over the sheet */}
+      {!showList && (
       <button
         onClick={() => add(detail.slug, detail.name, detail.rawPrice)}
         style={{
@@ -252,6 +252,7 @@ export default function ItemPage({ detail, venueSlug }: Props) {
       >
         +
       </button>
+      )}
 
       {toast && <AddedToast id={toast.id} text={t('cart.added', { name: toast.name })} />}
 

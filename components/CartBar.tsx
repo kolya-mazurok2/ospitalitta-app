@@ -18,6 +18,7 @@ export default function CartBar({ count, totalStr, detailOpen, label, onClick }:
         zIndex: detailOpen ? 7 : 5,
         background: 'var(--surface-dark-2)',
         color: 'var(--on-dark)',
+        borderTop: '2px solid var(--hairline)',
         // Extra bottom padding clears the iOS home indicator when pinned to the edge.
         padding: detailOpen ? '14px 18px' : '14px 18px calc(14px + env(safe-area-inset-bottom, 0px))',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,

@@ -38,12 +38,8 @@ export interface ItemDetail {
   videoSrc?: string
   posterSrc?: string
   dishes: DetailDishRow[]
-  /** Cocktail: coloured lead + underlined drink name + tail. Food: one plain sentence. */
-  whyIsCocktail: boolean
-  whyLead?: string
-  whyDrink?: string
-  whyPost?: string
-  foodWhy?: string
+  /** One concrete line about why these pairings work. */
+  why?: string
 }
 
 function indexes(menu: VenueMenuData) {
@@ -94,8 +90,7 @@ export function buildItemDetail(
           isFood: true,
         }
       }) ?? [],
-      whyIsCocktail: true,
-      whyLead: why?.lead, whyDrink: text.name, whyPost: why?.post,
+      why,
     }
   }
 
@@ -122,7 +117,6 @@ export function buildItemDetail(
         isFood: false,
       }]
     }) ?? [],
-    whyIsCocktail: false,
-    foodWhy: fp ? (fp.i18n[locale]?.why ?? fp.i18n['en']?.why) : undefined,
+    why: fp ? (fp.i18n[locale]?.why ?? fp.i18n['en']?.why) : undefined,
   }
 }

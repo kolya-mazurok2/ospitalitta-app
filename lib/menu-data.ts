@@ -101,7 +101,7 @@ export interface VenueMenuData {
   foodPairings: FoodPairing[]
   featuredPick: FeaturedPick
   foodFeaturedPick?: FoodFeaturedPick
-  tasteWhy?: Record<string, { lead: string; post: string }>
+  tasteWhy?: Record<string, string>   // one concrete line per taste
 }
 
 // ---------------------------------------------------------------------------
@@ -457,35 +457,35 @@ export const pairings: Pairing[] = [
 export const foodPairings: FoodPairing[] = [
   // TODO(bb-csv): refs to removed cocktails stripped — each dish needs 3 again, why text to follow
   { dishRef: 'margherita', cocktailRefs: ['brothers-spritz', 'campari-spritz', 'sea-salt-paloma'],
-    i18n: { en: { why: 'Light and fresh, so the glass stays light and fresh too.' } } },
+    i18n: { en: { why: 'Sour keeps it fresh.' } } },
   { dishRef: 'capricciosa', cocktailRefs: ['brothers-spritz', 'basil-smash', 'talk-balkan-to-me'],
-    i18n: { en: { why: 'Enough going on to need cutting through, not so much that a light glass drowns.' } } },
+    i18n: { en: { why: 'Bitter cuts through it.' } } },
   { dishRef: '4-formaggi', cocktailRefs: ['tierra-del-fuego', 'barrel-aged-coconut-negroni', 'campari-spritz'],
-    i18n: { en: { why: 'Salt and fat the whole way through. Bitter cuts it, sour clears it.' } } },
+    i18n: { en: { why: 'Bitter cuts the fat.' } } },
   { dishRef: 'diavola', cocktailRefs: ['lychee-spritz', 'martini-royal', 'cherry-poppins'],
-    i18n: { en: { why: 'Sweet is what sits on chilli heat and takes the edge off it.' } } },
+    i18n: { en: { why: 'Sweet cools the chilli.' } } },
   { dishRef: 'deliziosa', cocktailRefs: ['negroni-strawberry-basil', 'basil-smash', 'tierra-del-fuego'],
-    i18n: { en: { why: 'Salt-forward, so the glass answers with citrus and a little sweetness.' } } },
+    i18n: { en: { why: 'Citrus cuts the salt.' } } },
   { dishRef: 'cotto-e-funghi', cocktailRefs: ['limoncello-spritz', 'brothers-mule', 'brothers-spritz'],
-    i18n: { en: { why: 'Heavy and starchy, so the glass has to be sharp enough to cut through.' } } },
+    i18n: { en: { why: 'Sour cuts the starch.' } } },
   { dishRef: 'americana', cocktailRefs: ['aperol-spritz', 'campari-spritz', 'talk-balkan-to-me'],
-    i18n: { en: { why: 'Heavy and starchy, so the glass has to be sharp enough to cut through.' } } },
+    i18n: { en: { why: 'Sour cuts the starch.' } } },
   { dishRef: 'bi-bi', cocktailRefs: ['campari-spritz', 'barrel-aged-coconut-negroni', 'negroni-strawberry-basil'],
-    i18n: { en: { why: 'Enough going on to need cutting through, not so much that a light glass drowns.' } } },
+    i18n: { en: { why: 'Bitter cuts through it.' } } },
   { dishRef: 'finger-food-mix', cocktailRefs: ['barrel-aged-coconut-negroni', 'miss-lavander', 'aloe-you-vera-much'],
-    i18n: { en: { why: 'Salt and fat the whole way through. Bitter cuts it, sour clears it.' } } },
+    i18n: { en: { why: 'Bitter cuts the fat.' } } },
   { dishRef: 'cured-meats-cheese-platter', cocktailRefs: ['negroni-strawberry-basil', 'basil-smash', 'tierra-del-fuego'],
-    i18n: { en: { why: 'Salt and fat the whole way through. Bitter cuts it, sour clears it.' } } },
+    i18n: { en: { why: 'Bitter cuts the fat.' } } },
 ]
 
 // ---------------------------------------------------------------------------
 // Taste-why tooltip text (cocktail → dish pairing explanation)
 // ---------------------------------------------------------------------------
 
-export const tasteWhy: Record<string, { lead: string; post: string }> = {
-  sour:   { lead: 'Sour cuts the fat.', post: ' slices through the cheese and resets your palate between bites.' },
-  sweet:  { lead: 'Sweet cools the heat.', post: ' balances a salty or spicy slice, and a Diavola loves it.' },
-  bitter: { lead: 'Bitter holds its own.', post: ' stands up to a loaded pizza and cuts the richness.' },
+export const tasteWhy: Record<string, string> = {
+  sour:   'Sour clears the palate.',
+  sweet:  'Sweet cools the heat.',
+  bitter: 'Bitter cuts the fat.',
 }
 
 // ---------------------------------------------------------------------------
