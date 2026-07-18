@@ -32,7 +32,7 @@ export default function FeaturedPick({ name, desc, price, glass, taste, n, house
           width: 24, height: 24,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           background: 'transparent', border: 'none', cursor: 'pointer',
-          color: 'rgb(84 89 90 / 0.45)', padding: 0, zIndex: 2,
+          color: 'var(--ink-faint)', padding: 0, zIndex: 2,
         }}
         aria-label="Dismiss"
       >

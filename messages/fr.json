@@ -19,8 +19,7 @@
     "label": "Les Brothers recommandent"
   },
   "pizza_note": {
-    "text": "Nos pizzas arrivent en 5 à 7 minutes du four. Ça vaut la petite attente.",
-    "bold": "Faites à la commande."
+    "text": "En général, une pizza ne prend que 5 minutes."
   },
   "legend": {
     "title": "Comment lire ce menu",
@@ -41,7 +40,7 @@
   },
   "cart": {
     "show_waiter": "Montrer au serveur",
-    "open_list": "Montrez-le au serveur",
+    "open_list": "Montrez ceci au serveur",
     "keep_browsing": "Continuer à explorer",
     "total_label": "Total · Lekë",
     "clear": "Effacer la commande",

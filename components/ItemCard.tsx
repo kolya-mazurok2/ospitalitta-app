@@ -2,7 +2,6 @@
 
 import CardVideo from '@/components/CardVideo'
 import Glass from '@/components/Glass'
-import TasteMark from '@/components/TasteMark'
 import type { GlassType } from '@/lib/menu-data'
 import { clampDesc } from '@/lib/text'
 
@@ -23,6 +22,7 @@ interface Props {
   videoSrc?: string
   posterSrc?: string
   lovedLabel: string
+  priority?: boolean   // first card in the list — eager, everything below stays lazy
   onTap: () => void
   onAdd: (e: React.MouseEvent) => void
 }
@@ -69,18 +69,11 @@ function HouseMark({ kind, size, inline, style }: { kind?: string; size: number;
 }
 
 export default function ItemCard({
-  id, name, desc, price, glass, taste, lvl, flavor,
-  loved, house, houseIndicator, compact, videoSrc, posterSrc, lovedLabel, onTap, onAdd,
+  id, name, desc, price, glass,
+  loved, house, houseIndicator, compact, videoSrc, posterSrc, lovedLabel, priority, onTap, onAdd,
 }: Props) {
-  let markTaste: 'bitter' | 'sour' | 'sweet' | undefined
-  let markN: 1 | 2 | 3 | undefined
-  let markSingle = false
-  if (taste === 'zero' && flavor) {
-    markTaste = flavor; markN = 1; markSingle = true
-  } else if ((taste === 'bitter' || taste === 'sour' || taste === 'sweet') && lvl) {
-    markTaste = taste; markN = lvl
-  }
-
+  // taste/lvl/flavor stay in Props — callers pass them and the detail sheet still shows
+  // the profile. The card itself no longer draws taste marks.
   const showIndicator = !!(house && houseIndicator)
 
   if (compact) {
@@ -110,7 +103,7 @@ export default function ItemCard({
           {desc && (
             <p style={{
               fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.6875rem',
-              color: 'var(--ink-faint)', margin: '2px 0 0',
+              color: 'var(--ink-body-2)', margin: '2px 0 0',
               overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
             }}>
               {clampDesc(desc)}
@@ -163,11 +156,14 @@ export default function ItemCard({
           />
         ) : posterSrc ? (
           <img
-            src={posterSrc} alt={name} loading="lazy"
+            src={posterSrc} alt={name}
+            loading={priority ? 'eager' : 'lazy'}
+            fetchPriority={priority ? 'high' : undefined}
+            decoding="async"
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
           />
         ) : glass ? (
-          <Glass type={glass} style={{ width: 40, height: 56, color: 'rgb(84 89 90 / 0.3)' }} />
+          <Glass type={glass} style={{ width: 40, height: 56, color: 'var(--line-strong)' }} />
         ) : null}
 
         <button
@@ -189,7 +185,7 @@ export default function ItemCard({
         </button>
       </div>
 
-      {/* body: 2×2 grid — desc/name left, TasteMark+price right. loved spans full width above */}
+      {/* body: 2×2 grid — desc/name left, price right. loved spans full width above */}
       <div style={{ padding: '10px 15px 14px' }}>
         {loved && (
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: 4, marginBottom: 7 }}>
@@ -224,19 +220,6 @@ export default function ItemCard({
           }}>
             {desc}
           </p>
-
-          {/* [1,2] TasteMark */}
-          <div style={{
-            gridColumn: 2, gridRow: 1,
-            display: 'flex', flexDirection: 'column', alignItems: 'flex-end',
-            alignSelf: 'start',
-          }}>
-            {markTaste && markN && (
-              <span style={{ color: 'var(--brand)', display: 'flex', alignItems: 'flex-end' }}>
-                <TasteMark taste={markTaste} n={markN} single={markSingle} />
-              </span>
-            )}
-          </div>
 
           {/* [2,1] name + olive indicator */}
           <div style={{ gridColumn: 1, gridRow: 2, alignSelf: 'end' }}>

@@ -26,7 +26,7 @@ interface Props {
 const rowStyle: React.CSSProperties = {
   display: 'flex', alignItems: 'center', gap: 8,
   padding: '16px 0',
-  borderTop: '1px solid rgb(84 89 90 / 0.12)',
+  borderTop: '1px solid var(--line-soft)',
 }
 const iconWrap: React.CSSProperties = {
   width: 30, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
@@ -37,7 +37,7 @@ const rowName: React.CSSProperties = {
 }
 const rowDesc: React.CSSProperties = {
   marginLeft: 'auto',
-  fontFamily: 'var(--font-text)', fontSize: '0.9375rem', color: 'rgb(84 89 90 / 0.55)',
+  fontFamily: 'var(--font-text)', fontSize: '0.9375rem', color: 'var(--ink-faint)',
 }
 
 export default function LegendSheet({
@@ -77,7 +77,7 @@ export default function LegendSheet({
             width: 32, height: 32, zIndex: 1,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             background: 'transparent', border: 'none', cursor: 'pointer',
-            color: 'rgb(84 89 90 / 0.5)', padding: 0,
+            color: 'var(--ink-faint)', padding: 0,
           }}
           aria-label="Close"
         >
@@ -96,7 +96,7 @@ export default function LegendSheet({
         </h3>
         <p style={{
           fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.875rem',
-          lineHeight: 1.5, color: 'rgb(110 114 107)',
+          lineHeight: 1.5, color: 'var(--ink-body)',
           marginTop: 6, textAlign: 'center', whiteSpace: 'pre-line',
         }}>
           {sub}
@@ -215,10 +215,10 @@ export default function LegendSheet({
         {/* prices note */}
         <div style={{
           marginTop: 16, paddingTop: 13,
-          borderTop: '1px solid rgb(84 89 90 / 0.14)',
+          borderTop: '1px solid var(--line-soft)',
           fontFamily: 'var(--font-text)', fontWeight: 400, fontSize: '0.6875rem',
           letterSpacing: '0.18em', textTransform: 'uppercase',
-          color: 'rgb(84 89 90 / 0.5)',
+          color: 'var(--ink-faint)',
         }}>
           {pricesNote}
         </div>

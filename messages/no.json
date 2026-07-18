@@ -19,8 +19,7 @@
     "label": "Brothers anbefaler"
   },
   "pizza_note": {
-    "text": "Pizzaene våre er klare på 5–7 minutter fra ovnen. Verdt den lille ventetiden.",
-    "bold": "Laget på bestilling."
+    "text": "En pizza tar vanligvis bare 5 minutter."
   },
   "legend": {
     "title": "Slik leser du denne menyen",
@@ -41,7 +40,7 @@
   },
   "cart": {
     "show_waiter": "Vis kelneren",
-    "open_list": "La kelneren se",
+    "open_list": "Vis dette til kelneren",
     "keep_browsing": "Fortsett å bla",
     "total_label": "Totalt · Lekë",
     "clear": "Fjern bestilling",

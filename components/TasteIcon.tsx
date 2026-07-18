@@ -3,6 +3,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { TASTE_SPRITE, TASTE_ICONS } from '@/lib/taste-sprite'
 
+/** Static-sprite size relative to the Lottie's drawn artwork. See the render site. */
+const STATIC_SCALE = 0.85
+
 type Props = {
   taste: string
   active: boolean
@@ -79,7 +82,15 @@ export default function TasteIcon({ taste, active, size = 17 }: Props) {
     >
       <span ref={host} style={{ position: 'absolute', inset: 0 }} />
       {!animating && (
-        <svg width={size} height={size} style={{ display: 'block' }}>
+        <svg
+          width={size} height={size}
+          // The Lottie composition draws its artwork with padding inside the 500×500
+          // canvas; the source SVG fills its viewBox edge to edge. Rendered at the same
+          // box the static icon therefore looks larger, and swapping to the Lottie on
+          // tab activation reads as a jump. Scaling the static down closes the gap.
+          // Eyeballed — nudge this one number if the swap still shifts.
+          style={{ display: 'block', transform: `scale(${STATIC_SCALE})`, transformOrigin: 'center' }}
+        >
           <use href={`#taste-${taste}`} />
         </svg>
       )}

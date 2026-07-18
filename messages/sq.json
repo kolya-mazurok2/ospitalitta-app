@@ -19,8 +19,7 @@
     "label": "Vëllezërit rekomandojnë"
   },
   "pizza_note": {
-    "text": "Picat tona vijnë 5 deri në 7 minuta nga furra. Ia vlen pritja.",
-    "bold": "Bëhet me porosi."
+    "text": "Zakonisht një pizza bëhet për vetëm 5 minuta."
   },
   "legend": {
     "title": "Si të lexoni këtë menu",
@@ -41,7 +40,7 @@
   },
   "cart": {
     "show_waiter": "Trego kamarierit",
-    "open_list": "Le ta shohë kamarieri",
+    "open_list": "Tregoja kamarierit",
     "keep_browsing": "Vazhdoni shfletimin",
     "total_label": "Totali · Lekë",
     "clear": "Fshi porosinë",

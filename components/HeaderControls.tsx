@@ -33,7 +33,7 @@ function LocaleIcon({ locale, size = 24 }: { locale: string; size?: number }) {
 }
 
 const SCALE_STEPS = [0.9, 1, 1.15, 1.3]
-const SCALE_LABELS = [0.72, 0.88, 1.04, 1.20] // rem sizes for the "A" buttons
+const SCALE_LABELS = [0.72, 0.88, 1.04, 1.20] // rem sizes for the "T" buttons
 
 // Platform-level order — all supported locales in display sequence
 const ALL_LOCALES: { code: string; label: string }[] = [
@@ -70,22 +70,24 @@ export default function HeaderControls({
   const handleAa = () => { setAaOpen(v => !v); setLangOpen(false) }
   const handleLang = () => { setLangOpen(v => !v); setAaOpen(false) }
 
-  // Any tap that lands outside the header dismisses an open dropdown — without this it
-  // stays up until the trigger is hit again, and it overlaps the menu it covers.
-  const headerRef = useRef<HTMLDivElement>(null)
+  // Any tap outside a dropdown dismisses it. Scoped to the dropdown itself, not the
+  // header: anchoring on the header meant tapping the logo or the neighbouring control
+  // counted as "inside" and left the panel hanging over the menu.
+  const aaRef = useRef<HTMLDivElement>(null)
+  const langRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     if (!aaOpen && !langOpen) return
     const onDown = (e: PointerEvent) => {
-      if (headerRef.current?.contains(e.target as Node)) return
-      setAaOpen(false)
-      setLangOpen(false)
+      const target = e.target as Node
+      if (aaOpen && !aaRef.current?.contains(target)) setAaOpen(false)
+      if (langOpen && !langRef.current?.contains(target)) setLangOpen(false)
     }
     document.addEventListener('pointerdown', onDown)
     return () => document.removeEventListener('pointerdown', onDown)
   }, [aaOpen, langOpen])
 
   return (
-    <div ref={headerRef} style={{
+    <div style={{
       flexShrink: 0, padding: '20px 20px 12px',
       background: 'var(--surface)', position: 'relative', zIndex: 6,
     }}>
@@ -166,7 +168,7 @@ export default function HeaderControls({
           </button>
 
           {/* Aa size picker */}
-          <div style={{ position: 'relative', display: 'inline-flex' }}>
+          <div ref={aaRef} style={{ position: 'relative', display: 'inline-flex' }}>
             <button
               onClick={handleAa}
               style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center' }}
@@ -198,7 +200,7 @@ export default function HeaderControls({
                       aria-label={`Text size ${v}`}
                       aria-pressed={active}
                     >
-                      <span style={{ fontSize: `${SCALE_LABELS[i]}rem` }}>A</span>
+                      <span style={{ fontSize: `${SCALE_LABELS[i]}rem` }}>T</span>
                     </button>
                   )
                 })}
@@ -207,7 +209,7 @@ export default function HeaderControls({
           </div>
 
           {/* language picker */}
-          <div style={{ position: 'relative', display: 'inline-flex' }}>
+          <div ref={langRef} style={{ position: 'relative', display: 'inline-flex' }}>
             <button
               onClick={handleLang}
               style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center', flexShrink: 0 }}

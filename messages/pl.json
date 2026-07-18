@@ -19,8 +19,7 @@
     "label": "Polecamy"
   },
   "pizza_note": {
-    "text": "Nasze pizze są gotowe w 5 do 7 minut z pieca. Warto chwilę poczekać.",
-    "bold": "Przygotowywane na zamówienie."
+    "text": "Zwykle pizza zajmuje tylko 5 minut."
   },
   "legend": {
     "title": "Jak czytać to menu",
@@ -41,7 +40,7 @@
   },
   "cart": {
     "show_waiter": "Pokaż kelnerkowi",
-    "open_list": "Niech kelner zobaczy",
+    "open_list": "Pokaż to kelnerowi",
     "keep_browsing": "Wróć do menu",
     "total_label": "Razem · Lekë",
     "clear": "Wyczyść zamówienie",

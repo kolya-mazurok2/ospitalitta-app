@@ -19,8 +19,7 @@
     "label": "Brothers empfehlen"
   },
   "pizza_note": {
-    "text": "Unsere Pizzen kommen in 5–7 Minuten aus dem Ofen. Die kurze Wartezeit lohnt sich.",
-    "bold": "Frisch auf Bestellung."
+    "text": "Eine Pizza dauert meist nur 5 Minuten."
   },
   "legend": {
     "title": "So liest man diese Karte",
@@ -41,7 +40,7 @@
   },
   "cart": {
     "show_waiter": "Zeig dem Kellner",
-    "open_list": "Lass den Kellner schauen",
+    "open_list": "Zeig das dem Kellner",
     "keep_browsing": "Weiter stöbern",
     "total_label": "Gesamt · Lekë",
     "clear": "Bestellung löschen",

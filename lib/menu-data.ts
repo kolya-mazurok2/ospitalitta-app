@@ -27,12 +27,25 @@ export interface TasteSpec {
   lvl: 1 | 2 | 3
 }
 
+/**
+ * What a plate does to the palate. Pairings are scored off this rather than guessed
+ * from the ingredient list: fat and salt are what a glass has to cut through, and
+ * heat is what it has to cool. Not shown to the guest — it drives which three
+ * cocktails a dish gets, and in what order.
+ */
+export interface FoodProfile {
+  rich: 1 | 2 | 3        // fat / heaviness
+  salt: 1 | 2 | 3
+  spicy?: boolean
+}
+
 export interface MenuItem {
   id: string
   slug: string
   price: string          // 'L500' — flat
   glass?: GlassType
   lvl?: 1 | 2 | 3       // intensity marks (bitter/sour/sweet)
+  profile?: FoodProfile  // food items only
   // Full taste profile, primary axis first. Only set when the item has MORE than one
   // taste — a single-taste item is covered by its section key + lvl. Detail sheet reads
   // this; the compact card keeps showing the section's single mark.
@@ -77,7 +90,7 @@ export interface FeaturedPick {
 
 export interface FoodFeaturedPick {
   itemRef: string             // slug of a food item (must exist in one of foodSections)
-  showAfterSection: FoodKey   // render callout at bottom of this section's tab
+  showAfterSection: FoodKey   // which section tab the note belongs to
   i18n: { [locale: string]: { label: string; desc?: string } }
 }
 
@@ -232,14 +245,18 @@ const spicy: MenuSection = {
   },
   items: [
     { id: 'brothers-mule', slug: 'brothers-mule', price: 'L750', glass: 'collins', house: true,
+      tastes: [{ taste: 'sour', lvl: 2 }],
       posterSrc: '/venue-assets/bottle-brothers/brothers-mule.jpg',
       i18n: { en: { name: "Brother's Mule", desc: 'Medium sour, spicy. Fresh and fizzy. Cucumber and basil vodka, lime, ginger beer, bitters. Ginger hits first, dry to the end.' } } },
     { id: 'tierra-del-fuego', slug: 'tierra-del-fuego', price: 'L750', glass: 'rocks', house: true, loved: true,
+      tastes: [{ taste: 'sweet', lvl: 2 }, { taste: 'sour', lvl: 2 }],
       posterSrc: '/venue-assets/bottle-brothers/tierra-del-fuego.jpg',
       i18n: { en: { name: 'Tierra Del Fuego', desc: 'Balanced sweet and sour. Fresh and green. Chilli-infused tequila, lime, watermelon, jalapeño liqueur. Watermelon leads, opens spicy at the end.' } } },
   ],
 }
 
+// Every zero item shares one illustration — the section reads as a set, and none of
+// them had a shot of their own (they were borrowing alcoholic drinks' posters).
 const zero: MenuSection = {
   key: 'zero',
   type: 'cocktail',
@@ -254,20 +271,17 @@ const zero: MenuSection = {
     no: { label: 'Alkoholfritt' },
   },
   items: [
-    // shares the Hugo poster — same build, no alcohol
     { id: 'virgin-hugo', slug: 'virgin-hugo', price: 'L450', glass: 'wine', flavor: 'sweet',
-      posterSrc: '/venue-assets/bottle-brothers/hugo.jpg',
+      posterSrc: '/venue-assets/bottle-brothers/mocktail-placeholder.jpg',
       i18n: { en: { name: 'Virgin Hugo', desc: 'Lightly sweet. Fresh and floral. Elderflower syrup, mint, soda. All the lift of the Hugo, none of the gin.' } } },
     { id: 'passion-pop', slug: 'passion-pop', price: 'L450', glass: 'collins', flavor: 'sweet', loved: true,
-      posterSrc: '/venue-assets/bottle-brothers/aloe-you-vera-much.jpg',
+      posterSrc: '/venue-assets/bottle-brothers/mocktail-placeholder.jpg',
       i18n: { en: { name: 'Passion Pop', desc: 'Medium sweet. Bright and tropical. Passion fruit, pineapple, lemon, sparkling water. Fruity and fizzy to the end.' } } },
-    // shares the Hugo poster — lime + mint, no alcohol
     { id: 'virgin-mojito', slug: 'virgin-mojito', price: 'L450', glass: 'collins', flavor: 'sour',
-      posterSrc: '/venue-assets/bottle-brothers/hugo.jpg',
+      posterSrc: '/venue-assets/bottle-brothers/mocktail-placeholder.jpg',
       i18n: { en: { name: 'Virgin Mojito', desc: 'Lightly sour. Cool and clean. Lime, mint, soda. Crisp to the end.' } } },
-    // shares the Hibiscus Spritz poster — same hibiscus build, no alcohol
     { id: 'hibiscus-ruby', slug: 'hibiscus-ruby', price: 'L450', glass: 'collins', flavor: 'sour',
-      posterSrc: '/venue-assets/bottle-brothers/hibiscus-spritz.jpg',
+      posterSrc: '/venue-assets/bottle-brothers/mocktail-placeholder.jpg',
       i18n: { en: { name: 'Hibiscus Ruby', desc: 'Lightly sour. Tart and ruby. Hibiscus cordial, lime, red berry juice, soda. Fresh on the finish.' } } },
   ],
 }
@@ -291,29 +305,37 @@ const pizza: MenuSection = {
   },
   items: [
     { id: 'margherita', slug: 'margherita', price: 'L600', glass: 'wine',
-      posterSrc: '/venue-assets/bottle-brothers/food-placeholder.jpg',
+      profile: { rich: 1, salt: 1 },
+      posterSrc: '/venue-assets/bottle-brothers/pizza-placeholder.jpg',
       i18n: { en: { name: 'Margherita', desc: 'Tomato sauce, mozzarella, basil' } } },
     { id: 'bi-bi', slug: 'bi-bi', price: 'L1000', glass: 'wine',
+      profile: { rich: 2, salt: 2 },
       posterSrc: '/venue-assets/bottle-brothers/bi-bi.jpg',
       i18n: { en: { name: 'Bi-Bi', desc: 'Tomato sauce, mozzarella, chicken ham, arugula, Grana cheese' } } },
     { id: 'capricciosa', slug: 'capricciosa', price: 'L700', glass: 'wine',
-      posterSrc: '/venue-assets/bottle-brothers/food-placeholder.jpg',
+      profile: { rich: 2, salt: 2 },
+      posterSrc: '/venue-assets/bottle-brothers/pizza-placeholder.jpg',
       i18n: { en: { name: 'Capricciosa', desc: 'Tomato sauce, mozzarella, ham, mushrooms, olives' } } },
     { id: '4-formaggi', slug: '4-formaggi', price: 'L750', glass: 'wine',
-      posterSrc: '/venue-assets/bottle-brothers/food-placeholder.jpg',
+      profile: { rich: 3, salt: 3 },
+      posterSrc: '/venue-assets/bottle-brothers/pizza-placeholder.jpg',
       i18n: { en: { name: '4 Formaggi', desc: 'Tomato sauce, mozzarella, Gouda, provolone, gorgonzola' } } },
     { id: 'diavola', slug: 'diavola', price: 'L650', glass: 'wine',
-      posterSrc: '/venue-assets/bottle-brothers/food-placeholder.jpg',
+      profile: { rich: 2, salt: 2, spicy: true },
+      posterSrc: '/venue-assets/bottle-brothers/pizza-placeholder.jpg',
       i18n: { en: { name: 'Diavola', desc: 'Tomato sauce, mozzarella, basil, spicy salami, spicy sauce' } } },
     { id: 'deliziosa', slug: 'deliziosa', price: 'L800', glass: 'wine',
-      posterSrc: '/venue-assets/bottle-brothers/food-placeholder.jpg',
+      profile: { rich: 2, salt: 3 },
+      posterSrc: '/venue-assets/bottle-brothers/pizza-placeholder.jpg',
       i18n: { en: { name: 'Deliziosa', desc: 'Mozzarella, prosciutto crudo, cherry tomatoes, arugula, Grana cheese' } } },
     { id: 'cotto-e-funghi', slug: 'cotto-e-funghi', price: 'L700', glass: 'wine',
-      posterSrc: '/venue-assets/bottle-brothers/food-placeholder.jpg',
+      profile: { rich: 3, salt: 2 },
+      posterSrc: '/venue-assets/bottle-brothers/pizza-placeholder.jpg',
       i18n: { en: { name: 'Cotto e Funghi', desc: 'Tomato sauce, mozzarella, wurstel sausage, potatoes' } } },
     { id: 'americana', slug: 'americana', price: 'L650', glass: 'wine',
+      profile: { rich: 3, salt: 2 },
       // TODO: Americana description duplicates Cotto e Funghi — confirm real copy with BB
-      posterSrc: '/venue-assets/bottle-brothers/food-placeholder.jpg',
+      posterSrc: '/venue-assets/bottle-brothers/pizza-placeholder.jpg',
       i18n: { en: { name: 'Americana', desc: 'Tomato sauce, mozzarella, wurstel sausage, potatoes' } } },
   ],
 }
@@ -333,10 +355,12 @@ const sharing: MenuSection = {
   },
   items: [
     { id: 'finger-food-mix', slug: 'finger-food-mix', price: 'L1000', glass: 'wine',
-      posterSrc: '/venue-assets/bottle-brothers/sharing-board.jpg',
+      profile: { rich: 3, salt: 3 },
+      posterSrc: '/venue-assets/bottle-brothers/board-placeholder.jpg',
       i18n: { en: { name: 'Finger Food Mix', desc: 'Chicken nuggets, onion rings, potato croquettes, and French fries' } } },
     { id: 'cured-meats-cheese-platter', slug: 'cured-meats-cheese-platter', price: 'L1400', glass: 'wine',
-      posterSrc: '/venue-assets/bottle-brothers/sharing-board.jpg',
+      profile: { rich: 3, salt: 3 },
+      posterSrc: '/venue-assets/bottle-brothers/board-placeholder.jpg',
       i18n: { en: { name: 'Cured Meats & Cheese Platter', desc: 'Selection of cured meats and cheeses' } } },
   ],
 }
@@ -355,9 +379,11 @@ export const pairings: Pairing[] = [
     dishes: [{ itemRef: 'margherita', price: 'L600' }, { itemRef: 'americana', price: 'L650' }, { itemRef: 'finger-food-mix', price: 'L1000' }],
     i18n: { en: { wisdom: 'Sharper and redder, it stands up to the saltiest, richest bites on the table.' } } },
   // TODO(bb-csv): fill dishes + wisdom
-  { cocktailRef: 'negroni-strawberry-basil', dishes: [], i18n: { en: { wisdom: '' } } },
+  { cocktailRef: 'negroni-strawberry-basil',
+    dishes: [{ itemRef: 'margherita', price: 'L600' }, { itemRef: '4-formaggi', price: 'L750' }, { itemRef: 'cured-meats-cheese-platter', price: 'L1400' }],
+    i18n: { en: { wisdom: 'Basil in the glass, basil on the plate. The bitter side cuts straight through cheese and cured fat.' } } },
   { cocktailRef: 'barrel-aged-coconut-negroni',
-    dishes: [{ itemRef: '4-formaggi', price: 'L750' }, { itemRef: 'cured-meats-cheese-platter', price: 'L1400' }],
+    dishes: [{ itemRef: '4-formaggi', price: 'L750' }, { itemRef: 'cured-meats-cheese-platter', price: 'L1400' }, { itemRef: 'capricciosa', price: 'L700' }],
     i18n: { en: { wisdom: 'A month in oak gives it real body, so give it a plate with weight. Smoke likes the intense.' } } },
   { cocktailRef: 'aloe-you-vera-much',
     dishes: [{ itemRef: 'margherita', price: 'L600' }, { itemRef: 'bi-bi', price: 'L1000' }, { itemRef: 'finger-food-mix', price: 'L1000' }],
@@ -366,8 +392,12 @@ export const pairings: Pairing[] = [
     dishes: [{ itemRef: 'margherita', price: 'L600' }, { itemRef: 'deliziosa', price: 'L800' }, { itemRef: '4-formaggi', price: 'L750' }],
     i18n: { en: { wisdom: 'Basil in the glass, basil on the pizza, they were always going to get along.' } } },
   // TODO(bb-csv): fill dishes + wisdom
-  { cocktailRef: 'sea-salt-paloma', dishes: [], i18n: { en: { wisdom: '' } } },
-  { cocktailRef: 'talk-balkan-to-me', dishes: [], i18n: { en: { wisdom: '' } } },
+  { cocktailRef: 'sea-salt-paloma',
+    dishes: [{ itemRef: 'finger-food-mix', price: 'L1000' }, { itemRef: 'diavola', price: 'L650' }, { itemRef: 'cured-meats-cheese-platter', price: 'L1400' }],
+    i18n: { en: { wisdom: 'Salt meets salt, and grapefruit resets your mouth between the fried bites.' } } },
+  { cocktailRef: 'talk-balkan-to-me',
+    dishes: [{ itemRef: 'margherita', price: 'L600' }, { itemRef: 'deliziosa', price: 'L800' }, { itemRef: 'bi-bi', price: 'L1000' }],
+    i18n: { en: { wisdom: 'Floral and light, it stays out of the way of a fresh plate and lifts the arugula.' } } },
   { cocktailRef: 'hugo',
     dishes: [{ itemRef: 'margherita', price: 'L600' }, { itemRef: 'deliziosa', price: 'L800' }, { itemRef: 'bi-bi', price: 'L1000' }],
     i18n: { en: { wisdom: 'Light and herbal, it keeps a fresh pizza tasting fresh.' } } },
@@ -375,38 +405,46 @@ export const pairings: Pairing[] = [
     dishes: [{ itemRef: 'margherita', price: 'L600' }, { itemRef: 'bi-bi', price: 'L1000' }, { itemRef: 'diavola', price: 'L650' }],
     i18n: { en: { wisdom: 'Lemon cuts grease, and the sweetness softens a little chili heat.' } } },
   { cocktailRef: 'lychee-spritz',
-    dishes: [{ itemRef: 'margherita', price: 'L600' }, { itemRef: 'bi-bi', price: 'L1000' }],
+    dishes: [{ itemRef: 'margherita', price: 'L600' }, { itemRef: 'bi-bi', price: 'L1000' }, { itemRef: 'deliziosa', price: 'L800' }],
     i18n: { en: { wisdom: 'Floral and soft, it cools a slice down and likes the lighter plates.' } } },
   { cocktailRef: 'brothers-spritz',
     dishes: [{ itemRef: 'diavola', price: 'L650' }, { itemRef: 'margherita', price: 'L600' }, { itemRef: 'finger-food-mix', price: 'L1000' }],
     i18n: { en: { wisdom: 'Passion fruit is sweet enough to calm a little chili heat.' } } },
   // TODO(bb-csv): fill dishes + wisdom
-  { cocktailRef: 'hibiscus-spritz', dishes: [], i18n: { en: { wisdom: '' } } },
-  { cocktailRef: 'martini-royal', dishes: [], i18n: { en: { wisdom: '' } } },
-  { cocktailRef: 'cherry-poppins', dishes: [], i18n: { en: { wisdom: '' } } },
+  { cocktailRef: 'hibiscus-spritz',
+    dishes: [{ itemRef: 'diavola', price: 'L650' }, { itemRef: 'capricciosa', price: 'L700' }, { itemRef: 'finger-food-mix', price: 'L1000' }],
+    i18n: { en: { wisdom: 'Bubbles cut the fat, and the sweetness takes the edge off the chilli.' } } },
+  { cocktailRef: 'martini-royal',
+    dishes: [{ itemRef: 'margherita', price: 'L600' }, { itemRef: 'deliziosa', price: 'L800' }, { itemRef: 'bi-bi', price: 'L1000' }],
+    i18n: { en: { wisdom: 'Fizzy and floral, it keeps a fresh pizza tasting fresh.' } } },
+  { cocktailRef: 'cherry-poppins',
+    dishes: [{ itemRef: 'cured-meats-cheese-platter', price: 'L1400' }, { itemRef: '4-formaggi', price: 'L750' }, { itemRef: 'capricciosa', price: 'L700' }],
+    i18n: { en: { wisdom: 'Cherry and almond do beside a cheese board what fruit preserve has always done.' } } },
   { cocktailRef: 'miss-lavander',
     dishes: [{ itemRef: 'margherita', price: 'L600' }, { itemRef: 'bi-bi', price: 'L1000' }, { itemRef: 'deliziosa', price: 'L800' }],
     i18n: { en: { wisdom: 'Delicate and floral, it likes a light plate that will not shout over it.' } } },
   { cocktailRef: 'pornstar-martini',
-    dishes: [{ itemRef: 'diavola', price: 'L650' }, { itemRef: 'finger-food-mix', price: 'L1000' }],
+    dishes: [{ itemRef: 'diavola', price: 'L650' }, { itemRef: 'finger-food-mix', price: 'L1000' }, { itemRef: 'capricciosa', price: 'L700' }],
     i18n: { en: { wisdom: 'Sweet and exotic, it softens heat and salt at the same time.' } } },
   { cocktailRef: 'tiki-tonka',
     dishes: [{ itemRef: 'diavola', price: 'L650' }, { itemRef: 'americana', price: 'L650' }, { itemRef: 'finger-food-mix', price: 'L1000' }],
     i18n: { en: { wisdom: 'Tropical and strong, it can take on smoke and spice.' } } },
   { cocktailRef: 'brothers-mule',
-    dishes: [{ itemRef: 'americana', price: 'L650' }, { itemRef: 'finger-food-mix', price: 'L1000' }],
+    dishes: [{ itemRef: 'americana', price: 'L650' }, { itemRef: 'finger-food-mix', price: 'L1000' }, { itemRef: 'cotto-e-funghi', price: 'L700' }],
     i18n: { en: { wisdom: 'Ginger and ice cool things off, so a heavy, savory plate feels easy.' } } },
   { cocktailRef: 'tierra-del-fuego',
-    dishes: [{ itemRef: 'diavola', price: 'L650' }, { itemRef: 'cured-meats-cheese-platter', price: 'L1400' }],
+    dishes: [{ itemRef: 'diavola', price: 'L650' }, { itemRef: 'cured-meats-cheese-platter', price: 'L1400' }, { itemRef: 'finger-food-mix', price: 'L1000' }],
     i18n: { en: { wisdom: 'Heat meets heat, or let the cheese cool it down, your call.' } } },
   { cocktailRef: 'virgin-hugo',
-    dishes: [{ itemRef: 'margherita', price: 'L600' }, { itemRef: 'bi-bi', price: 'L1000' }],
+    dishes: [{ itemRef: 'margherita', price: 'L600' }, { itemRef: 'bi-bi', price: 'L1000' }, { itemRef: 'deliziosa', price: 'L800' }],
     i18n: { en: { wisdom: 'All the lift of the Hugo, same love for a fresh pizza.' } } },
   { cocktailRef: 'passion-pop',
     dishes: [{ itemRef: 'diavola', price: 'L650' }, { itemRef: 'margherita', price: 'L600' }, { itemRef: 'finger-food-mix', price: 'L1000' }],
     i18n: { en: { wisdom: 'Bright and tropical, it cools a spicy bite.' } } },
   // TODO(bb-csv): fill dishes + wisdom
-  { cocktailRef: 'virgin-mojito', dishes: [], i18n: { en: { wisdom: '' } } },
+  { cocktailRef: 'virgin-mojito',
+    dishes: [{ itemRef: 'finger-food-mix', price: 'L1000' }, { itemRef: 'diavola', price: 'L650' }, { itemRef: 'margherita', price: 'L600' }],
+    i18n: { en: { wisdom: 'Lime and mint cool the heat and cut through anything fried.' } } },
   { cocktailRef: 'hibiscus-ruby',
     dishes: [{ itemRef: 'margherita', price: 'L600' }, { itemRef: '4-formaggi', price: 'L750' }, { itemRef: 'bi-bi', price: 'L1000' }],
     i18n: { en: { wisdom: 'Tart and ruby, it freshens up anything savory and likes cheese.' } } },
@@ -418,26 +456,26 @@ export const pairings: Pairing[] = [
 
 export const foodPairings: FoodPairing[] = [
   // TODO(bb-csv): refs to removed cocktails stripped — each dish needs 3 again, why text to follow
-  { dishRef: 'margherita', cocktailRefs: ['aperol-spritz', 'hugo'],
+  { dishRef: 'margherita', cocktailRefs: ['brothers-spritz', 'campari-spritz', 'sea-salt-paloma'],
     i18n: { en: { why: 'Light and fresh, so the glass stays light and fresh too.' } } },
-  { dishRef: 'capricciosa', cocktailRefs: [],
-    i18n: { en: { why: '' } } },
-  { dishRef: '4-formaggi', cocktailRefs: [],
-    i18n: { en: { why: '' } } },
-  { dishRef: 'diavola', cocktailRefs: ['brothers-spritz', 'pornstar-martini', 'limoncello-spritz'],
-    i18n: { en: { why: 'Sweet calms the chili heat.' } } },
-  { dishRef: 'deliziosa', cocktailRefs: ['aperol-spritz', 'hugo', 'basil-smash'],
-    i18n: { en: { why: 'Light and herbal next to a fresh, simple plate.' } } },
-  { dishRef: 'cotto-e-funghi', cocktailRefs: [],
-    i18n: { en: { why: '' } } },
-  { dishRef: 'americana', cocktailRefs: ['campari-spritz'],
-    i18n: { en: { why: 'Bitter, bubbles and a little sour cut the fat.' } } },
-  { dishRef: 'bi-bi', cocktailRefs: ['hugo', 'limoncello-spritz'],
-    i18n: { en: { why: 'Light and fresh, so the glass keeps it light.' } } },
-  { dishRef: 'finger-food-mix', cocktailRefs: ['aperol-spritz', 'campari-spritz', 'pornstar-martini'],
-    i18n: { en: { why: 'Aperitivo bubbles, and one sweet for the table.' } } },
-  { dishRef: 'cured-meats-cheese-platter', cocktailRefs: [],
-    i18n: { en: { why: '' } } },
+  { dishRef: 'capricciosa', cocktailRefs: ['brothers-spritz', 'basil-smash', 'talk-balkan-to-me'],
+    i18n: { en: { why: 'Enough going on to need cutting through, not so much that a light glass drowns.' } } },
+  { dishRef: '4-formaggi', cocktailRefs: ['tierra-del-fuego', 'barrel-aged-coconut-negroni', 'campari-spritz'],
+    i18n: { en: { why: 'Salt and fat the whole way through. Bitter cuts it, sour clears it.' } } },
+  { dishRef: 'diavola', cocktailRefs: ['lychee-spritz', 'martini-royal', 'cherry-poppins'],
+    i18n: { en: { why: 'Sweet is what sits on chilli heat and takes the edge off it.' } } },
+  { dishRef: 'deliziosa', cocktailRefs: ['negroni-strawberry-basil', 'basil-smash', 'tierra-del-fuego'],
+    i18n: { en: { why: 'Salt-forward, so the glass answers with citrus and a little sweetness.' } } },
+  { dishRef: 'cotto-e-funghi', cocktailRefs: ['limoncello-spritz', 'brothers-mule', 'brothers-spritz'],
+    i18n: { en: { why: 'Heavy and starchy, so the glass has to be sharp enough to cut through.' } } },
+  { dishRef: 'americana', cocktailRefs: ['aperol-spritz', 'campari-spritz', 'talk-balkan-to-me'],
+    i18n: { en: { why: 'Heavy and starchy, so the glass has to be sharp enough to cut through.' } } },
+  { dishRef: 'bi-bi', cocktailRefs: ['campari-spritz', 'barrel-aged-coconut-negroni', 'negroni-strawberry-basil'],
+    i18n: { en: { why: 'Enough going on to need cutting through, not so much that a light glass drowns.' } } },
+  { dishRef: 'finger-food-mix', cocktailRefs: ['barrel-aged-coconut-negroni', 'miss-lavander', 'aloe-you-vera-much'],
+    i18n: { en: { why: 'Salt and fat the whole way through. Bitter cuts it, sour clears it.' } } },
+  { dishRef: 'cured-meats-cheese-platter', cocktailRefs: ['negroni-strawberry-basil', 'basil-smash', 'tierra-del-fuego'],
+    i18n: { en: { why: 'Salt and fat the whole way through. Bitter cuts it, sour clears it.' } } },
 ]
 
 // ---------------------------------------------------------------------------
@@ -459,6 +497,25 @@ export const featuredPick: FeaturedPick = {
 }
 
 // ---------------------------------------------------------------------------
+// Food featured pick — the sharing board to order for two
+// ---------------------------------------------------------------------------
+
+export const foodFeaturedPick: FoodFeaturedPick = {
+  itemRef: 'cured-meats-cheese-platter',
+  showAfterSection: 'sharing',
+  i18n: {
+    en: { label: 'Recommended for two.' },
+    sq: { label: 'Rekomandohet për dy.' },
+    it: { label: 'Consigliato per due.' },
+    pl: { label: 'Polecane dla dwojga.' },
+    uk: { label: 'Рекомендуємо для двох.' },
+    de: { label: 'Empfohlen für zwei.' },
+    fr: { label: 'Recommandé pour deux.' },
+    no: { label: 'Anbefales for to.' },
+  },
+}
+
+// ---------------------------------------------------------------------------
 // Full venue menu export
 // ---------------------------------------------------------------------------
 
@@ -468,6 +525,7 @@ export const bbMenuData: VenueMenuData = {
   pairings,
   foodPairings,
   featuredPick,
+  foodFeaturedPick,
   tasteWhy,
 }
 

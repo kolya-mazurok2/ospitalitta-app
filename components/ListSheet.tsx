@@ -5,6 +5,7 @@ interface CartLine {
   lineTotal: string   // e.g. "L1500"
   onMinus: () => void
   onPlus: () => void
+  onOpen?: () => void   // opens the item's detail sheet
 }
 
 interface Props {
@@ -54,7 +55,7 @@ export default function ListSheet({
             width: 32, height: 32, zIndex: 1,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             background: 'transparent', border: 'none', cursor: 'pointer',
-            color: 'rgb(84 89 90 / 0.5)', padding: 0,
+            color: 'var(--ink-faint)', padding: 0,
           }}
           aria-label="Close"
         >
@@ -65,7 +66,7 @@ export default function ListSheet({
         </button>
 
         {/* heading */}
-        <div style={{ textAlign: 'center', marginTop: 12 }}>
+        <div style={{ marginTop: 12, paddingRight: 40 }}>
           <h3 style={{
             fontFamily: 'var(--font-display)', fontSize: '1.4375rem',
             letterSpacing: '0.04em', color: 'var(--ink-heading)', lineHeight: 1.1,
@@ -75,17 +76,17 @@ export default function ListSheet({
         </div>
 
         {/* cart lines */}
-        <div style={{ display: 'flex', flexDirection: 'column', marginTop: 20, borderTop: '1px solid rgb(84 89 90 / 0.18)' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', marginTop: 20, borderTop: '1px solid var(--line)' }}>
           {lines.map(l => (
             <div key={l.slug} style={{
               display: 'flex', alignItems: 'center', gap: 12,
               padding: '12px 0',
-              borderBottom: '1px solid rgb(84 89 90 / 0.12)',
+              borderBottom: '1px solid var(--line-soft)',
             }}>
               {/* stepper */}
               <div style={{
                 display: 'inline-flex', alignItems: 'center', flexShrink: 0,
-                border: '1px solid rgb(84 89 90 / 0.3)',
+                border: '1px solid var(--line-strong)',
               }}>
                 <button
                   onClick={l.onMinus}
@@ -120,12 +121,24 @@ export default function ListSheet({
                 </button>
               </div>
 
-              <span style={{
-                flex: 1, minWidth: 0,
-                fontFamily: 'var(--font-display)', fontSize: '0.9375rem',
-                letterSpacing: '0.01em', color: 'var(--ink)',
-              }}>
+              <span
+                onClick={l.onOpen}
+                style={{
+                  flex: 1, minWidth: 0,
+                  display: 'inline-flex', alignItems: 'center', gap: 6,
+                  fontFamily: 'var(--font-display)', fontSize: '0.9375rem',
+                  letterSpacing: '0.01em', color: 'var(--ink)',
+                  cursor: l.onOpen ? 'pointer' : 'default',
+                }}
+              >
                 {l.name}
+                {l.onOpen && (
+                  <svg width="6" height="11" viewBox="0 0 6 11" fill="none"
+                    stroke="var(--ink-heading)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
+                    style={{ display: 'block', flexShrink: 0 }} aria-hidden>
+                    <path d="M1 1.5 L5 5.5 L1 9.5" />
+                  </svg>
+                )}
               </span>
 
               <span style={{
@@ -143,7 +156,7 @@ export default function ListSheet({
           <span style={{
             fontFamily: 'var(--font-text)', fontWeight: 500, fontSize: '0.6875rem',
             letterSpacing: '0.16em', textTransform: 'uppercase',
-            color: 'rgb(84 89 90 / 0.6)',
+            color: 'var(--ink-faint)',
           }}>
             {totalLabel}
           </span>
@@ -162,8 +175,8 @@ export default function ListSheet({
             width: '100%', marginTop: 22,
             fontFamily: 'var(--font-text)', fontWeight: 500, fontSize: '0.75rem',
             letterSpacing: '0.1em', textTransform: 'uppercase',
-            color: 'rgb(84 89 90 / 0.45)', background: 'transparent',
-            border: '1px solid rgb(84 89 90 / 0.22)', padding: '12px 0', cursor: 'pointer',
+            color: 'var(--ink-faint)', background: 'transparent',
+            border: '1px solid var(--line)', padding: '12px 0', cursor: 'pointer',
           }}
         >
           {clearLabel}

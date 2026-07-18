@@ -13,6 +13,7 @@ interface Props {
   compact?: boolean
   videoSrc?: string
   posterSrc?: string
+  priority?: boolean   // first card in the list — eager, everything below stays lazy
   onTap: () => void
   onAdd: (e: React.MouseEvent) => void
 }
@@ -33,7 +34,7 @@ const badgePillStyle: React.CSSProperties = {
   flexShrink: 0,
 }
 
-export default function FoodCard({ id, name, desc, price, badge, compact, videoSrc, posterSrc, onTap, onAdd }: Props) {
+export default function FoodCard({ id, name, desc, price, badge, compact, videoSrc, posterSrc, priority, onTap, onAdd }: Props) {
   const { amount, unit } = parsePriceDisplay(price)
   // price shows amount only; unit becomes a badge label (rule: per-unit info belongs near name, not in price)
   const displayPrice = amount
@@ -72,7 +73,7 @@ export default function FoodCard({ id, name, desc, price, badge, compact, videoS
           {desc && (
             <p style={{
               fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.6875rem',
-              color: 'var(--ink-faint)', margin: '2px 0 0',
+              color: 'var(--ink-body-2)', margin: '2px 0 0',
               overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
             }}>
               {clampDesc(desc)}
@@ -125,7 +126,10 @@ export default function FoodCard({ id, name, desc, price, badge, compact, videoS
           />
         ) : posterSrc ? (
           <img
-            src={posterSrc} alt=""
+            src={posterSrc} alt={name}
+            loading={priority ? 'eager' : 'lazy'}
+            fetchPriority={priority ? 'high' : undefined}
+            decoding="async"
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
           />
         ) : null}
@@ -162,8 +166,8 @@ export default function FoodCard({ id, name, desc, price, badge, compact, videoS
         {/* row 1 left: description */}
         <p style={{
           gridColumn: 1, gridRow: 1,
-          fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.71875rem',
-          lineHeight: 1.4, color: 'var(--ink-faint)', margin: 0,
+          fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.84375rem',
+          lineHeight: 1.45, color: 'var(--ink-body-2)', margin: 0,
           textWrap: 'pretty' as React.CSSProperties['textWrap'],
           alignSelf: 'start',
         }}>
@@ -180,7 +184,7 @@ export default function FoodCard({ id, name, desc, price, badge, compact, videoS
         {/* row 2 left: name */}
         <span style={{
           gridColumn: 1, gridRow: 2,
-          fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: '1.125rem',
+          fontFamily: 'var(--font-display)', fontSize: '0.9375rem',
           letterSpacing: '0.01em', color: 'var(--ink)', lineHeight: 1.1,
           alignSelf: 'end',
         }}>
@@ -189,8 +193,8 @@ export default function FoodCard({ id, name, desc, price, badge, compact, videoS
         {/* row 2 right: price */}
         <span style={{
           gridColumn: 2, gridRow: 2,
-          fontFamily: 'var(--font-text)', fontWeight: 500, fontSize: '0.9375rem',
-          color: 'var(--ink-heading)', textAlign: 'right',
+          fontFamily: 'var(--font-text)', fontSize: '0.8125rem',
+          letterSpacing: '0.03em', color: 'var(--brand)', textAlign: 'right',
           alignSelf: 'end',
         }}>
           {displayPrice}

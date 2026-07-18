@@ -19,8 +19,7 @@
     "label": "I Brothers consigliano"
   },
   "pizza_note": {
-    "text": "Le nostre pizze arrivano in 5-7 minuti dal forno. Vale la piccola attesa.",
-    "bold": "Fatto su ordinazione."
+    "text": "Di solito una pizza è pronta in soli 5 minuti."
   },
   "legend": {
     "title": "Come leggere questo menu",
@@ -41,7 +40,7 @@
   },
   "cart": {
     "show_waiter": "Mostra al cameriere",
-    "open_list": "Fallo vedere al cameriere",
+    "open_list": "Mostra questo al cameriere",
     "keep_browsing": "Continua a sfogliare",
     "total_label": "Totale · Lekë",
     "clear": "Svuota ordine",

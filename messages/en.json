@@ -19,8 +19,7 @@
     "label": "Brothers recommend"
   },
   "pizza_note": {
-    "text": "Our pizzas come 5 to 7 minutes from the oven. Worth the small wait.",
-    "bold": "Made to order."
+    "text": "Usually a pizza takes just 5 minutes."
   },
   "legend": {
     "title": "How to read this menu",
@@ -41,7 +40,7 @@
   },
   "cart": {
     "show_waiter": "Show your waiter",
-    "open_list": "Let the waiter look",
+    "open_list": "Show this to your server",
     "keep_browsing": "Keep browsing",
     "total_label": "Total · Lekë",
     "clear": "Clear order",
