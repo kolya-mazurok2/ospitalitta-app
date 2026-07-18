@@ -165,7 +165,7 @@ const venues: Record<string, VenueConfig> = {
   'saly': {
     slug: 'saly',
     name: 'Saly',
-    locales: ['en', 'sq', 'it', 'pl', 'hu', 'de', 'fr', 'no'],
+    locales: ['en', 'sq', 'it', 'pl', 'uk', 'de', 'fr', 'no'],
     defaultLocale: 'en',
     brand: {
       themeAttr: 'saly',
@@ -188,7 +188,7 @@ const venues: Record<string, VenueConfig> = {
   'cote': {
     slug: 'cote',
     name: 'Côte',
-    locales: ['en', 'sq', 'it', 'pl', 'hu', 'de', 'fr', 'no'],
+    locales: ['en', 'sq', 'it', 'pl', 'uk', 'de', 'fr', 'no'],
     defaultLocale: 'en',
     brand: {
       themeAttr: 'cote',
@@ -210,7 +210,7 @@ const venues: Record<string, VenueConfig> = {
   'bottle-brothers': {
     slug: 'bottle-brothers',
     name: 'Bottle Brothers',
-    locales: ['en', 'sq', 'it', 'pl', 'hu', 'de', 'fr', 'no'],
+    locales: ['en', 'sq', 'it', 'pl', 'uk', 'de', 'fr', 'no'],
     defaultLocale: 'en',
     brand: {
       themeAttr: 'bottle-brothers',

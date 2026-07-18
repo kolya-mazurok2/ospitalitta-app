@@ -16,7 +16,7 @@ const GLASS_OPTIONS = ['wine', 'collins', 'rocks', 'martini', 'coupe']
 const TOP_LABEL: Record<'cocktail' | 'food', string> = { cocktail: 'Drinks', food: 'Food' }
 const LOCALE_NAMES: Record<string, string> = {
   en: 'English', sq: 'Albanian', it: 'Italian', pl: 'Polish',
-  hu: 'Hungarian', de: 'German', fr: 'French', no: 'Norwegian',
+  uk: 'Ukrainian', de: 'German', fr: 'French', no: 'Norwegian',
 }
 
 function priceLabel(minor: number | null, unit: string | null): string {

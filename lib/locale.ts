@@ -37,7 +37,7 @@ export function tabOrder(lead: TasteKey): TasteKey[] {
 }
 
 /** Every UI locale Ospitalitta ships messages for. Single source of truth. */
-export const SUPPORTED_LOCALES = ['en', 'sq', 'it', 'pl', 'hu', 'de', 'fr', 'no'] as const
+export const SUPPORTED_LOCALES = ['en', 'sq', 'it', 'pl', 'uk', 'de', 'fr', 'no'] as const
 export type SupportedLocale = typeof SUPPORTED_LOCALES[number]
 
 /**

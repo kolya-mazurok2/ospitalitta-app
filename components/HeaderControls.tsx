@@ -2,6 +2,35 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { FLAG_SPRITE, FLAG_LOCALES } from '@/lib/flag-sprite'
+
+/** Chrome icon from the inlined sprite — same-document <use>, no extra request. */
+function UiIcon({ name, size = 24 }: { name: 'info' | 'typography' | 'language'; size?: number }) {
+  return (
+    <svg width={size} height={size} style={{ display: 'block', color: 'var(--ink-faint)' }} aria-hidden>
+      <use href={`#ui-${name}`} />
+    </svg>
+  )
+}
+
+/**
+ * Current language, shown as its country flag. Every shipped locale has one today;
+ * the globe stays as the fallback so adding a language never leaves a blank control.
+ */
+function LocaleIcon({ locale, size = 24 }: { locale: string; size?: number }) {
+  if (!FLAG_LOCALES.has(locale)) return <UiIcon name="language" size={size} />
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 512 512"
+      style={{ display: 'block', borderRadius: 2 }}
+      aria-hidden
+    >
+      <use href={`#flag-${locale}`} />
+    </svg>
+  )
+}
 
 const SCALE_STEPS = [0.9, 1, 1.15, 1.3]
 const SCALE_LABELS = [0.72, 0.88, 1.04, 1.20] // rem sizes for the "A" buttons
@@ -14,7 +43,7 @@ const ALL_LOCALES: { code: string; label: string }[] = [
   { code: 'sq', label: 'Shqip' },
   { code: 'de', label: 'Deutsch' },
   { code: 'no', label: 'Norsk' },
-  { code: 'hu', label: 'Magyar' },
+  { code: 'uk', label: 'Українська' },
   { code: 'en', label: 'English' },
 ]
 
@@ -46,6 +75,7 @@ export default function HeaderControls({
       flexShrink: 0, padding: '20px 20px 12px',
       background: 'var(--surface)', position: 'relative', zIndex: 6,
     }}>
+      <svg style={{ display: 'none' }} aria-hidden dangerouslySetInnerHTML={{ __html: FLAG_SPRITE }} />
       {headerDecor && (
         <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
           <img
@@ -82,7 +112,8 @@ export default function HeaderControls({
           }}
         />
       )}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+      {/* logo left, controls right; the controls line up on the logo's bottom edge */}
+      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
         {/* logo — image or live-text wordmark */}
         {logoText ? (
           <span style={{
@@ -93,26 +124,31 @@ export default function HeaderControls({
             {logoText}
           </span>
         ) : logoSrc ? (
-          <Image
-            src={logoSrc}
-            alt=""
-            width={300}
-            height={40}
-            className="venue-logo"
-            style={{ height: '40px', width: 'auto', display: 'block' }}
-            priority
-          />
+          <span style={{
+            display: 'block', flexShrink: 0,
+            background: 'var(--surface-logo)', padding: '6px 10px',
+          }}>
+            <Image
+              src={logoSrc}
+              alt=""
+              width={300}
+              height={40}
+              className="venue-logo"
+              style={{ height: '40px', width: 'auto', display: 'block' }}
+              priority
+            />
+          </span>
         ) : null}
 
         {/* controls */}
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 18 }}>
+        <div style={{ display: 'flex', alignItems: 'flex-end', gap: 18 }}>
           {/* info / legend */}
           <button
             onClick={() => { onOpenLegend(); setAaOpen(false); setLangOpen(false) }}
             style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '2px 0', display: 'flex', alignItems: 'center', flexShrink: 0 }}
             aria-label="How to read this menu"
           >
-            <Image src="/assets/icon-info.svg" alt="" width={24} height={24} aria-hidden />
+            <UiIcon name="info" />
           </button>
 
           {/* Aa size picker */}
@@ -122,7 +158,7 @@ export default function HeaderControls({
               style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '2px 0', display: 'flex', alignItems: 'center' }}
               aria-label="Text size"
             >
-              <Image src="/assets/icon-typography.svg" alt="" width={24} height={24} aria-hidden />
+              <UiIcon name="typography" />
             </button>
 
             {aaOpen && (
@@ -163,7 +199,7 @@ export default function HeaderControls({
               style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '2px 0', display: 'flex', alignItems: 'center', flexShrink: 0 }}
               aria-label="Language"
             >
-              <Image src="/assets/icon-language.svg" alt="" width={24} height={24} aria-hidden />
+              <LocaleIcon locale={locale} />
             </button>
 
             {langOpen && (

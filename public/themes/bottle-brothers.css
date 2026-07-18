@@ -112,6 +112,7 @@
   --surface-media:  var(--bb-media);
   --surface-dark:   var(--bb-char);
   --surface-dark-2: var(--bb-char-deep);
+  --surface-logo:   var(--bb-char);   /* olive logo is drawn to sit on char, not paper */
 
   --ink:            var(--bb-ink);
   --ink-heading:    var(--bb-ink-heading);

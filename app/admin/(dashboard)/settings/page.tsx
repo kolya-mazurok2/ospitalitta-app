@@ -3,7 +3,7 @@ import { logout } from './actions'
 
 const LOCALE_NAMES: Record<string, string> = {
   en: 'English', sq: 'Albanian', it: 'Italian', pl: 'Polish',
-  hu: 'Hungarian', de: 'German', fr: 'French', no: 'Norwegian',
+  uk: 'Ukrainian', de: 'German', fr: 'French', no: 'Norwegian',
 }
 const CURRENCY_NAME: Record<string, string> = { ALL: 'Lekë' }
 
