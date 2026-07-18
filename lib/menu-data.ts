@@ -213,7 +213,6 @@ const spicy: MenuSection = {
       posterSrc: '/venue-assets/bottle-brothers/brothers-mule.jpg',
       i18n: { en: { name: "Brother's Mule", desc: 'Medium sour, spicy. Fresh and fizzy. Cucumber and basil vodka, lime, ginger beer, bitters. Ginger hits first, dry to the end.' } } },
     { id: 'tierra-del-fuego', slug: 'tierra-del-fuego', price: 'L750', glass: 'rocks', house: true, loved: true,
-      videoSrc: '/venue-assets/bottle-brothers/tierra-del-fuego.mp4',
       posterSrc: '/venue-assets/bottle-brothers/tierra-del-fuego.jpg',
       i18n: { en: { name: 'Tierra Del Fuego', desc: 'Balanced sweet and sour. Fresh and green. Chilli-infused tequila, lime, watermelon, jalapeño liqueur. Watermelon leads, opens spicy at the end.' } } },
   ],
