@@ -46,7 +46,7 @@
     "added": "{name} ajouté",
     "confirm": "Passer commande",
     "thanks_title": "Commande passée",
-    "thanks_body": "En attendant le serveur, nous vous serions reconnaissants pour un <link>avis</link>.\nIl nous aide à améliorer le service.",
+    "thanks_body": "En attendant le serveur, nous vous serions reconnaissants pour un <link>avis</link>. Il nous aide à améliorer le service.",
     "new_order": "Passer une nouvelle commande",
     "change_order": "Modifier la commande"
   },

@@ -46,7 +46,7 @@
     "added": "{name} aggiunto",
     "confirm": "Invia ordine",
     "thanks_title": "Ordine inviato",
-    "thanks_body": "Mentre aspetti il cameriere, ti saremmo grati per una <link>recensione</link>.\nCi aiuta a migliorare il servizio.",
+    "thanks_body": "Mentre aspetti il cameriere, ti saremmo grati per una <link>recensione</link>. Ci aiuta a migliorare il servizio.",
     "new_order": "Fai un nuovo ordine",
     "change_order": "Modifica ordine"
   },

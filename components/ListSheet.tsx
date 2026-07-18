@@ -217,7 +217,6 @@ export default function ListSheet({
                 <p style={{
                   fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.9375rem',
                   lineHeight: 1.5, color: 'var(--ink-body)', margin: 0,
-                  whiteSpace: 'pre-line',
                 }}>
                   {thanksBody}
                 </p>

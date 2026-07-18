@@ -46,7 +46,7 @@
     "added": "{name} added",
     "confirm": "Place order",
     "thanks_title": "Order placed",
-    "thanks_body": "While you wait for your server, we would be grateful for a <link>review</link>.\nIt helps us make the service better.",
+    "thanks_body": "While you wait for your server, we would be grateful for a <link>review</link>. It helps us make the service better.",
     "new_order": "Place a new order",
     "change_order": "Change order"
   },
