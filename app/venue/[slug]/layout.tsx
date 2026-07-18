@@ -43,8 +43,12 @@ export default async function VenueLayout({ children, params }: Props) {
         <link key={f.family} rel="stylesheet" href={f.href} />
       ))}
       <link rel="stylesheet" href={venue.brand.stylesheet} />
+      {/* data-theme: only bottle-brothers.css defines a [data-theme="dark"] block,
+          so other venues ignore it. Drop the attribute to return to the paper
+          world. Should move to venue.brand once the dark theme is signed off. */}
       <div
         data-venue={venue.brand.themeAttr}
+        data-theme="dark"
         data-locale={locale}
         data-lead-taste={leadTaste}
         style={{ height: '100dvh', display: 'flex', justifyContent: 'center', background: 'var(--surface-dark, #15110e)' }}
