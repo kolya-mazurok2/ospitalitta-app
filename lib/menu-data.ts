@@ -133,6 +133,7 @@ const sour: MenuSection = {
       posterSrc: '/venue-assets/bottle-brothers/basil-smash.jpg',
       i18n: { en: { name: 'Basil Smash', desc: 'Balanced sweet and sour. Fresh and green. Basil, gin, lemon. Clean through, opens easy.' } } },
     { id: 'talk-balkan-to-me', slug: 'talk-balkan-to-me', price: 'L1000', glass: 'collins', lvl: 2, loved: true,
+      videoSrc: '/venue-assets/bottle-brothers/talk-balkan-to-me.mp4',
       posterSrc: '/venue-assets/bottle-brothers/talk-balkan-to-me.jpg',
       i18n: { en: { name: 'Talk Balkan To Me', desc: 'Medium sour, lightly sweet. Fresh and floral. Chamomile gin, lemon, elderflower liqueur, soda, fig leaf. Starts soft, opens more sour at the end.' } } },
     { id: 'sea-salt-paloma', slug: 'sea-salt-paloma', price: 'L500', glass: 'collins', lvl: 2,
