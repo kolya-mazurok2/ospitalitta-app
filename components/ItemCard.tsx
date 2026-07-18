@@ -1,6 +1,10 @@
+'use client'
+
+import CardVideo from '@/components/CardVideo'
 import Glass from '@/components/Glass'
 import TasteMark from '@/components/TasteMark'
 import type { GlassType } from '@/lib/menu-data'
+
 
 interface Props {
   id: string
@@ -149,9 +153,8 @@ export default function ItemCard({
         overflow: 'hidden',
       }}>
         {videoSrc ? (
-          <video
+          <CardVideo
             src={videoSrc} poster={posterSrc}
-            autoPlay loop playsInline muted
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
           />
         ) : posterSrc ? (

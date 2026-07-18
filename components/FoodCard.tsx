@@ -1,3 +1,6 @@
+'use client'
+
+import CardVideo from '@/components/CardVideo'
 import { parsePriceDisplay } from '@/lib/locale'
 
 interface Props {
@@ -112,9 +115,8 @@ export default function FoodCard({ id, name, desc, price, badge, compact, videoS
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
         {videoSrc ? (
-          <video
+          <CardVideo
             src={videoSrc} poster={posterSrc}
-            autoPlay loop playsInline muted
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
           />
         ) : posterSrc ? (
