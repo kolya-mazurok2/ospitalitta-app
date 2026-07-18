@@ -185,10 +185,6 @@ export default function DetailSheet({
           <div style={{ marginTop: 16 }}>
             {loved && (
               <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 9 }}>
-                <svg viewBox="154 164 314 303" style={{ width: 12, height: 12, display: 'block', fill: 'var(--brand)' }} aria-hidden>
-                  <path d="m467.804 292.907c-7.47-48.489-60.582-101.763-132.159-62.814-29.177-90.905-119.689-69.448-145.953-43.65-85.322 76.173 8.362 203.179 40.333 268.032 14.045-39.091-117.417-181.241-27.244-255.414 68.632-56.454 126.977 25.183 124.741 56.454 44.947-40.995 121.184-16.165 122.736 37.392 3.752 129.472-200.887 143.96-206.188 175.093 115.457-25.643 238.406-79.846 223.734-175.093z" />
-                  <path d="m287.945 231.035c-46.589-62.449-117.225 12.49-74.644 84.931-12.023-79.435 25.55-110.91 74.644-84.931z" />
-                </svg>
                 <span style={{
                   fontFamily: 'var(--font-text)', fontWeight: 500, fontSize: '0.53125rem',
                   letterSpacing: '0.16em', textTransform: 'uppercase',
@@ -196,6 +192,10 @@ export default function DetailSheet({
                 }}>
                   loved here
                 </span>
+                <svg viewBox="154 164 314 303" style={{ width: 12, height: 12, display: 'block', fill: 'var(--brand)' }} aria-hidden>
+                  <path d="m467.804 292.907c-7.47-48.489-60.582-101.763-132.159-62.814-29.177-90.905-119.689-69.448-145.953-43.65-85.322 76.173 8.362 203.179 40.333 268.032 14.045-39.091-117.417-181.241-27.244-255.414 68.632-56.454 126.977 25.183 124.741 56.454 44.947-40.995 121.184-16.165 122.736 37.392 3.752 129.472-200.887 143.96-206.188 175.093 115.457-25.643 238.406-79.846 223.734-175.093z" />
+                  <path d="m287.945 231.035c-46.589-62.449-117.225 12.49-74.644 84.931-12.023-79.435 25.55-110.91 74.644-84.931z" />
+                </svg>
               </div>
             )}
 
@@ -218,13 +218,6 @@ export default function DetailSheet({
             {/* name + olive + price */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 16, marginTop: 8 }}>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
-                {house && (
-                  <svg width="11" height="13" viewBox="0 0 24 24" style={{ display: 'block', flexShrink: 0 }} aria-hidden>
-                    <ellipse cx="12" cy="12" rx="6.6" ry="8.8" transform="rotate(-18 12 12)" fill="#7E8C50" />
-                    <ellipse cx="9.7" cy="7.6" rx="1.5" ry="2.3" transform="rotate(-18 12 12)" fill="#B6C07A" />
-                    <ellipse cx="13.4" cy="14.2" rx="1.4" ry="1.9" transform="rotate(-18 12 12)" fill="#C7503B" />
-                  </svg>
-                )}
                 <span style={{
                   fontFamily: 'var(--font-display)', fontSize: '1.0625rem',
                   letterSpacing: '0.01em', color: 'var(--ink)',
@@ -232,6 +225,13 @@ export default function DetailSheet({
                 }}>
                   {name}
                 </span>
+                {house && (
+                  <svg width="11" height="13" viewBox="0 0 24 24" style={{ display: 'block', flexShrink: 0 }} aria-hidden>
+                    <ellipse cx="12" cy="12" rx="6.6" ry="8.8" transform="rotate(-18 12 12)" fill="#7E8C50" />
+                    <ellipse cx="9.7" cy="7.6" rx="1.5" ry="2.3" transform="rotate(-18 12 12)" fill="#B6C07A" />
+                    <ellipse cx="13.4" cy="14.2" rx="1.4" ry="1.9" transform="rotate(-18 12 12)" fill="#C7503B" />
+                  </svg>
+                )}
               </span>
               <span style={{
                 fontFamily: 'var(--font-text)', fontSize: '0.875rem',

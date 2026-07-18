@@ -89,7 +89,7 @@ const bitter: MenuSection = {
   key: 'bitter',
   type: 'cocktail',
   i18n: {
-    en: { label: 'Bitter', sub: 'Grown-up and bittersweet, the before-dinner ones' },
+    en: { label: 'Bitter' },
     sq: { label: 'Të hidhura' },
     it: { label: 'Amaro' },
     pl: { label: 'Gorzkie' },
@@ -118,7 +118,7 @@ const sour: MenuSection = {
   key: 'sour',
   type: 'cocktail',
   i18n: {
-    en: { label: 'Sour', sub: 'Bright and sharp, wakes you up' },
+    en: { label: 'Sour' },
     sq: { label: 'Të thartat' },
     it: { label: 'Aspro' },
     pl: { label: 'Kwaśne' },
@@ -147,7 +147,7 @@ const sweet: MenuSection = {
   key: 'sweet',
   type: 'cocktail',
   i18n: {
-    en: { label: 'Sweet', sub: 'Fruit-forward and easy, the crowd-pleasers' },
+    en: { label: 'Sweet' },
     sq: { label: 'Të ëmbla' },
     it: { label: 'Dolce' },
     pl: { label: 'Słodkie' },
@@ -197,7 +197,7 @@ const spicy: MenuSection = {
   key: 'spicy',
   type: 'cocktail',
   i18n: {
-    en: { label: 'Spicy', sub: 'A little heat' },
+    en: { label: 'Spicy' },
     sq: { label: 'Pikante' },
     it: { label: 'Speziato' },
     pl: { label: 'Ostre' },
@@ -220,7 +220,7 @@ const zero: MenuSection = {
   key: 'zero',
   type: 'cocktail',
   i18n: {
-    en: { label: 'Zero', sub: 'No alcohol, same hands, same care' },
+    en: { label: 'Zero' },
     sq: { label: 'Pa alkool' },
     it: { label: 'Analcolici' },
     pl: { label: 'Bez alkoholu' },
@@ -256,7 +256,7 @@ const pizza: MenuSection = {
   key: 'pizza',
   type: 'food',
   i18n: {
-    en: { label: 'Pizza', sub: '' },
+    en: { label: 'Pizza' },
     sq: { label: 'Pizza' },
     it: { label: 'Pizza' },
     pl: { label: 'Pizza' },
@@ -290,7 +290,7 @@ const burgers: MenuSection = {
   key: 'burgers',
   type: 'food',
   i18n: {
-    en: { label: 'Burgers', sub: '' },
+    en: { label: 'Burgers' },
     sq: { label: 'Hamburgerë' },
     it: { label: 'Hamburger' },
     pl: { label: 'Burgery' },
@@ -313,7 +313,7 @@ const sharing: MenuSection = {
   key: 'sharing',
   type: 'food',
   i18n: {
-    en: { label: 'Sharing', sub: '' },
+    en: { label: 'Sharing' },
     sq: { label: 'Për ndarje' },
     it: { label: 'Da condividere' },
     pl: { label: 'Do podziału' },

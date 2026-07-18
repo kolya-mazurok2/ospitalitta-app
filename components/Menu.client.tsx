@@ -21,6 +21,7 @@ import { setLocaleAction } from '@/app/actions/locale'
 import { track } from '@/lib/analytics'
 import { useImpressions } from '@/lib/useImpressions'
 import MenuBackdrop from '@/components/MenuBackdrop'
+import TasteIcon, { TasteSprite } from '@/components/TasteIcon'
 
 const SCALE_STEPS = [0.9, 1, 1.15, 1.3] as const
 
@@ -429,6 +430,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, position: 'relative', background: 'var(--surface)' }}>
+      <TasteSprite />
 
       <MenuBackdrop theme={backgroundTheme ?? 'none'} />
 
@@ -474,8 +476,9 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
                 const sec = sectionByKey[tk]
                 const label = sec ? pl(sec.i18n).label : tk
                 return (
-                  <button key={tk} onClick={() => { track('taste_tab_switch', { venue_slug: venueSlug, taste: tk }); setTab(tk) }} style={tabBtn(active)}>
+                  <button key={tk} onClick={() => { track('taste_tab_switch', { venue_slug: venueSlug, taste: tk }); setTab(tk) }} style={{ ...tabBtn(active), display: 'inline-flex', alignItems: 'center', gap: 6 }}>
                     {label}
+                    <TasteIcon taste={tk} active={active} />
                     {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
                   </button>
                 )

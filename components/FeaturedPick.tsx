@@ -79,7 +79,7 @@ export default function FeaturedPick({ name, desc, price, glass, taste, n, house
             <span style={{ display: 'inline-flex', alignItems: 'center', minWidth: 0, position: 'relative' }}>
               {house && (
                 <svg width="11" height="13" viewBox="0 0 24 24"
-                  style={{ position: 'absolute', left: -15, top: '50%', transform: 'translateY(-50%)', display: 'block', flexShrink: 0 }}>
+                  style={{ position: 'absolute', right: -15, top: '50%', transform: 'translateY(-50%)', display: 'block', flexShrink: 0 }}>
                   <ellipse cx="12" cy="12" rx="6.6" ry="8.8" transform="rotate(-18 12 12)" fill="#7E8C50" />
                   <ellipse cx="9.7" cy="7.6" rx="1.5" ry="2.3" transform="rotate(-18 12 12)" fill="#B6C07A" />
                   <ellipse cx="13.4" cy="14.2" rx="1.4" ry="1.9" transform="rotate(-18 12 12)" fill="#C7503B" />
