@@ -19,7 +19,7 @@
     "label": "Les Brothers recommandent"
   },
   "pizza_note": {
-    "text": "En général, une pizza ne prend que 5 minutes."
+    "text": "En général, votre pizza sera prête en 5 minutes environ"
   },
   "legend": {
     "title": "Comment lire ce menu",
@@ -41,10 +41,14 @@
   "cart": {
     "show_waiter": "Montrer au serveur",
     "open_list": "Montrez ceci au serveur",
-    "keep_browsing": "Continuer à explorer",
     "total_label": "Total · Lekë",
     "clear": "Effacer la commande",
-    "added": "{name} ajouté"
+    "added": "{name} ajouté",
+    "confirm": "Passer commande",
+    "thanks_title": "Commande passée",
+    "thanks_body": "En attendant le serveur, nous vous serions reconnaissants pour un <link>avis</link>.\nIl nous aide à améliorer le service.",
+    "new_order": "Passer une nouvelle commande",
+    "change_order": "Modifier la commande"
   },
   "pairing": {
     "drink_label": "Se marie le mieux avec :",

@@ -19,7 +19,7 @@
     "label": "I Brothers consigliano"
   },
   "pizza_note": {
-    "text": "Di solito una pizza è pronta in soli 5 minuti."
+    "text": "Di solito la tua pizza è pronta in circa 5 minuti"
   },
   "legend": {
     "title": "Come leggere questo menu",
@@ -41,10 +41,14 @@
   "cart": {
     "show_waiter": "Mostra al cameriere",
     "open_list": "Mostra questo al cameriere",
-    "keep_browsing": "Continua a sfogliare",
     "total_label": "Totale · Lekë",
     "clear": "Svuota ordine",
-    "added": "{name} aggiunto"
+    "added": "{name} aggiunto",
+    "confirm": "Invia ordine",
+    "thanks_title": "Ordine inviato",
+    "thanks_body": "Mentre aspetti il cameriere, ti saremmo grati per una <link>recensione</link>.\nCi aiuta a migliorare il servizio.",
+    "new_order": "Fai un nuovo ordine",
+    "change_order": "Modifica ordine"
   },
   "pairing": {
     "drink_label": "Sta meglio con:",

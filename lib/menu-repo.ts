@@ -159,6 +159,8 @@ export interface VenueConfig {
   backgroundTheme?: 'seafood' | 'cocktail' | 'patisserie' | 'none'
   headerDecor?: string
   headerDecorLeft?: string
+  /** Google review link. Omit and the thank-you screen simply drops the review block. */
+  reviewUrl?: string
 }
 
 const venues: Record<string, VenueConfig> = {
@@ -222,6 +224,7 @@ const venues: Record<string, VenueConfig> = {
     },
     logoSrc: '/assets/bb-logo-crop.png',
     houseIndicator: 'olive',
+    reviewUrl: 'https://maps.app.goo.gl/fyXLGu8BJR215ujS6',
     backgroundTheme: 'cocktail',
     onboarding: {
       pricesNote: 'Prices in Lekë',

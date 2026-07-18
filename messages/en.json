@@ -19,7 +19,7 @@
     "label": "Brothers recommend"
   },
   "pizza_note": {
-    "text": "Usually a pizza takes just 5 minutes."
+    "text": "Usually, your pizza will be ready in about 5 minutes"
   },
   "legend": {
     "title": "How to read this menu",
@@ -41,10 +41,14 @@
   "cart": {
     "show_waiter": "Show your waiter",
     "open_list": "Show this to your server",
-    "keep_browsing": "Keep browsing",
     "total_label": "Total · Lekë",
     "clear": "Clear order",
-    "added": "{name} added"
+    "added": "{name} added",
+    "confirm": "Place order",
+    "thanks_title": "Order placed",
+    "thanks_body": "While you wait for your server, we would be grateful for a <link>review</link>.\nIt helps us make the service better.",
+    "new_order": "Place a new order",
+    "change_order": "Change order"
   },
   "pairing": {
     "drink_label": "Best tastes with:",

@@ -10,6 +10,7 @@ import SectionNote from '@/components/SectionNote'
 import CartBar from '@/components/CartBar'
 import AddedToast from '@/components/AddedToast'
 import ListSheet from '@/components/ListSheet'
+import OspitalittaMark from '@/components/OspitalittaMark'
 import LegendSheet from '@/components/LegendSheet'
 import type { VenueMenuData, TasteKey, FoodKey } from '@/lib/menu-data'
 import { TASTE_KEYS } from '@/lib/menu-data'
@@ -40,6 +41,7 @@ interface Props {
   houseIndicator?: string
   showCocktailGuide?: boolean
   backgroundTheme?: 'seafood' | 'cocktail' | 'patisserie' | 'none'
+  reviewUrl?: string
   headerDecor?: string
   headerDecorLeft?: string
 }
@@ -75,10 +77,10 @@ function ViewToggle({ mode, onChange }: { mode: 'expanded' | 'compact'; onChange
   )
 }
 
-export default function MenuClient({ menuData, venueSlug, locale, leadTaste, locales, logoSrc, logoText, onboarding, defaultCategory, drinksCategoryLabel, forceCompact, houseIndicator, showCocktailGuide, backgroundTheme, headerDecor, headerDecorLeft }: Props) {
+export default function MenuClient({ menuData, venueSlug, locale, leadTaste, locales, logoSrc, logoText, onboarding, defaultCategory, drinksCategoryLabel, forceCompact, houseIndicator, showCocktailGuide, backgroundTheme, reviewUrl, headerDecor, headerDecorLeft }: Props) {
   const t = useTranslations()
   const router = useRouter()
-  const { cart, count, total, toast, add: pushToCart, changeQty: setQty, clear: clearTheCart } = useCart(venueSlug)
+  const { cart, count, total, toast, add: pushToCart, changeQty: setQty, clear: clearTheCart, placed, place, unplace } = useCart(venueSlug)
 
   const hasCocktails = menuData.sections.length > 0
   const hasFoodSections = menuData.foodSections.length > 0
@@ -232,6 +234,15 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
 
   // ----- Helpers -----
   const pl = <T,>(i18n: Record<string, T>) => pickLocale(i18n, locale)
+
+  // The review link lives inside the sentence, so it renders as rich text rather than a
+  // separate call to action underneath it.
+  const reviewLink = (chunks: React.ReactNode) => (
+    <a href={reviewUrl} target="_blank" rel="noopener noreferrer"
+      style={{ color: 'var(--brand)', textDecoration: 'underline', textUnderlineOffset: 3 }}>
+      {chunks}
+    </a>
+  )
 
   const handleScaleChange = (v: number) => {
     setFontScale(v)
@@ -426,8 +437,8 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
                 })}
               </div>
 
-              <div style={{ textAlign: 'center', fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.5625rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--ink-faint)', marginTop: 34 }}>
-                {t('footer.powered')}
+              <div style={{ display: 'flex', justifyContent: 'center', marginTop: 40 }}>
+                <OspitalittaMark />
               </div>
             </div>
           </>
@@ -531,8 +542,8 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
                 })}
               </div>
 
-              <div style={{ textAlign: 'center', fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.5625rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--ink-faint)', marginTop: 34 }}>
-                {t('footer.powered')}
+              <div style={{ display: 'flex', justifyContent: 'center', marginTop: 40 }}>
+                <OspitalittaMark />
               </div>
             </div>
           </>
@@ -566,7 +577,16 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
         <ListSheet
           lines={cartLines} totalStr={String(total)}
           heading={t('cart.open_list')} totalLabel={t('cart.total_label')}
-          clearLabel={t('cart.clear')} keepBrowsing={t('cart.keep_browsing')}
+          clearLabel={t('cart.clear')}
+          confirmLabel={t('cart.confirm')}
+          onConfirm={() => { track('order_confirmed', { venue_slug: venueSlug, item_count: count, value: total }); place() }}
+          placed={placed}
+          placedHeading={t('cart.thanks_title')}
+          changeLabel={t('cart.change_order')}
+          onChange={unplace}
+          thanksBody={reviewUrl ? t.rich('cart.thanks_body', { link: reviewLink }) : undefined}
+          newOrderLabel={t('cart.new_order')}
+          onNewOrder={() => { clearTheCart(); setShowList(false) }}
           onClear={() => { clearTheCart(); setShowList(false) }}
           onClose={() => setShowList(false)}
         />

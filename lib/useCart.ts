@@ -12,12 +12,18 @@ import {
   type CartItem, loadCart, saveCart, addItem, changeQty as changeQtyIn,
   cartCount, cartTotal, clearCart,
 } from './cart'
+import { ssGet, ssSet, ssRemove } from './storage'
 import { track } from './analytics'
 
 const TOAST_MS = 1800
 
+const placedKey = (slug: string) => `osp_placed_${slug}`
+
 export function useCart(venueSlug: string) {
   const [cart, setCart] = useState<CartItem[]>([])
+  // Survives closing the sheet and moving between the menu and a product page — a placed
+  // order must not quietly become editable again just because the guest tapped away.
+  const [placed, setPlaced] = useState(false)
   // id is a timestamp — remounts the node so the fade replays on rapid repeat taps
   const [toast, setToast] = useState<{ id: number; name: string } | null>(null)
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -25,6 +31,7 @@ export function useCart(venueSlug: string) {
   useEffect(() => {
     const saved = loadCart(venueSlug)
     if (saved.length) setCart(saved)
+    setPlaced(ssGet(placedKey(venueSlug)) === '1')
   }, [venueSlug])
 
   useEffect(() => { saveCart(venueSlug, cart) }, [cart, venueSlug])
@@ -51,9 +58,22 @@ export function useCart(venueSlug: string) {
     setCart(prev => changeQtyIn(prev, slug, delta))
   }, [])
 
+  const place = useCallback(() => {
+    ssSet(placedKey(venueSlug), '1')
+    setPlaced(true)
+  }, [venueSlug])
+
+  // "Change order" — the guest wants the steppers back. The cart itself is untouched.
+  const unplace = useCallback(() => {
+    ssRemove(placedKey(venueSlug))
+    setPlaced(false)
+  }, [venueSlug])
+
   const clear = useCallback(() => {
     clearCart(venueSlug)
+    ssRemove(placedKey(venueSlug))
     setCart([])
+    setPlaced(false)
   }, [venueSlug])
 
   return {
@@ -61,8 +81,11 @@ export function useCart(venueSlug: string) {
     count: cartCount(cart),
     total: cartTotal(cart),
     toast,
+    placed,
     add,
     changeQty,
+    place,
+    unplace,
     clear,
   }
 }

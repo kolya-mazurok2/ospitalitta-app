@@ -33,5 +33,5 @@ export default async function ItemPage({ params }: Props) {
   const detail = buildItemDetail(menu, item, locale)
   if (!detail) notFound()
 
-  return <ItemPageClient detail={detail} venueSlug={slug} />
+  return <ItemPageClient detail={detail} venueSlug={slug} reviewUrl={venue.reviewUrl} />
 }

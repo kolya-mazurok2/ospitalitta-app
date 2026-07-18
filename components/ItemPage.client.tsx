@@ -3,7 +3,6 @@
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import TasteMark from '@/components/TasteMark'
-import CardVideo from '@/components/CardVideo'
 import CartBar from '@/components/CartBar'
 import SectionNote from '@/components/SectionNote'
 import ListSheet from '@/components/ListSheet'
@@ -19,6 +18,7 @@ import { useState } from 'react'
 interface Props {
   detail: ItemDetail
   venueSlug: string
+  reviewUrl?: string
 }
 
 /**
@@ -29,13 +29,20 @@ interface Props {
  * written to localStorage before navigating, which is the same channel the menu already
  * reads its landing tab from.
  */
-export default function ItemPage({ detail, venueSlug }: Props) {
+export default function ItemPage({ detail, venueSlug, reviewUrl }: Props) {
   const t = useTranslations()
   const router = useRouter()
-  const { cart, count, total, toast, add, changeQty, clear } = useCart(venueSlug)
+  const { cart, count, total, toast, add, changeQty, clear, placed, place, unplace } = useCart(venueSlug)
   const [showList, setShowList] = useState(false)
 
   const menuHref = `/venue/${venueSlug}/menu`
+
+  const reviewLink = (chunks: React.ReactNode) => (
+    <a href={reviewUrl} target="_blank" rel="noopener noreferrer"
+      style={{ color: 'var(--brand)', textDecoration: 'underline', textUnderlineOffset: 3 }}>
+      {chunks}
+    </a>
+  )
 
   const rememberSection = (sectionKey: string, isFood: boolean) => {
     lsSet(`osp_cat_${venueSlug}`, isFood ? 'food' : 'cocktails')
@@ -77,12 +84,9 @@ export default function ItemPage({ detail, venueSlug }: Props) {
           position: 'relative', aspectRatio: '4/3',
           background: 'var(--surface-media)', overflow: 'hidden',
         }}>
-          {detail.videoSrc ? (
-            <CardVideo
-              src={detail.videoSrc} poster={detail.posterSrc}
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-            />
-          ) : detail.posterSrc ? (
+          {/* Still only. The card in the list is where the clip plays; repeating it here
+              would fetch several MB for a screen the guest is reading, not scanning. */}
+          {detail.posterSrc && (
             // Same file the card already showed, so this is a cache hit, not a second download.
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -90,7 +94,7 @@ export default function ItemPage({ detail, venueSlug }: Props) {
               fetchPriority="high" decoding="async"
               style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
             />
-          ) : null}
+          )}
 
           <button
             onClick={goBack}
@@ -271,11 +275,21 @@ export default function ItemPage({ detail, venueSlug }: Props) {
         <ListSheet
           lines={cartLines} totalStr={String(total)}
           heading={t('cart.open_list')} totalLabel={t('cart.total_label')}
-          clearLabel={t('cart.clear')} keepBrowsing={t('cart.keep_browsing')}
+          clearLabel={t('cart.clear')}
+          confirmLabel={t('cart.confirm')}
           onClear={() => { clear(); setShowList(false) }}
+          onConfirm={() => { track('order_confirmed', { venue_slug: venueSlug, item_count: count, value: total }); place() }}
+          placed={placed}
+          placedHeading={t('cart.thanks_title')}
+          changeLabel={t('cart.change_order')}
+          onChange={unplace}
+          thanksBody={reviewUrl ? t.rich('cart.thanks_body', { link: reviewLink }) : undefined}
+          newOrderLabel={t('cart.new_order')}
+          onNewOrder={() => { clear(); setShowList(false); router.push(menuHref) }}
           onClose={() => setShowList(false)}
         />
       )}
+
     </div>
   )
 }

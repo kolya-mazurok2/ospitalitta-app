@@ -43,6 +43,7 @@ export default async function MenuPage({ params }: Props) {
       houseIndicator={venue.houseIndicator}
       showCocktailGuide={venue.showCocktailGuide ?? true}
       backgroundTheme={venue.backgroundTheme ?? 'none'}
+      reviewUrl={venue.reviewUrl}
       headerDecor={venue.headerDecor}
       headerDecorLeft={venue.headerDecorLeft}
     />

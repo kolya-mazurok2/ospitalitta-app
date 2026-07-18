@@ -19,7 +19,7 @@
     "label": "Brothers empfehlen"
   },
   "pizza_note": {
-    "text": "Eine Pizza dauert meist nur 5 Minuten."
+    "text": "Normalerweise ist deine Pizza in etwa 5 Minuten fertig"
   },
   "legend": {
     "title": "So liest man diese Karte",
@@ -41,10 +41,14 @@
   "cart": {
     "show_waiter": "Zeig dem Kellner",
     "open_list": "Zeig das dem Kellner",
-    "keep_browsing": "Weiter stöbern",
     "total_label": "Gesamt · Lekë",
     "clear": "Bestellung löschen",
-    "added": "{name} hinzugefügt"
+    "added": "{name} hinzugefügt",
+    "confirm": "Bestellung abgeben",
+    "thanks_title": "Bestellung abgegeben",
+    "thanks_body": "Während du auf den Kellner wartest, wären wir für eine <link>Bewertung</link> dankbar.\nSie hilft uns, den Service besser zu machen.",
+    "new_order": "Neue Bestellung aufgeben",
+    "change_order": "Bestellung ändern"
   },
   "pairing": {
     "drink_label": "Schmeckt am besten mit:",

@@ -19,7 +19,7 @@
     "label": "Polecamy"
   },
   "pizza_note": {
-    "text": "Zwykle pizza zajmuje tylko 5 minut."
+    "text": "Zwykle pizza będzie gotowa w około 5 minut"
   },
   "legend": {
     "title": "Jak czytać to menu",
@@ -41,10 +41,14 @@
   "cart": {
     "show_waiter": "Pokaż kelnerkowi",
     "open_list": "Pokaż to kelnerowi",
-    "keep_browsing": "Wróć do menu",
     "total_label": "Razem · Lekë",
     "clear": "Wyczyść zamówienie",
-    "added": "Dodano {name}"
+    "added": "Dodano {name}",
+    "confirm": "Złóż zamówienie",
+    "thanks_title": "Zamówienie złożone",
+    "thanks_body": "Czekając na kelnera, będziemy wdzięczni za <link>opinię</link>.\nPomaga nam ulepszać obsługę.",
+    "new_order": "Złóż nowe zamówienie",
+    "change_order": "Zmień zamówienie"
   },
   "pairing": {
     "drink_label": "Najlepiej smakuje z:",

@@ -19,7 +19,7 @@
     "label": "Vëllezërit rekomandojnë"
   },
   "pizza_note": {
-    "text": "Zakonisht një pizza bëhet për vetëm 5 minuta."
+    "text": "Zakonisht, pizza juaj do të jetë gati për rreth 5 minuta"
   },
   "legend": {
     "title": "Si të lexoni këtë menu",
@@ -41,10 +41,14 @@
   "cart": {
     "show_waiter": "Trego kamarierit",
     "open_list": "Tregoja kamarierit",
-    "keep_browsing": "Vazhdoni shfletimin",
     "total_label": "Totali · Lekë",
     "clear": "Fshi porosinë",
-    "added": "{name} u shtua"
+    "added": "{name} u shtua",
+    "confirm": "Vendos porosinë",
+    "thanks_title": "Porosia u vendos",
+    "thanks_body": "Ndërsa pret kamarierin, do t’ju ishim mirënjohës për një <link>vlerësim</link>.\nNa ndihmon ta bëjmë shërbimin më të mirë.",
+    "new_order": "Bëj një porosi të re",
+    "change_order": "Ndrysho porosinë"
   },
   "pairing": {
     "drink_label": "Shijohet më mirë me:",

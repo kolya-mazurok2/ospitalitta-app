@@ -19,7 +19,7 @@
     "label": "Brothers anbefaler"
   },
   "pizza_note": {
-    "text": "En pizza tar vanligvis bare 5 minutter."
+    "text": "Vanligvis er pizzaen din klar om cirka 5 minutter"
   },
   "legend": {
     "title": "Slik leser du denne menyen",
@@ -41,10 +41,14 @@
   "cart": {
     "show_waiter": "Vis kelneren",
     "open_list": "Vis dette til kelneren",
-    "keep_browsing": "Fortsett å bla",
     "total_label": "Totalt · Lekë",
     "clear": "Fjern bestilling",
-    "added": "{name} lagt til"
+    "added": "{name} lagt til",
+    "confirm": "Legg inn bestilling",
+    "thanks_title": "Bestilling lagt inn",
+    "thanks_body": "Mens du venter på kelneren, blir vi takknemlige for en <link>anmeldelse</link>.\nDen hjelper oss å gjøre servicen bedre.",
+    "new_order": "Legg inn en ny bestilling",
+    "change_order": "Endre bestilling"
   },
   "pairing": {
     "drink_label": "Smaker best med:",
