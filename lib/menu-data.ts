@@ -7,7 +7,7 @@
 export type GlassType = 'wine' | 'collins' | 'rocks' | 'martini' | 'coupe'
 export type TasteKey = 'bitter' | 'sour' | 'sweet' | 'spicy' | 'zero'
 export type TierKey  = 'tier-600' | 'tier-700' | 'tier-800' | 'tier-900' | 'tier-1000'
-export type FoodKey  = 'pizza' | 'burgers' | 'sharing'
+export type FoodKey  = 'pizza' | 'sharing'
                      | 'cold' | 'warm' | 'salads' | 'pasta' | 'mains' | 'fresh-fish'
                      | 'hot-drinks' | 'cold-coffees' | 'soft-drinks' | 'bio-juices'
                      | 'beers' | 'wine' | 'cocktails'
@@ -21,12 +21,22 @@ export interface I18nText {
   [locale: string]: { name: string; desc: string }
 }
 
+/** One taste axis with its intensity. Items can carry several ("medium sweet, lightly sour"). */
+export interface TasteSpec {
+  taste: 'bitter' | 'sour' | 'sweet'
+  lvl: 1 | 2 | 3
+}
+
 export interface MenuItem {
   id: string
   slug: string
   price: string          // 'L500' — flat
   glass?: GlassType
   lvl?: 1 | 2 | 3       // intensity marks (bitter/sour/sweet)
+  // Full taste profile, primary axis first. Only set when the item has MORE than one
+  // taste — a single-taste item is covered by its section key + lvl. Detail sheet reads
+  // this; the compact card keeps showing the section's single mark.
+  tastes?: TasteSpec[]
   flavor?: 'sweet' | 'sour' // zero items only
   loved?: boolean
   house?: boolean
@@ -100,9 +110,11 @@ const bitter: MenuSection = {
   },
   items: [
     { id: 'aperol-spritz', slug: 'aperol-spritz', price: 'L500', glass: 'wine', lvl: 1,
+      tastes: [{ taste: 'bitter', lvl: 1 }, { taste: 'sweet', lvl: 1 }],
       posterSrc: '/venue-assets/bottle-brothers/aperol-spritz.jpg',
       i18n: { en: { name: 'Aperol Spritz', desc: 'Lightly bitter, lightly sweet. Light and easy. Aperol, prosecco, soda, orange. Opens slow, stays gentle.' } } },
     { id: 'barrel-aged-coconut-negroni', slug: 'barrel-aged-coconut-negroni', price: 'L1000', glass: 'rocks', lvl: 2, house: true, loved: true,
+      tastes: [{ taste: 'bitter', lvl: 2 }, { taste: 'sweet', lvl: 2 }],
       videoSrc: '/venue-assets/bottle-brothers/barrel-aged-coconut-negroni.mp4',
       posterSrc: '/venue-assets/bottle-brothers/barrel-aged-coconut-negroni.jpg',
       i18n: { en: { name: 'Barrel-Aged Coconut Negroni', desc: 'Medium bitter, medium sweet. Warm and tropical. Coconut rum, Campari, vermouth. A month in oak, and it opens like the tropics.' } } },
@@ -110,6 +122,7 @@ const bitter: MenuSection = {
       posterSrc: '/venue-assets/bottle-brothers/campari-spritz.jpg',
       i18n: { en: { name: 'Campari Spritz', desc: 'Strongly bitter. Sharp and dry. Campari, prosecco, soda. Bites from the first sip and holds it.' } } },
     { id: 'negroni-strawberry-basil', slug: 'negroni-strawberry-basil', price: 'L500', glass: 'rocks', lvl: 2,
+      tastes: [{ taste: 'bitter', lvl: 2 }, { taste: 'sweet', lvl: 1 }],
       posterSrc: '/venue-assets/bottle-brothers/negroni-strawberry-basil.jpg',
       i18n: { en: { name: 'Negroni Strawberry & Basil', desc: 'Medium bitter, lightly sweet. Fruity and fresh. Strawberry-infused Campari, basil gin, vermouth. Strawberry leads, basil takes over at the end.' } } },
   ],
@@ -130,9 +143,11 @@ const sour: MenuSection = {
   },
   items: [
     { id: 'basil-smash', slug: 'basil-smash', price: 'L750', glass: 'rocks', lvl: 2, house: true,
+      tastes: [{ taste: 'sour', lvl: 2 }, { taste: 'sweet', lvl: 2 }],
       posterSrc: '/venue-assets/bottle-brothers/basil-smash.jpg',
       i18n: { en: { name: 'Basil Smash', desc: 'Balanced sweet and sour. Fresh and green. Basil, gin, lemon. Clean through, opens easy.' } } },
     { id: 'talk-balkan-to-me', slug: 'talk-balkan-to-me', price: 'L1000', glass: 'collins', lvl: 2, loved: true,
+      tastes: [{ taste: 'sour', lvl: 2 }, { taste: 'sweet', lvl: 1 }],
       videoSrc: '/venue-assets/bottle-brothers/talk-balkan-to-me.mp4',
       posterSrc: '/venue-assets/bottle-brothers/talk-balkan-to-me.jpg',
       i18n: { en: { name: 'Talk Balkan To Me', desc: 'Medium sour, lightly sweet. Fresh and floral. Chamomile gin, lemon, elderflower liqueur, soda, fig leaf. Starts soft, opens more sour at the end.' } } },
@@ -143,6 +158,7 @@ const sour: MenuSection = {
       posterSrc: '/venue-assets/bottle-brothers/limoncello-spritz.jpg',
       i18n: { en: { name: 'Limoncello Spritz', desc: 'Medium sour. Bright and fresh. Limoncello, prosecco, soda, mint. Citrus and green grass, crisp to the end.' } } },
     { id: 'brothers-spritz', slug: 'brothers-spritz', price: 'L750', glass: 'wine', lvl: 2, house: true,
+      tastes: [{ taste: 'sour', lvl: 2 }, { taste: 'bitter', lvl: 1 }],
       posterSrc: '/venue-assets/bottle-brothers/brothers-spritz.jpg',
       i18n: { en: { name: 'Brothers Spritz', desc: 'Medium sour, lightly bitter. Fresh and tropical. Aperol, prosecco, passion fruit, soda. Tropical up front, dry on the finish.' } } },
   ],
@@ -170,19 +186,24 @@ const sweet: MenuSection = {
       posterSrc: '/venue-assets/bottle-brothers/pornstar-martini.jpg',
       i18n: { en: { name: 'Pornstar Martini', desc: 'Medium sweet. Exotic and fresh. Vanilla vodka, passion fruit, pineapple, almond syrup, cucumber. Soft and tropical, fresh on the finish.' } } },
     { id: 'lychee-spritz', slug: 'lychee-spritz', price: 'L500', glass: 'wine', lvl: 2,
+      tastes: [{ taste: 'sweet', lvl: 2 }, { taste: 'sour', lvl: 1 }],
       posterSrc: '/venue-assets/bottle-brothers/lychee-spritz.jpg',
       i18n: { en: { name: 'Lychee Spritz', desc: 'Medium sweet, lightly sour. Soft and floral. Lychee liqueur, mint, prosecco, soda. Delicate, opens light.' } } },
     { id: 'hibiscus-spritz', slug: 'hibiscus-spritz', price: 'L500', glass: 'wine', lvl: 2,
       posterSrc: '/venue-assets/bottle-brothers/hibiscus-spritz.jpg',
       i18n: { en: { name: 'Hibiscus Spritz', desc: 'Medium sweet. Bright and fresh. Hibiscus cordial, prosecco, soda. Citrus and mint, clean to the end.' } } },
     { id: 'martini-royal', slug: 'martini-royal', price: 'L500', glass: 'wine', lvl: 2,
+      tastes: [{ taste: 'sweet', lvl: 2 }, { taste: 'sour', lvl: 1 }],
       posterSrc: '/venue-assets/bottle-brothers/martini-royal.jpg',
       i18n: { en: { name: 'Martini Royal', desc: 'Medium sweet, lightly sour. Fresh and floral. White Martini, prosecco, mint, citrus. Fizzy, opens light.' } } },
     { id: 'cherry-poppins', slug: 'cherry-poppins', price: 'L500', glass: 'collins', lvl: 2,
+      tastes: [{ taste: 'sweet', lvl: 2 }, { taste: 'sour', lvl: 1 }],
       videoSrc: '/venue-assets/bottle-brothers/cherry-poppins.mp4',
+      posterSrc: '/venue-assets/bottle-brothers/cherry-poppins.jpg',
       i18n: { en: { name: 'Cherry Poppins', desc: 'Medium sweet, lightly sour. Soft and nutty. Amaretto, hibiscus and cherry cordial, mint, lime, ginger. Cherry leads, nuts on the finish.' } } },
     // glass: CSV says martini, but the venue photo is clearly a coupe — photo wins
     { id: 'miss-lavander', slug: 'miss-lavander', price: 'L750', glass: 'coupe', lvl: 2, house: true,
+      tastes: [{ taste: 'sweet', lvl: 2 }, { taste: 'sour', lvl: 1 }],
       posterSrc: '/venue-assets/bottle-brothers/miss-lavander.jpg',
       i18n: { en: { name: 'Miss Lavander', desc: 'Medium sweet, lightly sour. Floral and fresh. Lavender-infused lychee liqueur, elderflower, grapefruit juice, rose water. Balanced through, opens with a touch of rose.' } } },
     // shares the Brothers Mule poster for now — swap when a real Tiki Tonka shot arrives
@@ -190,6 +211,7 @@ const sweet: MenuSection = {
       posterSrc: '/venue-assets/bottle-brothers/brothers-mule.jpg',
       i18n: { en: { name: 'Tiki Tonka', desc: 'Medium sweet. Tropical and warm. Tonka-infused rum blend, amaretto, vanilla, lime, pineapple. Opens with coffee and chocolate at the end.' } } },
     { id: 'aloe-you-vera-much', slug: 'aloe-you-vera-much', price: 'L750', glass: 'collins', lvl: 2, house: true,
+      tastes: [{ taste: 'sweet', lvl: 2 }, { taste: 'sour', lvl: 1 }],
       posterSrc: '/venue-assets/bottle-brothers/aloe-you-vera-much.jpg',
       i18n: { en: { name: 'Aloe You Vera Much', desc: 'Medium sweet, lightly sour. Fresh and green. Gin, aloe vera, basil, lime, pineapple. The longer you hold it, the more elderflower opens up.' } } },
   ],
@@ -269,45 +291,30 @@ const pizza: MenuSection = {
   },
   items: [
     { id: 'margherita', slug: 'margherita', price: 'L600', glass: 'wine',
+      posterSrc: '/venue-assets/bottle-brothers/food-placeholder.jpg',
       i18n: { en: { name: 'Margherita', desc: 'Tomato sauce, mozzarella, basil' } } },
+    { id: 'bi-bi', slug: 'bi-bi', price: 'L1000', glass: 'wine',
+      posterSrc: '/venue-assets/bottle-brothers/bi-bi.jpg',
+      i18n: { en: { name: 'Bi-Bi', desc: 'Tomato sauce, mozzarella, chicken ham, arugula, Grana cheese' } } },
     { id: 'capricciosa', slug: 'capricciosa', price: 'L700', glass: 'wine',
+      posterSrc: '/venue-assets/bottle-brothers/food-placeholder.jpg',
       i18n: { en: { name: 'Capricciosa', desc: 'Tomato sauce, mozzarella, ham, mushrooms, olives' } } },
     { id: '4-formaggi', slug: '4-formaggi', price: 'L750', glass: 'wine',
+      posterSrc: '/venue-assets/bottle-brothers/food-placeholder.jpg',
       i18n: { en: { name: '4 Formaggi', desc: 'Tomato sauce, mozzarella, Gouda, provolone, gorgonzola' } } },
     { id: 'diavola', slug: 'diavola', price: 'L650', glass: 'wine',
+      posterSrc: '/venue-assets/bottle-brothers/food-placeholder.jpg',
       i18n: { en: { name: 'Diavola', desc: 'Tomato sauce, mozzarella, basil, spicy salami, spicy sauce' } } },
     { id: 'deliziosa', slug: 'deliziosa', price: 'L800', glass: 'wine',
+      posterSrc: '/venue-assets/bottle-brothers/food-placeholder.jpg',
       i18n: { en: { name: 'Deliziosa', desc: 'Mozzarella, prosciutto crudo, cherry tomatoes, arugula, Grana cheese' } } },
     { id: 'cotto-e-funghi', slug: 'cotto-e-funghi', price: 'L700', glass: 'wine',
+      posterSrc: '/venue-assets/bottle-brothers/food-placeholder.jpg',
       i18n: { en: { name: 'Cotto e Funghi', desc: 'Tomato sauce, mozzarella, wurstel sausage, potatoes' } } },
     { id: 'americana', slug: 'americana', price: 'L650', glass: 'wine',
       // TODO: Americana description duplicates Cotto e Funghi — confirm real copy with BB
+      posterSrc: '/venue-assets/bottle-brothers/food-placeholder.jpg',
       i18n: { en: { name: 'Americana', desc: 'Tomato sauce, mozzarella, wurstel sausage, potatoes' } } },
-    { id: 'bi-bi', slug: 'bi-bi', price: 'L1000', glass: 'wine',
-      i18n: { en: { name: 'Bi-Bi', desc: 'Tomato sauce, mozzarella, chicken ham, arugula, Grana cheese' } } },
-  ],
-}
-
-const burgers: MenuSection = {
-  key: 'burgers',
-  type: 'food',
-  i18n: {
-    en: { label: 'Burgers' },
-    sq: { label: 'Hamburgerë' },
-    it: { label: 'Hamburger' },
-    pl: { label: 'Burgery' },
-    uk: { label: 'Бургери' },
-    de: { label: 'Burger' },
-    fr: { label: 'Burgers' },
-    no: { label: 'Burgere' },
-  },
-  items: [
-    { id: 'classic-burger', slug: 'classic-burger', price: 'L500', glass: 'wine',
-      i18n: { en: { name: 'Classic Burger', desc: 'Beef patty, tomato, arugula, Gouda cheese, sauce of your choice' } } },
-    { id: 'chicken-burger', slug: 'chicken-burger', price: 'L600', glass: 'wine',
-      i18n: { en: { name: 'Chicken Burger', desc: 'Chicken fillet, tomato, arugula, Gouda cheese, sauce of your choice' } } },
-    { id: 'brothers-burger', slug: 'brothers-burger', price: 'L700', glass: 'wine',
-      i18n: { en: { name: "Brother's Burger", desc: 'Beef patty, bacon, tomato, arugula, Gouda cheese, egg, caramelized red onion, barbecue sauce' } } },
   ],
 }
 
@@ -326,8 +333,10 @@ const sharing: MenuSection = {
   },
   items: [
     { id: 'finger-food-mix', slug: 'finger-food-mix', price: 'L1000', glass: 'wine',
+      posterSrc: '/venue-assets/bottle-brothers/sharing-board.jpg',
       i18n: { en: { name: 'Finger Food Mix', desc: 'Chicken nuggets, onion rings, potato croquettes, and French fries' } } },
     { id: 'cured-meats-cheese-platter', slug: 'cured-meats-cheese-platter', price: 'L1400', glass: 'wine',
+      posterSrc: '/venue-assets/bottle-brothers/sharing-board.jpg',
       i18n: { en: { name: 'Cured Meats & Cheese Platter', desc: 'Selection of cured meats and cheeses' } } },
   ],
 }
@@ -348,7 +357,7 @@ export const pairings: Pairing[] = [
   // TODO(bb-csv): fill dishes + wisdom
   { cocktailRef: 'negroni-strawberry-basil', dishes: [], i18n: { en: { wisdom: '' } } },
   { cocktailRef: 'barrel-aged-coconut-negroni',
-    dishes: [{ itemRef: 'brothers-burger', price: 'L700' }, { itemRef: '4-formaggi', price: 'L750' }, { itemRef: 'cured-meats-cheese-platter', price: 'L1400' }],
+    dishes: [{ itemRef: '4-formaggi', price: 'L750' }, { itemRef: 'cured-meats-cheese-platter', price: 'L1400' }],
     i18n: { en: { wisdom: 'A month in oak gives it real body, so give it a plate with weight. Smoke likes the intense.' } } },
   { cocktailRef: 'aloe-you-vera-much',
     dishes: [{ itemRef: 'margherita', price: 'L600' }, { itemRef: 'bi-bi', price: 'L1000' }, { itemRef: 'finger-food-mix', price: 'L1000' }],
@@ -366,7 +375,7 @@ export const pairings: Pairing[] = [
     dishes: [{ itemRef: 'margherita', price: 'L600' }, { itemRef: 'bi-bi', price: 'L1000' }, { itemRef: 'diavola', price: 'L650' }],
     i18n: { en: { wisdom: 'Lemon cuts grease, and the sweetness softens a little chili heat.' } } },
   { cocktailRef: 'lychee-spritz',
-    dishes: [{ itemRef: 'margherita', price: 'L600' }, { itemRef: 'bi-bi', price: 'L1000' }, { itemRef: 'chicken-burger', price: 'L600' }],
+    dishes: [{ itemRef: 'margherita', price: 'L600' }, { itemRef: 'bi-bi', price: 'L1000' }],
     i18n: { en: { wisdom: 'Floral and soft, it cools a slice down and likes the lighter plates.' } } },
   { cocktailRef: 'brothers-spritz',
     dishes: [{ itemRef: 'diavola', price: 'L650' }, { itemRef: 'margherita', price: 'L600' }, { itemRef: 'finger-food-mix', price: 'L1000' }],
@@ -379,19 +388,19 @@ export const pairings: Pairing[] = [
     dishes: [{ itemRef: 'margherita', price: 'L600' }, { itemRef: 'bi-bi', price: 'L1000' }, { itemRef: 'deliziosa', price: 'L800' }],
     i18n: { en: { wisdom: 'Delicate and floral, it likes a light plate that will not shout over it.' } } },
   { cocktailRef: 'pornstar-martini',
-    dishes: [{ itemRef: 'diavola', price: 'L650' }, { itemRef: 'brothers-burger', price: 'L700' }, { itemRef: 'finger-food-mix', price: 'L1000' }],
+    dishes: [{ itemRef: 'diavola', price: 'L650' }, { itemRef: 'finger-food-mix', price: 'L1000' }],
     i18n: { en: { wisdom: 'Sweet and exotic, it softens heat and salt at the same time.' } } },
   { cocktailRef: 'tiki-tonka',
     dishes: [{ itemRef: 'diavola', price: 'L650' }, { itemRef: 'americana', price: 'L650' }, { itemRef: 'finger-food-mix', price: 'L1000' }],
     i18n: { en: { wisdom: 'Tropical and strong, it can take on smoke and spice.' } } },
   { cocktailRef: 'brothers-mule',
-    dishes: [{ itemRef: 'americana', price: 'L650' }, { itemRef: 'brothers-burger', price: 'L700' }, { itemRef: 'finger-food-mix', price: 'L1000' }],
+    dishes: [{ itemRef: 'americana', price: 'L650' }, { itemRef: 'finger-food-mix', price: 'L1000' }],
     i18n: { en: { wisdom: 'Ginger and ice cool things off, so a heavy, savory plate feels easy.' } } },
   { cocktailRef: 'tierra-del-fuego',
-    dishes: [{ itemRef: 'diavola', price: 'L650' }, { itemRef: 'brothers-burger', price: 'L700' }, { itemRef: 'cured-meats-cheese-platter', price: 'L1400' }],
+    dishes: [{ itemRef: 'diavola', price: 'L650' }, { itemRef: 'cured-meats-cheese-platter', price: 'L1400' }],
     i18n: { en: { wisdom: 'Heat meets heat, or let the cheese cool it down, your call.' } } },
   { cocktailRef: 'virgin-hugo',
-    dishes: [{ itemRef: 'margherita', price: 'L600' }, { itemRef: 'bi-bi', price: 'L1000' }, { itemRef: 'chicken-burger', price: 'L600' }],
+    dishes: [{ itemRef: 'margherita', price: 'L600' }, { itemRef: 'bi-bi', price: 'L1000' }],
     i18n: { en: { wisdom: 'All the lift of the Hugo, same love for a fresh pizza.' } } },
   { cocktailRef: 'passion-pop',
     dishes: [{ itemRef: 'diavola', price: 'L650' }, { itemRef: 'margherita', price: 'L600' }, { itemRef: 'finger-food-mix', price: 'L1000' }],
@@ -425,12 +434,6 @@ export const foodPairings: FoodPairing[] = [
     i18n: { en: { why: 'Bitter, bubbles and a little sour cut the fat.' } } },
   { dishRef: 'bi-bi', cocktailRefs: ['hugo', 'limoncello-spritz'],
     i18n: { en: { why: 'Light and fresh, so the glass keeps it light.' } } },
-  { dishRef: 'classic-burger', cocktailRefs: ['campari-spritz', 'brothers-mule'],
-    i18n: { en: { why: 'Bitter cuts the fat, and one long drink cleanses.' } } },
-  { dishRef: 'chicken-burger', cocktailRefs: ['lychee-spritz', 'aloe-you-vera-much'],
-    i18n: { en: { why: 'Lighter meat asks for lighter, fresher glasses.' } } },
-  { dishRef: 'brothers-burger', cocktailRefs: ['barrel-aged-coconut-negroni'],
-    i18n: { en: { why: 'Smoky and rich, so intense bitter and sour stand up to it.' } } },
   { dishRef: 'finger-food-mix', cocktailRefs: ['aperol-spritz', 'campari-spritz', 'pornstar-martini'],
     i18n: { en: { why: 'Aperitivo bubbles, and one sweet for the table.' } } },
   { dishRef: 'cured-meats-cheese-platter', cocktailRefs: [],
@@ -461,7 +464,7 @@ export const featuredPick: FeaturedPick = {
 
 export const bbMenuData: VenueMenuData = {
   sections: [bitter, sour, sweet, spicy, zero],
-  foodSections: [pizza, burgers, sharing],
+  foodSections: [pizza, sharing],
   pairings,
   foodPairings,
   featuredPick,
@@ -469,4 +472,4 @@ export const bbMenuData: VenueMenuData = {
 }
 
 // Ordered food categories for tab rendering
-export const foodCatOrder: FoodKey[] = ['pizza', 'burgers', 'sharing']
+export const foodCatOrder: FoodKey[] = ['pizza', 'sharing']

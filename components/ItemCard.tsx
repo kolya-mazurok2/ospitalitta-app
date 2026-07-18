@@ -4,6 +4,7 @@ import CardVideo from '@/components/CardVideo'
 import Glass from '@/components/Glass'
 import TasteMark from '@/components/TasteMark'
 import type { GlassType } from '@/lib/menu-data'
+import { clampDesc } from '@/lib/text'
 
 
 interface Props {
@@ -105,13 +106,16 @@ export default function ItemCard({
             </span>
             {showIndicator && <HouseMark kind={houseIndicator} size={houseIndicator === 'fish' ? 13 : 9} inline style={{ marginLeft: 3 }} />}
           </div>
-          <p style={{
-            fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.6875rem',
-            color: 'var(--ink-faint)', margin: '2px 0 0',
-            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-          }}>
-            {desc ? `${desc} ${price}` : price}
-          </p>
+          {/* Description only — price lives in the detail sheet, not in the list */}
+          {desc && (
+            <p style={{
+              fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.6875rem',
+              color: 'var(--ink-faint)', margin: '2px 0 0',
+              overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+            }}>
+              {clampDesc(desc)}
+            </p>
+          )}
         </div>
         <button
           onClick={(e) => { e.stopPropagation(); onAdd(e) }}

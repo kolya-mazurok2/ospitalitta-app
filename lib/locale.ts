@@ -1,7 +1,8 @@
 /**
  * Locale resolution (DEC-009) and taste-order logic (DEC-009).
  * No URL routing. Locale resolved from cookie → Accept-Language → venue.locales[0].
- * countryTaste is separate: region from Accept-Language → lead taste tab order.
+ * countryTaste is separate: region from Accept-Language → which taste tab starts ACTIVE.
+ * Tab order is never touched — sections render in their authored order.
  */
 
 export type CountryCode = string
@@ -17,6 +18,7 @@ const countryTasteMap: Record<string, TasteKey> = {
 /**
  * Derive lead taste from Accept-Language header value (e.g. "pl-PL,pl;q=0.9,en;q=0.8").
  * Extracts region from first locale tag. Falls back to 'bitter'.
+ * Used only as the LANDING tab when the guest has no stored preference.
  */
 export function getLeadTaste(acceptLanguage: string | null): TasteKey {
   if (!acceptLanguage) return 'bitter'
@@ -24,16 +26,6 @@ export function getLeadTaste(acceptLanguage: string | null): TasteKey {
   const match = first.match(/[-_]([A-Za-z]{2})/)
   const country = match ? match[1].toUpperCase() : null
   return (country && countryTasteMap[country]) || 'bitter'
-}
-
-/**
- * Ordered taste keys for tab rendering.
- * Lead is always first, spicy and zero always last.
- */
-export function tabOrder(lead: TasteKey): TasteKey[] {
-  const base: TasteKey[] = ['bitter', 'sour', 'sweet']
-  const rest = base.filter(t => t !== lead)
-  return [lead, ...rest, 'spicy', 'zero']
 }
 
 /** Every UI locale Ospitalitta ships messages for. Single source of truth. */

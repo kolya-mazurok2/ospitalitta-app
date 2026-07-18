@@ -12,12 +12,14 @@ export default function CartBar({ count, totalStr, detailOpen, label, onClick }:
       onClick={onClick}
       style={{
         position: 'absolute',
-        left: 14, right: 14,
-        bottom: detailOpen ? 'calc(60% + 12px)' : 30,
+        left: 0, right: 0,
+        // Sits flush on the bottom edge; rides above the detail sheet when one is open.
+        bottom: detailOpen ? '60%' : 0,
         zIndex: detailOpen ? 7 : 5,
         background: 'var(--surface-dark-2)',
         color: 'var(--on-dark)',
-        padding: '14px 18px',
+        // Extra bottom padding clears the iOS home indicator when pinned to the edge.
+        padding: detailOpen ? '14px 18px' : '14px 18px calc(14px + env(safe-area-inset-bottom, 0px))',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
         cursor: 'pointer',
         boxShadow: '0 12px 30px rgb(0 0 0 / 0.28)',
@@ -44,7 +46,7 @@ export default function CartBar({ count, totalStr, detailOpen, label, onClick }:
           fontFamily: 'var(--font-text)', fontSize: '0.8125rem',
           letterSpacing: '0.04em', color: 'var(--brand-bright)',
         }}>
-          {totalStr} Lekë
+          {totalStr}
         </span>
         <svg width="6" height="11" viewBox="0 0 6 11" fill="none"
           stroke="var(--brand-bright)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"

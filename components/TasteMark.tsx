@@ -5,17 +5,20 @@
 
 type Taste = 'bitter' | 'sour' | 'sweet'
 
+interface IconProps { opacity: number; size: number }
+
 interface Props {
   taste: Taste
   n: 1 | 2 | 3
   single?: boolean   // zero items: render 1 mark, no dimming
+  size?: number     // icon edge in px (default 14)
   className?: string
   style?: React.CSSProperties
 }
 
-function BitterIcon({ opacity }: { opacity: number }) {
+function BitterIcon({ opacity, size }: IconProps) {
   return (
-    <svg viewBox="0 0 160 160" style={{ width: 14, height: 14, display: 'block', opacity }} aria-hidden>
+    <svg viewBox="0 0 160 160" style={{ width: size, height: size, display: 'block', opacity }} aria-hidden>
       <g fill="none" stroke="currentColor" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round">
         <path d="m88.422 60.233c-6.287-12.673-12.453-25.406-18.622-38.14-6.58-4.906-15.486-4.126-20.64 1.014a16.176 16.176 0 0 0 -1.8 20.02c12.707 6.726 25.52 13.52 38.34 20.313"/>
         <path d="m92.8 61.007c1.013-9.987 2.147-19.967 3.273-29.94-3.493-4.287-7.06-8.187-11.72-10.314s-10.94-2.28-14.56 1.34"/>
@@ -29,9 +32,9 @@ function BitterIcon({ opacity }: { opacity: number }) {
   )
 }
 
-function SourIcon({ opacity }: { opacity: number }) {
+function SourIcon({ opacity, size }: IconProps) {
   return (
-    <svg viewBox="0 0 64 64" style={{ width: 14, height: 14, display: 'block', opacity }} aria-hidden>
+    <svg viewBox="0 0 64 64" style={{ width: size, height: size, display: 'block', opacity }} aria-hidden>
       <g fill="currentColor">
         <path d="m43.84 30.82a1.51 1.51 0 0 0 -1.61 1.39 20.91 20.91 0 0 1 -6.37 12.79 21.27 21.27 0 0 1 -2.13 1.88 1.51 1.51 0 0 0 -.27 2.1 1.49 1.49 0 0 0 1.19.59 1.52 1.52 0 0 0 .92-.31 27.43 27.43 0 0 0 2.43-2.1 24 24 0 0 0 7.25-14.73 1.5 1.5 0 0 0 -1.41-1.61z"/>
         <path d="m61.06 13.92a9.32 9.32 0 0 0 -11.2-1.49c-1-2.69-3.33-7.18-7.55-9-6.08-2.61-13.44 1.49-13.75 1.67a1.49 1.49 0 0 0 -.72 1.66 22.6 22.6 0 0 0 2.1 5.1 31.13 31.13 0 0 0 -18.12 9.14c-8.75 8.76-11.69 20.87-7.4 29.89a6.1 6.1 0 0 0 .32 8.31 6.11 6.11 0 0 0 8.31.32 20.74 20.74 0 0 0 9 1.95c7.16 0 14.85-3.28 20.93-9.36 8.75-8.75 11.69-20.86 7.4-29.88a6.09 6.09 0 0 0 .66-7 6.34 6.34 0 0 1 7.95.8 1.5 1.5 0 0 0 2.12 0 1.49 1.49 0 0 0 -.05-2.11zm-19.93-7.73c3.54 1.53 5.44 5.88 6.16 8-2 .9-6.45 2.52-10 1s-5.44-5.87-6.17-8c2-.91 6.46-2.52 10.01-1zm-.32 43.81c-8 8-19.54 10.71-27.36 6.37a1.5 1.5 0 0 0 -1.95.44 2.51 2.51 0 0 1 -.26.31 3.13 3.13 0 0 1 -5.3-2.24 3 3 0 0 1 .89-2.17c.14-.14.2-.18.22-.2a1.5 1.5 0 0 0 .53-2c-4.34-7.83-1.66-19.34 6.36-27.36 5.13-5.13 11.65-8.16 18-8.41a11.56 11.56 0 0 0 4.16 3.17 11.33 11.33 0 0 0 4.5.87 20.22 20.22 0 0 0 7.9-1.86 3.1 3.1 0 0 1 -.57 3.52 1.5 1.5 0 0 1 -.27.24 1.5 1.5 0 0 0 -.48 2c4.33 7.78 1.65 19.32-6.37 27.32z"/>
@@ -40,15 +43,15 @@ function SourIcon({ opacity }: { opacity: number }) {
   )
 }
 
-function SweetIcon({ opacity }: { opacity: number }) {
+function SweetIcon({ opacity, size }: IconProps) {
   return (
-    <svg viewBox="0 0 64 64" style={{ width: 14, height: 14, display: 'block', opacity }} aria-hidden>
+    <svg viewBox="0 0 64 64" style={{ width: size, height: size, display: 'block', opacity }} aria-hidden>
       <path fill="currentColor" d="m63.50106 20.6098c-.15003-.71998-.52003-1.35-1.03005-1.83005-.50996-.47999-1.17-.8-1.88998-.89998-2.42515-.34376-7.5437-.62312-12.48422 1.73697-.25049-.95308-.88673-1.77127-1.78854-2.24241l-6.04728-3.15582c3.55938-3.31225 8.029-4.42933 10.19988-4.77889.41999-.08002.82997.12 1.03999.50001.56001 1.01998 1.35 2.65001 1.91 4.66005.18006.65004.85005 1.03005 1.52005.85005.65004-.18006 1.03005-.86006.85005-1.52004-.63002-2.23002-1.50003-4.04005-2.12009-5.18008-.70998-1.28005-2.15-1.98007-3.60004-1.75003-2.55876.42023-7.97725 1.77566-12.10347 6.01676l-12.21877-6.37644c-1.02895-.53852-2.25986-.5373-3.29125-.00122l-20.53965 10.73566c-1.17684.61426-1.90769 1.82113-1.90769 3.1494v22.92336c0 1.32705.72963 2.53154 1.90408 3.14941l20.53965 10.7633c.51686.26923 1.08303.40388 1.64804.40388.56617 0 1.13234-.13464 1.6492-.40388l20.56974-10.7633c.8965-.46937 1.53152-1.28353 1.78384-2.23179 3.54126-.53272 7.62897-2.01859 10.97644-5.60458 6.0501-6.48016 5.11008-14.85029 4.43007-18.15034zm-60.45383 23.80619c-.36182-.18995-.5854-.56019-.5854-.96889v-22.92336c0-.40748.2248-.77772.5854-.96645l20.53843-10.73565c.15869-.08295.33301-.12378.50727-.12378.17432 0 .34742.04083.50489.12378l19.74148 10.30278-20.2391 10.58209-17.20037-8.99404c-.59864-.31855-1.34627-.08295-1.66006.52052-.31495.60218-.08295 1.34512.52052 1.66l17.10899 8.94626v22.9623zm42.12394-.00245-19.84005 10.3803v-22.95454l20.42423-10.67883v22.28663c-.00001.4087-.22358.77894-.58418.96644zm12.09981-7.33349c-2.7382 2.93132-6.06901 4.23646-9.0538 4.76235v-6.01438l4.78371-5.11807c.22998-.23999.34003-.55.34003-.86-.01001-.32001-.14001-.64002-.39002-.88002-.50001-.45997-1.28005-.43-1.75003.06l-2.98369 3.1892v-9.89628c3.13195-1.77066 6.48045-2.21305 9.03378-2.21305 1.21004 0 2.24003.09998 2.99004.20001.41999.06.76003.38001.85005.8.59999 2.92003 1.44998 10.33019-3.82007 15.97024z"/>
     </svg>
   )
 }
 
-export default function TasteMark({ taste, n, single = false, className, style }: Props) {
+export default function TasteMark({ taste, n, single = false, size = 14, className, style }: Props) {
   const count = single ? 1 : 3
   const marks = Array.from({ length: count }, (_, i) => ({
     opacity: single || i < n ? 1 : 0.26,
@@ -61,7 +64,7 @@ export default function TasteMark({ taste, n, single = false, className, style }
       className={className}
       style={{ display: 'inline-flex', alignItems: 'center', gap: 3, color: 'inherit', verticalAlign: 'middle', ...style }}
     >
-      {marks.map((m, i) => <Icon key={i} opacity={m.opacity} />)}
+      {marks.map((m, i) => <Icon key={i} opacity={m.opacity} size={size} />)}
     </span>
   )
 }

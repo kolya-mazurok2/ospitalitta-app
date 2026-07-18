@@ -13,7 +13,6 @@
   },
   "food": {
     "pizza": "Pizza",
-    "burgers": "Burgere",
     "sharing": "Til deling"
   },
   "pick": {
@@ -42,13 +41,14 @@
   },
   "cart": {
     "show_waiter": "Vis kelneren",
-    "open_list": "Vis dette til kelneren",
+    "open_list": "La kelneren se",
     "keep_browsing": "Fortsett å bla",
     "total_label": "Totalt · Lekë",
-    "clear": "Fjern bestilling"
+    "clear": "Fjern bestilling",
+    "added": "{name} lagt til"
   },
   "pairing": {
-    "drink_label": "Hva denne drinken elsker på tallerkenen:",
+    "drink_label": "Smaker best med:",
     "plate_label": "Hva denne retten elsker i glasset:"
   },
   "footer": {

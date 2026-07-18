@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import TasteMark from '@/components/TasteMark'
 import MenuBackdrop from '@/components/MenuBackdrop'
 
@@ -11,12 +10,18 @@ interface DishRow {
   onAdd: () => void
 }
 
+interface TasteRow {
+  taste: 'bitter' | 'sour' | 'sweet'
+  n: 1 | 2 | 3
+}
+
 interface Props {
   name: string
   desc: string
   price: string
   taste?: 'bitter' | 'sour' | 'sweet'
   n?: 1 | 2 | 3
+  tastes?: TasteRow[]    // full profile; falls back to the single taste/n pair
   single?: boolean
   loved?: boolean
   house?: boolean
@@ -31,15 +36,18 @@ interface Props {
   foodWhy?: string       // food pairing single-string why
   onClose: () => void
   onAdd: () => void
+  onOpenLegend?: () => void   // same target as the header's info control
   backgroundTheme?: 'seafood' | 'cocktail' | 'patisserie' | 'none'
 }
 
 export default function DetailSheet({
-  name, desc, price, taste, n, single, loved, house,
+  name, desc, price, taste, n, tastes, single, loved, house,
   pairLabel, dishes, hasWhy, whyIsCocktail, whyLead, whyDrink, whyPost, foodWhy,
-  onClose, onAdd, backgroundTheme,
+  onClose, onAdd, onOpenLegend, backgroundTheme,
 }: Props) {
-  const [tipOpen, setTipOpen] = useState(false)
+  // Multi-taste items carry their own list; single-taste ones are described by taste + n.
+  const tasteRows: TasteRow[] =
+    tastes?.length ? tastes : (taste && n ? [{ taste, n }] : [])
 
   return (
     <>
@@ -50,6 +58,10 @@ export default function DetailSheet({
         style={{
           position: 'absolute', inset: 0,
           background: 'var(--sheet-scrim)',
+          // Minimal blur — pushes the menu list behind the sheet out of focus so the
+          // sheet's own text reads cleanly. Kept low: heavier values cost frames on old Androids.
+          backdropFilter: 'blur(3px)',
+          WebkitBackdropFilter: 'blur(3px)',
           zIndex: 5,
         }}
       />
@@ -70,12 +82,23 @@ export default function DetailSheet({
       >
         <MenuBackdrop theme={backgroundTheme ?? 'none'} />
 
-        {/* drag handle */}
-        <div style={{ flexShrink: 0, padding: '14px 0 6px', display: 'flex', justifyContent: 'center' }}>
-          <div
+        {/* close */}
+        <div style={{ flexShrink: 0, padding: '10px 14px 0', display: 'flex', justifyContent: 'flex-end' }}>
+          <button
             onClick={onClose}
-            style={{ width: 42, height: 4, borderRadius: 4, background: 'rgb(84 89 90 / 0.28)', cursor: 'pointer' }}
-          />
+            aria-label="Close"
+            style={{
+              width: 34, height: 34, border: 'none', background: 'transparent',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', padding: 0,
+            }}
+          >
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
+              stroke="var(--ink-heading)" strokeWidth="1.4" strokeLinecap="round"
+              style={{ display: 'block' }} aria-hidden>
+              <path d="M1.5 1.5 L13.5 13.5 M13.5 1.5 L1.5 13.5" />
+            </svg>
+          </button>
         </div>
 
         {/* scrollable body */}
@@ -83,39 +106,97 @@ export default function DetailSheet({
           className="scrollbar-none"
           style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '0 24px 92px' }}
         >
-          {/* pairing block */}
-          {dishes && dishes.length > 0 && (
-            <div style={{ marginTop: 4 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+          {/* item header */}
+          <div style={{ marginTop: 4 }}>
+            {loved && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 9 }}>
                 <span style={{
-                  fontFamily: 'var(--font-text)', fontWeight: 500, fontSize: '0.875rem',
-                  letterSpacing: '0.01em', color: 'var(--ink-heading)', lineHeight: 1.3,
+                  fontFamily: 'var(--font-text)', fontWeight: 500, fontSize: '0.53125rem',
+                  letterSpacing: '0.16em', textTransform: 'uppercase',
+                  color: 'var(--brand)', lineHeight: 1,
                 }}>
-                  {pairLabel}
+                  loved here
                 </span>
-                {hasWhy && (
+                <svg viewBox="154 164 314 303" style={{ width: 12, height: 12, display: 'block', fill: 'var(--brand)' }} aria-hidden>
+                  <path d="m467.804 292.907c-7.47-48.489-60.582-101.763-132.159-62.814-29.177-90.905-119.689-69.448-145.953-43.65-85.322 76.173 8.362 203.179 40.333 268.032 14.045-39.091-117.417-181.241-27.244-255.414 68.632-56.454 126.977 25.183 124.741 56.454 44.947-40.995 121.184-16.165 122.736 37.392 3.752 129.472-200.887 143.96-206.188 175.093 115.457-25.643 238.406-79.846 223.734-175.093z" />
+                  <path d="m287.945 231.035c-46.589-62.449-117.225 12.49-74.644 84.931-12.023-79.435 25.55-110.91 74.644-84.931z" />
+                </svg>
+              </div>
+            )}
+
+            {/* name + olive — price moved below the description */}
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 16 }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
+                <span style={{
+                  fontFamily: 'var(--font-display)', fontSize: '1.0625rem',
+                  letterSpacing: '0.01em', color: 'var(--ink)',
+                  lineHeight: 1.1, whiteSpace: 'nowrap',
+                }}>
+                  {name}
+                </span>
+                {house && (
+                  <svg width="11" height="13" viewBox="0 0 24 24" style={{ display: 'block', flexShrink: 0 }} aria-hidden>
+                    <ellipse cx="12" cy="12" rx="6.6" ry="8.8" transform="rotate(-18 12 12)" fill="#7E8C50" />
+                    <ellipse cx="9.7" cy="7.6" rx="1.5" ry="2.3" transform="rotate(-18 12 12)" fill="#B6C07A" />
+                    <ellipse cx="13.4" cy="14.2" rx="1.4" ry="1.9" transform="rotate(-18 12 12)" fill="#C7503B" />
+                  </svg>
+                )}
+              </span>
+            </div>
+
+            {/* taste profile — one row per taste axis, full width, no side column */}
+            {tasteRows.length > 0 && (
+              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '10px 20px', marginTop: 14, color: 'var(--brand)' }}>
+                {tasteRows.map((r, i) => (
+                  <TasteMark key={i} taste={r.taste} n={r.n} single={single} size={22} style={{ gap: 5 }} />
+                ))}
+                {onOpenLegend && (
                   <button
-                    onClick={() => setTipOpen(t => !t)}
+                    onClick={onOpenLegend}
+                    aria-label="How to read this menu"
                     style={{
-                      width: 18, height: 18, borderRadius: '50%',
-                      border: '1px solid rgb(84 89 90 / 0.4)',
-                      background: 'transparent', color: 'var(--ink-heading)',
-                      fontFamily: 'var(--font-text)', fontSize: '0.6875rem', fontWeight: 500,
-                      lineHeight: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      cursor: 'pointer', flexShrink: 0,
+                      background: 'transparent', border: 'none', cursor: 'pointer', padding: 0,
+                      display: 'flex', alignItems: 'center', flexShrink: 0,
                     }}
                   >
-                    ?
+                    {/* same sprite glyph as the header control — opens the same legend sheet */}
+                    <svg width={17} height={17} style={{ display: 'block', color: 'var(--ink-faint)' }} aria-hidden>
+                      <use href="#ui-info" />
+                    </svg>
                   </button>
                 )}
               </div>
+            )}
 
-              {/* why tooltip — renders inside the sheet, under the "?" (no overlap with the raised cart bar) */}
-              {hasWhy && tipOpen && (
+            {/* desc */}
+            <p style={{
+              fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '1rem',
+              lineHeight: 1.5, color: 'var(--ink-body)',
+              textWrap: 'pretty', margin: '14px 0 0',
+            }}>
+              {desc}
+            </p>
+
+            {/* price */}
+            <div style={{
+              fontFamily: 'var(--font-text)', fontSize: '0.875rem',
+              letterSpacing: '0.03em', color: 'var(--brand)', marginTop: 12,
+            }}>
+              {price}
+            </div>
+
+          </div>
+
+          {/* pairing block */}
+          {dishes && dishes.length > 0 && (
+            <div style={{ marginTop: 22 }}>
+              {/* why — always on, full width, above the label. No "?" to discover. */}
+              {hasWhy && (
                 <div style={{
-                  marginTop: 10, padding: '12px 14px',
+                  // Bleeds past the body's 24px side padding — edge to edge of the sheet.
+                  margin: '0 -24px 14px',
+                  padding: '12px 24px',
                   background: 'var(--surface-dark)',
-                  boxShadow: '0 8px 24px rgb(0 0 0 / 0.28)',
                 }}>
                   {whyIsCocktail ? (
                     <p style={{ fontFamily: 'var(--font-text)', fontSize: '0.8125rem', lineHeight: 1.5, color: 'var(--on-dark-2)', margin: 0 }}>
@@ -131,6 +212,14 @@ export default function DetailSheet({
                   )}
                 </div>
               )}
+
+              <span style={{
+                display: 'block',
+                fontFamily: 'var(--font-text)', fontWeight: 500, fontSize: '0.875rem',
+                letterSpacing: '0.01em', color: 'var(--ink-heading)', lineHeight: 1.3,
+              }}>
+                {pairLabel}
+              </span>
 
               <div style={{ display: 'flex', flexDirection: 'column', marginTop: 10 }}>
                 {dishes.map((d, i) => (
@@ -181,66 +270,6 @@ export default function DetailSheet({
             </div>
           )}
 
-          {/* item header */}
-          <div style={{ marginTop: 16 }}>
-            {loved && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 9 }}>
-                <span style={{
-                  fontFamily: 'var(--font-text)', fontWeight: 500, fontSize: '0.53125rem',
-                  letterSpacing: '0.16em', textTransform: 'uppercase',
-                  color: 'var(--brand)', lineHeight: 1,
-                }}>
-                  loved here
-                </span>
-                <svg viewBox="154 164 314 303" style={{ width: 12, height: 12, display: 'block', fill: 'var(--brand)' }} aria-hidden>
-                  <path d="m467.804 292.907c-7.47-48.489-60.582-101.763-132.159-62.814-29.177-90.905-119.689-69.448-145.953-43.65-85.322 76.173 8.362 203.179 40.333 268.032 14.045-39.091-117.417-181.241-27.244-255.414 68.632-56.454 126.977 25.183 124.741 56.454 44.947-40.995 121.184-16.165 122.736 37.392 3.752 129.472-200.887 143.96-206.188 175.093 115.457-25.643 238.406-79.846 223.734-175.093z" />
-                  <path d="m287.945 231.035c-46.589-62.449-117.225 12.49-74.644 84.931-12.023-79.435 25.55-110.91 74.644-84.931z" />
-                </svg>
-              </div>
-            )}
-
-            {/* desc + TasteMark */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
-              <p style={{
-                fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '1rem',
-                lineHeight: 1.5, color: 'var(--ink-body)',
-                flex: 1, minWidth: 0, textWrap: 'pretty', margin: 0,
-              }}>
-                {desc}
-              </p>
-              {taste && n && (
-                <span style={{ flexShrink: 0, display: 'flex', alignItems: 'flex-start', paddingTop: 4, color: 'var(--brand)' }}>
-                  <TasteMark taste={taste} n={n} single={single} />
-                </span>
-              )}
-            </div>
-
-            {/* name + olive + price */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 16, marginTop: 8 }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
-                <span style={{
-                  fontFamily: 'var(--font-display)', fontSize: '1.0625rem',
-                  letterSpacing: '0.01em', color: 'var(--ink)',
-                  lineHeight: 1.1, whiteSpace: 'nowrap',
-                }}>
-                  {name}
-                </span>
-                {house && (
-                  <svg width="11" height="13" viewBox="0 0 24 24" style={{ display: 'block', flexShrink: 0 }} aria-hidden>
-                    <ellipse cx="12" cy="12" rx="6.6" ry="8.8" transform="rotate(-18 12 12)" fill="#7E8C50" />
-                    <ellipse cx="9.7" cy="7.6" rx="1.5" ry="2.3" transform="rotate(-18 12 12)" fill="#B6C07A" />
-                    <ellipse cx="13.4" cy="14.2" rx="1.4" ry="1.9" transform="rotate(-18 12 12)" fill="#C7503B" />
-                  </svg>
-                )}
-              </span>
-              <span style={{
-                fontFamily: 'var(--font-text)', fontSize: '0.875rem',
-                letterSpacing: '0.03em', color: 'var(--brand)', flexShrink: 0,
-              }}>
-                {price}
-              </span>
-            </div>
-          </div>
         </div>
 
         {/* FAB — add to cart */}

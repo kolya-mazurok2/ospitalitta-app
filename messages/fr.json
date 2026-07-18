@@ -13,7 +13,6 @@
   },
   "food": {
     "pizza": "Pizza",
-    "burgers": "Burgers",
     "sharing": "À partager"
   },
   "pick": {
@@ -42,13 +41,14 @@
   },
   "cart": {
     "show_waiter": "Montrer au serveur",
-    "open_list": "Montrez ceci au serveur",
+    "open_list": "Montrez-le au serveur",
     "keep_browsing": "Continuer à explorer",
     "total_label": "Total · Lekë",
-    "clear": "Effacer la commande"
+    "clear": "Effacer la commande",
+    "added": "{name} ajouté"
   },
   "pairing": {
-    "drink_label": "Ce que ce drink aime dans l'assiette :",
+    "drink_label": "Se marie le mieux avec :",
     "plate_label": "Ce que ce plat aime dans le verre :"
   },
   "footer": {

@@ -13,7 +13,6 @@
   },
   "food": {
     "pizza": "Pizza",
-    "burgers": "Burgery",
     "sharing": "Do podziału"
   },
   "pick": {
@@ -42,13 +41,14 @@
   },
   "cart": {
     "show_waiter": "Pokaż kelnerkowi",
-    "open_list": "Pokaż to kelnerkowi",
+    "open_list": "Niech kelner zobaczy",
     "keep_browsing": "Wróć do menu",
     "total_label": "Razem · Lekë",
-    "clear": "Wyczyść zamówienie"
+    "clear": "Wyczyść zamówienie",
+    "added": "Dodano {name}"
   },
   "pairing": {
-    "drink_label": "Co ten drink lubi na talerzu:",
+    "drink_label": "Najlepiej smakuje z:",
     "plate_label": "Co to danie lubi w kieliszku:"
   },
   "footer": {

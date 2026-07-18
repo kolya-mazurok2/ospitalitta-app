@@ -13,7 +13,7 @@ import ListSheet from '@/components/ListSheet'
 import LegendSheet from '@/components/LegendSheet'
 import type { VenueMenuData, TasteKey, FoodKey, MenuItem } from '@/lib/menu-data'
 import { TASTE_KEYS } from '@/lib/menu-data'
-import { tabOrder, pickLocale, money } from '@/lib/locale'
+import { pickLocale, money } from '@/lib/locale'
 import { type CartItem, loadCart, saveCart, addItem, changeQty, cartCount, cartTotal, parsePrice, clearCart } from '@/lib/cart'
 import { lsGet, lsSet } from '@/lib/storage'
 import { setLocaleAction } from '@/app/actions/locale'
@@ -39,6 +39,7 @@ interface OpenItem {
   rawPrice: number   // for cart ops
   taste?: 'bitter' | 'sour' | 'sweet'
   n?: 1 | 2 | 3
+  tastes?: Array<{ taste: 'bitter' | 'sour' | 'sweet'; n: 1 | 2 | 3 }>
   single?: boolean
   loved?: boolean
   house?: boolean
@@ -121,9 +122,14 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
     }
     return 'expanded'
   })
-  const [tab, setTab] = useState<string>(
-    isTasteBased ? leadTaste : (menuData.sections[0]?.key ?? '')
-  )
+  // Landing tab: last taste the guest picked here (localStorage) → locale-derived lead taste
+  // → first section. Tab ORDER never changes — only which one starts active.
+  const [tab, setTab] = useState<string>(() => {
+    const fallback = isTasteBased ? leadTaste : (menuData.sections[0]?.key ?? '')
+    if (typeof window === 'undefined') return fallback
+    const saved = lsGet(`osp_taste_${venueSlug}`)
+    return saved && menuData.sections.some(s => s.key === saved) ? saved : fallback
+  })
   const [foodTab, setFoodTab] = useState<FoodKey>((menuData.foodSections[0]?.key as FoodKey) ?? 'pizza')
   const [openItem, setOpenItem] = useState<OpenItem | null>(null)
   const [showList, setShowList] = useState(false)
@@ -132,6 +138,14 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
   const [cart, setCart] = useState<CartItem[]>([])
   const [fontScale, setFontScale] = useState(1)
   const [pendingScroll, setPendingScroll] = useState<string | null>(null)
+  // id is a timestamp — remounts the node so the fade replays on rapid repeat taps
+  const [toast, setToast] = useState<{ id: number; name: string } | null>(null)
+
+  // Remember the guest's taste choice — next visit lands there instead of the locale default.
+  const changeTab = (key: string) => {
+    lsSet(`osp_taste_${venueSlug}`, key)
+    setTab(key)
+  }
 
   const changeViewMode = (mode: 'expanded' | 'compact') => {
     sessionStorage.setItem(`osp_view_${venueSlug}`, mode)
@@ -140,6 +154,9 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
 
   const skipOpenRef = useRef(false)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => () => { if (toastTimer.current) clearTimeout(toastTimer.current) }, [])
 
   useEffect(() => {
     const saved = loadCart(venueSlug)
@@ -150,10 +167,6 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
     setFontScale(fs)
     document.documentElement.style.setProperty('--font-scale', String(fs))
 
-    // lsGet returns null both when key absent and when localStorage is blocked (iframe).
-    // Treat both as first visit → show onboarding.
-    if (!lsGet(`onboarding_seen_${venueSlug}`)) setLegendOpen(true)
-
     // Landing tab never fires taste_tab_switch (nothing was switched) — record it here,
     // otherwise the most-seen tab of all is the one missing from the report.
     track('menu_view', { venue_slug: venueSlug, locale, category: initialCategory, tab })
@@ -163,6 +176,16 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
   }, [venueSlug, locale])
 
   useEffect(() => { saveCart(venueSlug, cart) }, [cart, venueSlug])
+
+  // A new tab is a new list — start it at the top instead of keeping the old offset.
+  // Skipped while a scroll target is pending: the featured pick switches tab on purpose
+  // to reach an item further down, and resetting here would undo that jump.
+  useEffect(() => {
+    if (pendingScroll) return
+    scrollRef.current?.scrollTo({ top: 0 })
+    // Deliberately not keyed on pendingScroll — this fires on tab switches only.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab, foodTab, category])
 
   // Scroll to pending item — reruns on tab/category/foodTab change so element is in DOM
   useEffect(() => {
@@ -181,12 +204,8 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
 
   const cocktailTabs = useMemo((): string[] => {
     if (!hasCocktails) return []
-    if (isTasteBased) {
-      const ordered = tabOrder(leadTaste) as string[]
-      return ordered.filter(k => menuData.sections.some(s => s.key === k))
-    }
     return menuData.sections.map(s => s.key)
-  }, [menuData.sections, leadTaste, hasCocktails, isTasteBased])
+  }, [menuData.sections, hasCocktails])
 
   const sectionByKey = useMemo(() => {
     const m: Record<string, (typeof menuData.sections)[0]> = {}
@@ -259,6 +278,10 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
 
   const pushToCart = (slug: string, name: string, rawPrice: number) => {
     setCart(prev => addItem(prev, { slug, name, price: rawPrice }))
+    // Confirm the tap — the cart bar sits at the bottom and the "+" gives no other feedback.
+    if (toastTimer.current) clearTimeout(toastTimer.current)
+    setToast({ id: Date.now(), name })
+    toastTimer.current = setTimeout(() => setToast(null), 1800)
     // GA4 ecommerce shape → feeds native Item reports (sliceable by Country).
     track('add_to_cart', {
       venue_slug: venueSlug,
@@ -304,6 +327,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
       slug, name: text.name, desc: text.desc, price: money(item.price),
       rawPrice: parsePrice(item.price),
       taste: tasteKey, n: item.lvl,
+      tastes: item.tastes?.map(ts => ({ taste: ts.taste, n: ts.lvl })),
       single: taste === 'zero',
       loved: item.loved, house: item.house, isFood: false,
       pairLabel: dishes.length ? t('pairing.drink_label') : undefined,
@@ -363,7 +387,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
 
   // ----- Tab labels -----
   const foodLabel: Record<string, string> = {
-    pizza: t('food.pizza'), burgers: t('food.burgers'), sharing: t('food.sharing'),
+    pizza: t('food.pizza'), sharing: t('food.sharing'),
   }
   const foodTabLabel = (sec: typeof menuData.foodSections[0]) =>
     pl(sec.i18n).label || foodLabel[sec.key] || sec.key
@@ -430,7 +454,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
                 const sec = sectionByKey[tk]
                 const label = sec ? pl(sec.i18n).label : tk
                 return (
-                  <button key={tk} onClick={() => { track('taste_tab_switch', { venue_slug: venueSlug, taste: tk }); setTab(tk) }} style={{ ...tabBtn(active), display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                  <button key={tk} onClick={() => { track('taste_tab_switch', { venue_slug: venueSlug, taste: tk }); changeTab(tk) }} style={{ ...tabBtn(active), display: 'inline-flex', alignItems: 'center', gap: 6 }}>
                     {label}
                     <TasteIcon taste={tk} active={active} />
                     {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
@@ -681,7 +705,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
       {openItem && (
         <DetailSheet
           name={openItem.name} desc={openItem.desc} price={openItem.price}
-          taste={openItem.taste} n={openItem.n} single={openItem.single}
+          taste={openItem.taste} n={openItem.n} tastes={openItem.tastes} single={openItem.single}
           loved={openItem.loved} house={openItem.house} isFood={openItem.isFood}
           pairLabel={openItem.pairLabel}
           dishes={openItem.dishes?.map(d => ({ ...d, ...makeDishHandlers(d) }))}
@@ -689,12 +713,35 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
           whyLead={openItem.whyLead} whyDrink={openItem.whyDrink} whyPost={openItem.whyPost}
           foodWhy={openItem.foodWhy}
           onClose={() => setOpenItem(null)}
+          onOpenLegend={() => setLegendOpen(true)}
           onAdd={() => {
             pushToCart(openItem.slug, openItem.name, openItem.rawPrice)
             setOpenItem(null)
           }}
           backgroundTheme={backgroundTheme ?? 'none'}
         />
+      )}
+
+      {/* Added-to-cart toast — above every sheet, clears itself after 1.8s */}
+      {toast && (
+        <div
+          key={toast.id}
+          className="animate-bb-dim"
+          style={{
+            position: 'absolute', top: 12, right: 12, zIndex: 70,
+            maxWidth: 'calc(100% - 24px)',
+            background: 'var(--surface-dark-2)', color: 'var(--on-dark)',
+            padding: '9px 13px',
+            fontFamily: 'var(--font-text)', fontWeight: 400, fontSize: '0.75rem',
+            lineHeight: 1.3, letterSpacing: '0.01em',
+            boxShadow: '0 10px 26px rgb(0 0 0 / 0.3)',
+            pointerEvents: 'none',
+          }}
+          role="status"
+          aria-live="polite"
+        >
+          {t('cart.added', { name: toast.name })}
+        </div>
       )}
 
       {/* Cart bar */}
@@ -740,7 +787,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
           oliveName={t('legend.olive_name')} oliveDesc={t('legend.olive_desc')}
           lovedName={t('legend.loved_name')} lovedDesc={t('legend.loved_desc')}
           pricesNote={onboarding.pricesNote} welcome={onboarding.welcome} cta={t('legend.cta')}
-          onClose={() => { lsSet(`onboarding_seen_${venueSlug}`, '1'); setLegendOpen(false) }}
+          onClose={() => setLegendOpen(false)}
         />
       )}
     </div>

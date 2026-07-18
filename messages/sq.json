@@ -13,7 +13,6 @@
   },
   "food": {
     "pizza": "Pizza",
-    "burgers": "Burgera",
     "sharing": "Për të ndarë"
   },
   "pick": {
@@ -42,13 +41,14 @@
   },
   "cart": {
     "show_waiter": "Trego kamarierit",
-    "open_list": "Tregoja kamarierit",
+    "open_list": "Le ta shohë kamarieri",
     "keep_browsing": "Vazhdoni shfletimin",
     "total_label": "Totali · Lekë",
-    "clear": "Fshi porosinë"
+    "clear": "Fshi porosinë",
+    "added": "{name} u shtua"
   },
   "pairing": {
-    "drink_label": "Çfarë do ky pije në pjatë:",
+    "drink_label": "Shijohet më mirë me:",
     "plate_label": "Çfarë do kjo pjatë në gotë:"
   },
   "footer": {

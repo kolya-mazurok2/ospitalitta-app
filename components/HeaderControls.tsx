@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { FLAG_SPRITE, FLAG_LOCALES } from '@/lib/flag-sprite'
 
@@ -70,8 +70,22 @@ export default function HeaderControls({
   const handleAa = () => { setAaOpen(v => !v); setLangOpen(false) }
   const handleLang = () => { setLangOpen(v => !v); setAaOpen(false) }
 
+  // Any tap that lands outside the header dismisses an open dropdown — without this it
+  // stays up until the trigger is hit again, and it overlaps the menu it covers.
+  const headerRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (!aaOpen && !langOpen) return
+    const onDown = (e: PointerEvent) => {
+      if (headerRef.current?.contains(e.target as Node)) return
+      setAaOpen(false)
+      setLangOpen(false)
+    }
+    document.addEventListener('pointerdown', onDown)
+    return () => document.removeEventListener('pointerdown', onDown)
+  }, [aaOpen, langOpen])
+
   return (
-    <div style={{
+    <div ref={headerRef} style={{
       flexShrink: 0, padding: '20px 20px 12px',
       background: 'var(--surface)', position: 'relative', zIndex: 6,
     }}>
@@ -145,7 +159,7 @@ export default function HeaderControls({
           {/* info / legend */}
           <button
             onClick={() => { onOpenLegend(); setAaOpen(false); setLangOpen(false) }}
-            style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '2px 0', display: 'flex', alignItems: 'center', flexShrink: 0 }}
+            style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center', flexShrink: 0 }}
             aria-label="How to read this menu"
           >
             <UiIcon name="info" />
@@ -155,7 +169,7 @@ export default function HeaderControls({
           <div style={{ position: 'relative', display: 'inline-flex' }}>
             <button
               onClick={handleAa}
-              style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '2px 0', display: 'flex', alignItems: 'center' }}
+              style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center' }}
               aria-label="Text size"
             >
               <UiIcon name="typography" />
@@ -196,7 +210,7 @@ export default function HeaderControls({
           <div style={{ position: 'relative', display: 'inline-flex' }}>
             <button
               onClick={handleLang}
-              style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '2px 0', display: 'flex', alignItems: 'center', flexShrink: 0 }}
+              style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center', flexShrink: 0 }}
               aria-label="Language"
             >
               <LocaleIcon locale={locale} />

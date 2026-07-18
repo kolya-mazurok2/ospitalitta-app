@@ -2,6 +2,7 @@
 
 import CardVideo from '@/components/CardVideo'
 import { parsePriceDisplay } from '@/lib/locale'
+import { clampDesc } from '@/lib/text'
 
 interface Props {
   id: string
@@ -67,13 +68,16 @@ export default function FoodCard({ id, name, desc, price, badge, compact, videoS
               </span>
             )}
           </div>
-          <p style={{
-            fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.6875rem',
-            color: 'var(--ink-faint)', margin: '2px 0 0',
-            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-          }}>
-            {desc ? `${desc} ${displayPrice}` : displayPrice}
-          </p>
+          {/* Description only — price lives in the detail sheet, not in the list */}
+          {desc && (
+            <p style={{
+              fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.6875rem',
+              color: 'var(--ink-faint)', margin: '2px 0 0',
+              overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+            }}>
+              {clampDesc(desc)}
+            </p>
+          )}
         </div>
         <button
           onClick={(e) => { e.stopPropagation(); onAdd(e) }}
