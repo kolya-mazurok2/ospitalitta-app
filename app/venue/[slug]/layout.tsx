@@ -1,3 +1,7 @@
+// Edge for the whole guest subtree (DEC-005). getPublishedMenu talks to PostgREST over
+// fetch precisely so this is possible; the admin keeps Node, it needs supabase-js.
+export const runtime = 'edge'
+
 import { notFound } from 'next/navigation'
 import { headers, cookies } from 'next/headers'
 import { NextIntlClientProvider } from 'next-intl'

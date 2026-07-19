@@ -182,7 +182,7 @@ const venues: Record<string, VenueConfig> = {
     houseIndicator: 'fish',
     showCocktailGuide: false,
     backgroundTheme: 'seafood',
-    headerDecor: '/decor/seafood/snapper-2.png',
+    headerDecor: '/decor/seafood/snapper-2.webp',
     onboarding: {
       pricesNote: 'Prices in Lekë',
     },
