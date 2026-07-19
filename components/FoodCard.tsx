@@ -163,9 +163,9 @@ export default function FoodCard({ id, name, desc, price, badge, compact, videoS
         columnGap: 10,
         rowGap: 10,
       }}>
-        {/* row 1 left: description */}
+        {/* row 1: description — takes the badge column too when there is no badge */}
         <p style={{
-          gridColumn: 1, gridRow: 1,
+          gridColumn: zoneBadge ? 1 : '1 / -1', gridRow: 1,
           fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.84375rem',
           lineHeight: 1.45, color: 'var(--ink-body-2)', margin: 0,
           textWrap: 'pretty' as React.CSSProperties['textWrap'],

@@ -210,9 +210,9 @@ export default function ItemCard({
           columnGap: 14,
           rowGap: 8,
         }}>
-          {/* [1,1] desc */}
+          {/* [1,*] desc — spans both columns; nothing shares row 1 since the taste marks left */}
           <p style={{
-            gridColumn: 1, gridRow: 1,
+            gridColumn: '1 / -1', gridRow: 1,
             fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.84375rem',
             lineHeight: 1.45, color: 'var(--ink-body-2)',
             margin: 0, textWrap: 'pretty' as React.CSSProperties['textWrap'],
