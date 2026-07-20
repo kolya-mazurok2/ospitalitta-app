@@ -62,6 +62,16 @@ function FishSvg({ size = 11, inline = false, style: extraStyle }: { size?: numb
   )
 }
 
+function EyeSvg({ size = 22 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" style={{ display: 'block', fill: 'currentColor' }} aria-hidden>
+      <path d="m12 18.53a11.71 11.71 0 0 1 -7.44-2.65l-3.09-2.53a1.74 1.74 0 0 1 0-2.7l3.09-2.53a11.78 11.78 0 0 1 14.88 0l3.09 2.53a1.74 1.74 0 0 1 0 2.7l-3.09 2.53a11.69 11.69 0 0 1 -7.44 2.65zm0-11.53a10.22 10.22 0 0 0 -6.49 2.28l-3.09 2.53a.25.25 0 0 0 0 .38l3.09 2.53a10.27 10.27 0 0 0 13 0l3.09-2.53a.25.25 0 0 0 0-.38l-3.11-2.53a10.24 10.24 0 0 0 -6.49-2.28z" />
+      <path d="m12 18.25a6.25 6.25 0 1 1 6.25-6.25 6.25 6.25 0 0 1 -6.25 6.25zm0-11a4.75 4.75 0 1 0 4.75 4.75 4.75 4.75 0 0 0 -4.75-4.75z" />
+      <path d="m15 12a3 3 0 1 1 -2.2-2.89 1.47 1.47 0 0 0 -.3.89 1.5 1.5 0 0 0 1.5 1.5 1.47 1.47 0 0 0 .89-.3 3 3 0 0 1 .11.8z" />
+    </svg>
+  )
+}
+
 function HouseMark({ kind, size, inline, style }: { kind?: string; size: number; inline?: boolean; style?: React.CSSProperties }) {
   if (kind === 'olive') return <OliveSvg size={size} inline={inline} style={style} />
   if (kind === 'fish') return <FishSvg size={size} inline={inline} style={style} />
@@ -137,6 +147,7 @@ export default function ItemCard({
       style={{
         background: 'var(--card-bg)',
         border: '1px solid var(--card-border)',
+        boxShadow: 'var(--card-shadow, 0 2px 10px rgb(0 0 0 / 0.10))',
         overflow: 'hidden',
         cursor: 'pointer',
       }}
@@ -166,23 +177,35 @@ export default function ItemCard({
           <Glass type={glass} style={{ width: 40, height: 56, color: 'var(--line-strong)' }} />
         ) : null}
 
-        <button
-          onClick={(e) => { e.stopPropagation(); onAdd(e) }}
-          style={{
-            position: 'absolute', bottom: 8, right: 8,
-            width: 34, height: 34, borderRadius: '50%',
-            border: 'none', background: 'var(--fab-bg)', color: 'var(--fab-fg)',
-            fontFamily: 'var(--font-text)', fontSize: '1.375rem', fontWeight: 300,
-            lineHeight: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            cursor: 'pointer', boxShadow: '0 2px 8px rgb(0 0 0 / 0.28), 0 0 0 1px rgb(255 255 255 / 0.18)', paddingBottom: 2,
-          }}
-          aria-label={`Add ${name}`}
-        >
-          <svg viewBox="0 0 100 100" width="22" height="22" fill="none" stroke="currentColor" strokeLinecap="round" style={{ display: 'block' }} aria-hidden>
-            <line x1="50" y1="22" x2="50" y2="78" strokeWidth="7"/>
-            <line x1="22" y1="50" x2="78" y2="50" strokeWidth="7"/>
-          </svg>
-        </button>
+        {/* "peek" affordance — centred over the media so the card reads as openable.
+            pointer-events:none so the tap falls through to the card's own onTap.
+            Skipped on the glass-silhouette fallback: both live dead-centre and would collide. */}
+        {(videoSrc || posterSrc) && (
+          <div
+            style={{
+              position: 'absolute', inset: 0,
+              background: 'var(--card-peek-scrim, rgb(0 0 0 / 0.4))',
+              pointerEvents: 'none',
+            }}
+            aria-hidden
+          />
+        )}
+
+        {(videoSrc || posterSrc) && (
+          <div style={{
+            position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+            width: 44, height: 44, borderRadius: '50%',
+            background: 'var(--card-peek-bg, rgb(0 0 0 / 0.34))',
+            color: 'var(--card-peek-fg, #fff)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            pointerEvents: 'none',
+            backdropFilter: 'blur(2px)',
+            boxShadow: '0 2px 10px rgb(0 0 0 / 0.22)',
+          }}>
+            <EyeSvg size={22} />
+          </div>
+        )}
+
       </div>
 
       {/* body: 2×2 grid — desc/name left, price right. loved spans full width above */}
@@ -210,9 +233,9 @@ export default function ItemCard({
           columnGap: 14,
           rowGap: 8,
         }}>
-          {/* [1,*] desc — spans both columns; nothing shares row 1 since the taste marks left */}
+          {/* [1,1] desc */}
           <p style={{
-            gridColumn: '1 / -1', gridRow: 1,
+            gridColumn: 1, gridRow: 1,
             fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.84375rem',
             lineHeight: 1.45, color: 'var(--ink-body-2)',
             margin: 0, textWrap: 'pretty' as React.CSSProperties['textWrap'],
@@ -232,6 +255,25 @@ export default function ItemCard({
             </span>
             {showIndicator && <HouseMark kind={houseIndicator} size={houseIndicator === 'fish' ? 15 : 11} inline style={{ marginLeft: 3 }} />}
           </div>
+
+          {/* [1,2] add — the FAB moved off the media zone and now sits above the price */}
+          <button
+            onClick={(e) => { e.stopPropagation(); onAdd(e) }}
+            style={{
+              gridColumn: 2, gridRow: 1, justifySelf: 'end', alignSelf: 'start',
+              flexShrink: 0, width: 30, height: 30, marginRight: -4,
+              background: 'transparent', border: 'none', color: 'var(--ink-faint)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', padding: 0,
+            }}
+            aria-label={`Add ${name}`}
+          >
+            <svg viewBox="0 0 100 100" width="24" height="24" fill="none" stroke="currentColor" strokeLinecap="round" style={{ display: 'block' }} aria-hidden>
+              <circle cx="50" cy="50" r="46" strokeWidth="3.5"/>
+              <line x1="50" y1="32" x2="50" y2="68" strokeWidth="4.5"/>
+              <line x1="32" y1="50" x2="68" y2="50" strokeWidth="4.5"/>
+            </svg>
+          </button>
 
           {/* [2,2] price */}
           <span style={{

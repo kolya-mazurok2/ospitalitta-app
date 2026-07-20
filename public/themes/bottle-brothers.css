@@ -180,6 +180,10 @@
   --card-bg-active: var(--surface-card-a);
   --card-border:    var(--line-soft);
   --card-radius:    var(--bb-r-card);
+  --card-shadow:    0 2px 10px rgb(21 17 14 / 0.10);
+  --card-peek-scrim: rgb(21 17 14 / 0.4);
+  --card-peek-bg:   rgb(21 17 14 / 0.34);
+  --card-peek-fg:   #fff;
 
   /* bottom sheet */
   --sheet-bg:       var(--surface);

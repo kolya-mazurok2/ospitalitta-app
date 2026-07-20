@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import Script from 'next/script'
-import { Anton } from 'next/font/google'
 import { MouseflowPageViews } from '@/components/MouseflowPageViews'
 import '@/styles/globals.css'
 
@@ -18,16 +17,11 @@ export const metadata: Metadata = {
   },
 }
 
-// The Ospitalitta wordmark face. Platform level, not a venue font, so next/font is fine
-// here — DEC-006 rules it out only for the per-venue brand manifest, which has to stay
-// runtime-swappable. Self-hosted: no third-party request, no swap flash on the mark.
-const anton = Anton({ subsets: ['latin'], weight: '400', variable: '--font-osp-mark' })
-
 const GA_ID = 'G-ZR4VH3NC1Z'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={anton.variable}>
+    <html lang="en">
       <body>
         {children}
         <MouseflowPageViews />

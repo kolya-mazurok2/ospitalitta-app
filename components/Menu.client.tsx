@@ -391,7 +391,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
         {category === 'cocktails' && (
           <>
 
-            <div style={{ padding: '0 18px 50px' }}>
+            <div style={{ padding: '0 18px 28px' }}>
               {/* Section heading dropped — the active tab already names the taste.
                   The operational note stays: it carries pricing, not a label. */}
               {currentSection && (() => {
@@ -448,7 +448,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
         {category === 'food' && (
           <>
 
-            <div style={{ padding: '0 18px 50px' }}>
+            <div style={{ padding: '0 18px 28px' }}>
               {foodTab === 'pizza' && (
                 <SectionNote bodyText={t('pizza_note.text')} />
               )}
