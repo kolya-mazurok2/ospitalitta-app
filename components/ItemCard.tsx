@@ -11,6 +11,7 @@ interface Props {
   name: string
   desc: string
   price: string
+  priceRange?: string   // 'min–max' when the item has sizes/variants
   glass?: GlassType
   taste: string
   lvl?: 1 | 2 | 3
@@ -62,7 +63,7 @@ function FishSvg({ size = 11, inline = false, style: extraStyle }: { size?: numb
   )
 }
 
-function EyeSvg({ size = 22 }: { size?: number }) {
+export function EyeSvg({ size = 22 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" style={{ display: 'block', fill: 'currentColor' }} aria-hidden>
       <path d="m12 18.53a11.71 11.71 0 0 1 -7.44-2.65l-3.09-2.53a1.74 1.74 0 0 1 0-2.7l3.09-2.53a11.78 11.78 0 0 1 14.88 0l3.09 2.53a1.74 1.74 0 0 1 0 2.7l-3.09 2.53a11.69 11.69 0 0 1 -7.44 2.65zm0-11.53a10.22 10.22 0 0 0 -6.49 2.28l-3.09 2.53a.25.25 0 0 0 0 .38l3.09 2.53a10.27 10.27 0 0 0 13 0l3.09-2.53a.25.25 0 0 0 0-.38l-3.11-2.53a10.24 10.24 0 0 0 -6.49-2.28z" />
@@ -72,14 +73,35 @@ function EyeSvg({ size = 22 }: { size?: number }) {
   )
 }
 
-function HouseMark({ kind, size, inline, style }: { kind?: string; size: number; inline?: boolean; style?: React.CSSProperties }) {
+function HeartSvg({ size = 11, inline = false, style: extraStyle }: { size?: number; inline?: boolean; style?: React.CSSProperties }) {
+  return (
+    <svg
+      width={size} height={size} viewBox="0 0 24 24" fillRule="evenodd" clipRule="evenodd"
+      style={inline
+        ? { display: 'inline-block', verticalAlign: 'middle', position: 'relative', top: '-1px', flexShrink: 0, fill: 'var(--brand)', ...extraStyle }
+        : { display: 'block', flexShrink: 0, fill: 'var(--brand)', ...extraStyle }
+      }
+      aria-hidden
+    >
+      <path d="m8.061 11.166c1.244-2.448 4.08-3.011 5.894-2.133 1.97.952 2.864 3.671 2.009 6.861-.522 2.17-2.616 4.787-4.47 6.637-.189.189-.465.263-.723.194-2.531-.675-5.653-1.895-7.19-3.513-2.336-2.335-2.921-5.136-1.691-6.946 1.132-1.668 3.87-2.598 6.171-1.1zm-.2 1.763c-1.634-1.631-3.871-1.085-4.73.179-.418.615-.475 1.394-.255 2.215.252.941.861 1.926 1.772 2.834.005.006.01.011.015.016 1.295 1.369 3.879 2.368 6.076 2.987 1.593-1.634 3.332-3.792 3.768-5.624.002-.008.004-.015.006-.022.334-1.242.369-2.4.117-3.341-.22-.821-.659-1.467-1.328-1.79-1.376-.666-3.586-.02-4.187 2.21-.069.258-.271.46-.53.529-.258.069-.534-.004-.724-.193z" />
+      <path d="m15.987 14.449c-.386.148-.82-.046-.968-.432-.149-.387.045-.821.431-.969 1.534-.588 3.012-1.338 3.887-2.263.005-.006.01-.011.015-.016.911-.909 1.52-1.894 1.772-2.835.22-.821.163-1.6-.255-2.214-.859-1.265-3.096-1.811-4.73-.18-.19.189-.466.263-.724.193-.259-.069-.461-.271-.53-.529-.601-2.23-2.811-2.876-4.187-2.21-.669.324-1.108.97-1.328 1.79-.252.941-.217 2.099.117 3.342.002.007.004.014.006.021.123.52.359 1.068.664 1.624.2.363.067.819-.296 1.018-.363.2-.819.067-1.018-.296-.373-.68-.654-1.352-.807-1.989-.855-3.19.039-5.907 2.009-6.86 1.814-.878 4.65-.315 5.894 2.134 2.301-1.499 5.039-.568 6.171 1.099 1.229 1.81.645 4.611-1.684 6.939-1.005 1.062-2.679 1.958-4.439 2.633z" />
+      <path d="m6.171 5.165c.185.37.035.821-.336 1.006-.37.185-.821.035-1.006-.336l-.5-1c-.185-.37-.035-.821.336-1.006.37-.185.821-.035 1.006.336z" />
+      <path d="m17.329 18.835c-.185-.37-.035-.821.336-1.006.37-.185.821-.035 1.006.336l.5 1c.185.37.035.821-.336 1.006-.37.185-.821.035-1.006-.336z" />
+      <path d="m3.835 9.671c-.37.185-.821.035-1.006-.336-.185-.37-.035-.821.336-1.006l1-.5c.37-.185.821-.035 1.006.336.185.37.035.821-.336 1.006z" />
+      <path d="m19.665 14.329c.37-.185.821-.035 1.006.336.185.37.035.821-.336 1.006l-1 .5c-.37.185-.821.035-1.006-.336-.185-.37-.035-.821.336-1.006z" />
+    </svg>
+  )
+}
+
+export function HouseMark({ kind, size, inline, style }: { kind?: string; size: number; inline?: boolean; style?: React.CSSProperties }) {
   if (kind === 'olive') return <OliveSvg size={size} inline={inline} style={style} />
   if (kind === 'fish') return <FishSvg size={size} inline={inline} style={style} />
+  if (kind === 'heart') return <HeartSvg size={size} inline={inline} style={style} />
   return null
 }
 
 export default function ItemCard({
-  id, name, desc, price, glass,
+  id, name, desc, price, priceRange, glass,
   loved, house, houseIndicator, compact, videoSrc, posterSrc, lovedLabel, priority, onTap, onAdd,
 }: Props) {
   // taste/lvl/flavor stay in Props — callers pass them and the detail sheet still shows
@@ -102,7 +124,7 @@ export default function ItemCard({
           {/* Line 1: name + indicator — inline so olive sits flush against text */}
           <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             <span style={{
-              fontFamily: 'var(--font-display)', fontSize: '0.9375rem',
+              fontFamily: 'var(--font-display)', fontSize: 'var(--card-title-size, 0.9375rem)',
               color: 'var(--ink)', verticalAlign: 'middle',
             }}>
               {name}
@@ -247,7 +269,7 @@ export default function ItemCard({
           {/* [2,1] name + olive indicator */}
           <div style={{ gridColumn: 1, gridRow: 2, alignSelf: 'end' }}>
             <span style={{
-              fontFamily: 'var(--font-display)', fontSize: '0.9375rem',
+              fontFamily: 'var(--font-display)', fontSize: 'var(--card-title-size, 0.9375rem)',
               letterSpacing: '0.01em', color: 'var(--ink)',
               verticalAlign: 'middle',
             }}>
@@ -282,7 +304,7 @@ export default function ItemCard({
             letterSpacing: '0.03em', color: 'var(--brand)',
             textAlign: 'right', alignSelf: 'end',
           }}>
-            {price}
+            {priceRange ?? price}
           </span>
         </div>
       </div>

@@ -10,7 +10,7 @@
  */
 import { pickLocale, money } from './locale'
 import { parsePrice } from './cart'
-import type { VenueMenuData, MenuItem } from './menu-data'
+import type { VenueMenuData, MenuItem, ItemOption } from './menu-data'
 
 export interface DetailDishRow {
   slug: string
@@ -35,6 +35,8 @@ export interface ItemDetail {
   loved?: boolean
   house?: boolean
   badge?: string
+  sizes?: ItemOption[]
+  variants?: ItemOption[]
   videoSrc?: string
   posterSrc?: string
   dishes: DetailDishRow[]
@@ -80,6 +82,7 @@ export function buildItemDetail(
       tastes: item.tastes?.map(ts => ({ taste: ts.taste, n: ts.lvl })),
       single: section === 'zero',
       loved: item.loved, house: item.house, badge: item.badge,
+      sizes: item.sizes, variants: item.variants,
       videoSrc: item.videoSrc, posterSrc: item.posterSrc,
       dishes: pairing?.dishes.map(d => {
         const fi = foods[d.itemRef]
@@ -106,6 +109,7 @@ export function buildItemDetail(
     price: money(item.price), rawPrice: parsePrice(item.price),
     isFood: true, sectionKey: section,
     loved: item.loved, house: item.house, badge: item.badge,
+    sizes: item.sizes, variants: item.variants,
     videoSrc: item.videoSrc, posterSrc: item.posterSrc,
     dishes: fp?.cocktailRefs.flatMap(ref => {
       const ce = cocktails[ref]

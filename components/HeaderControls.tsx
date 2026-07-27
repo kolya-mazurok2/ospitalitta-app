@@ -129,7 +129,7 @@ export default function HeaderControls({
         />
       )}
       {/* logo left, controls right; the controls line up on the logo's bottom edge */}
-      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         {/* logo — image or live-text wordmark */}
         {logoText ? (
           <span style={{

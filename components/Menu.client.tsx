@@ -413,10 +413,15 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
               <div style={{ display: 'flex', flexDirection: 'column', gap: viewMode === 'compact' ? 0 : 14, marginTop: viewMode === 'compact' ? 8 : 16 }}>
                 {currentSection?.items.map((item, i) => {
                   const text = pl(item.i18n)
+                  const dOpts = item.sizes ?? item.variants
+                  const dPriceRange = dOpts
+                    ? (() => { const n = dOpts.map(o => parsePrice(o.price)); const a = Math.min(...n), b = Math.max(...n); return a === b ? String(a) : `${a}–${b}` })()
+                    : undefined
                   return (
                     <ItemCard
                       key={item.slug} id={item.slug}
                       name={text.name} desc={text.desc} price={money(item.price)}
+                      priceRange={dPriceRange}
                       glass={item.glass} taste={currentSection.key}
                       compact={viewMode === 'compact'}
                       priority={i === 0}
@@ -521,11 +526,18 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
               <div style={{ display: 'flex', flexDirection: 'column', gap: viewMode === 'compact' ? 0 : 12, marginTop: viewMode === 'compact' ? 8 : 16 }}>
                 {currentFoodSection?.items.map((item, i) => {
                   const text = pl(item.i18n)
+                  const opts = item.sizes ?? item.variants
+                  const priceRange = opts
+                    ? (() => { const n = opts.map(o => parsePrice(o.price)); const a = Math.min(...n), b = Math.max(...n); return a === b ? String(a) : `${a}–${b}` })()
+                    : undefined
                   return (
                     <FoodCard
                       key={item.slug} id={item.slug}
                       name={text.name} desc={text.desc} price={item.price}
+                      priceRange={priceRange}
                       badge={item.badge}
+                      house={item.house}
+                      houseIndicator={houseIndicator}
                       compact={viewMode === 'compact'}
                       priority={i === 0}
                       videoSrc={item.videoSrc}

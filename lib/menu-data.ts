@@ -13,6 +13,7 @@ export type FoodKey  = 'pizza' | 'sharing'
                      | 'beers' | 'wine' | 'cocktails'
                      | 'breakfast' | 'sandwiches' | 'small-plates'
                      | 'pastries' | 'waffles' | 'crepes' | 'ice-cream'
+                     | 'cakes' | 'savory'
 
 export const TASTE_KEYS: ReadonlySet<string> = new Set<TasteKey>(['bitter','sour','sweet','spicy','zero'])
 export type Locale = string
@@ -39,10 +40,18 @@ export interface FoodProfile {
   spicy?: boolean
 }
 
+/** One selectable option. `sizes` = same item different size (S/M/L); `variants` = flavor/type. */
+export interface ItemOption {
+  label: string          // 'S' | 'M' | 'L'  or  'Chocolate' | 'Caramel' …
+  price: string          // 'L1000'
+}
+
 export interface MenuItem {
   id: string
   slug: string
-  price: string          // 'L500' — flat
+  price: string          // 'L500' — flat (base/default; the min when sizes/variants exist)
+  sizes?: ItemOption[]   // same item, different size — S/M/L
+  variants?: ItemOption[] // flavor/type variants — chocolate, caramel, pistachio …
   glass?: GlassType
   lvl?: 1 | 2 | 3       // intensity marks (bitter/sour/sweet)
   profile?: FoodProfile  // food items only

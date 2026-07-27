@@ -1,15 +1,20 @@
 'use client'
 
 import CardVideo from '@/components/CardVideo'
+import { HouseMark, EyeSvg } from '@/components/ItemCard'
+import TasteMark from '@/components/TasteMark'
 import { parsePriceDisplay } from '@/lib/locale'
-import { clampDesc } from '@/lib/text'
+import { clampDesc, sweetLevel } from '@/lib/text'
 
 interface Props {
   id: string
   name: string
   desc: string
   price: string
+  priceRange?: string   // 'min–max' shown instead of single price when the item has sizes/variants
   badge?: string
+  house?: boolean
+  houseIndicator?: string
   compact?: boolean
   videoSrc?: string
   posterSrc?: string
@@ -34,10 +39,11 @@ const badgePillStyle: React.CSSProperties = {
   flexShrink: 0,
 }
 
-export default function FoodCard({ id, name, desc, price, badge, compact, videoSrc, posterSrc, priority, onTap, onAdd }: Props) {
+export default function FoodCard({ id, name, desc, price, priceRange, badge, house, houseIndicator, compact, videoSrc, posterSrc, priority, onTap, onAdd }: Props) {
   const { amount, unit } = parsePriceDisplay(price)
   // price shows amount only; unit becomes a badge label (rule: per-unit info belongs near name, not in price)
-  const displayPrice = amount
+  const displayPrice = priceRange ?? amount
+  const sweet = sweetLevel(desc)
   // derive unit badge from price string if no explicit badge set
   const zoneBadge = badge ?? (unit ? 'Per ' + unit.replace('PER ', '').toLowerCase() : null)
 
@@ -58,7 +64,7 @@ export default function FoodCard({ id, name, desc, price, badge, compact, videoS
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 5, overflow: 'hidden' }}>
             <span style={{
               flex: 1, minWidth: 0,
-              fontFamily: 'var(--font-display)', fontSize: '0.9375rem',
+              fontFamily: 'var(--font-display)', fontSize: 'var(--card-title-size, 0.9375rem)',
               color: 'var(--ink)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
             }}>
               {name}
@@ -134,6 +140,24 @@ export default function FoodCard({ id, name, desc, price, badge, compact, videoS
           />
         ) : null}
 
+        {/* "peek" affordance — signals the card is openable (matches ItemCard). pointer-events:none so tap falls through to the card. */}
+        {(videoSrc || posterSrc) && (
+          <div style={{ position: 'absolute', inset: 0, background: 'var(--card-peek-scrim, rgb(0 0 0 / 0.4))', pointerEvents: 'none' }} aria-hidden />
+        )}
+        {(videoSrc || posterSrc) && (
+          <div style={{
+            position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+            width: 44, height: 44, borderRadius: '50%',
+            background: 'var(--card-peek-bg, rgb(0 0 0 / 0.34))',
+            color: 'var(--card-peek-fg, #fff)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            pointerEvents: 'none', backdropFilter: 'blur(2px)',
+            boxShadow: '0 2px 10px rgb(0 0 0 / 0.22)',
+          }}>
+            <EyeSvg size={22} />
+          </div>
+        )}
+
         {/* FAB add button */}
         <button
           onClick={(e) => { e.stopPropagation(); onAdd(e) }}
@@ -154,51 +178,72 @@ export default function FoodCard({ id, name, desc, price, badge, compact, videoS
         </button>
       </div>
 
-      {/* body: 2×2 grid — desc/name left col, badges/price right col */}
-      <div style={{
-        padding: '10px 14px 13px',
-        display: 'grid',
-        gridTemplateColumns: '1fr 80px',
-        gridTemplateRows: '1fr auto',
-        columnGap: 10,
-        rowGap: 10,
-      }}>
-        {/* row 1: description — takes the badge column too when there is no badge */}
-        <p style={{
-          gridColumn: zoneBadge ? 1 : '1 / -1', gridRow: 1,
-          fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.84375rem',
-          lineHeight: 1.45, color: 'var(--ink-body-2)', margin: 0,
-          textWrap: 'pretty' as React.CSSProperties['textWrap'],
-          alignSelf: 'start',
-        }}>
-          {desc}
-        </p>
-        {/* row 1 right: badges (always occupies column even when empty) */}
+      {/* body */}
+      <div style={{ padding: '10px 14px 13px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {/* eyebrow: signature marker above the description — heart glyph + label, no border */}
+        {house && (
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 4,
+            fontFamily: 'var(--font-text)', fontSize: '0.5rem', fontWeight: 600,
+            letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--brand)',
+          }}>
+            {houseIndicator && <HouseMark kind={houseIndicator} size={10} inline />}
+            <span>{badge ?? 'Best seller'}</span>
+          </div>
+        )}
+        {/* 2×2 grid — desc/name left col, badge/price right col */}
         <div style={{
-          gridColumn: 2, gridRow: 1,
-          display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4,
-          alignSelf: 'start',
+          display: 'grid',
+          gridTemplateColumns: '1fr 80px',
+          gridTemplateRows: '1fr auto',
+          columnGap: 10,
+          rowGap: 10,
         }}>
-          {zoneBadge && <span style={{ ...badgePillStyle, marginRight: -6 }}>{zoneBadge}</span>}
+          {/* row 1: description — takes the badge column too when there is no corner badge */}
+          <p style={{
+            gridColumn: (!house && zoneBadge) ? 1 : '1 / -1', gridRow: 1,
+            fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.84375rem',
+            lineHeight: 1.45, color: 'var(--ink-body-2)', margin: 0,
+            textWrap: 'pretty' as React.CSSProperties['textWrap'],
+            alignSelf: 'start',
+          }}>
+            {desc}
+          </p>
+          {/* row 1 right: corner badge (unit labels) — suppressed for signature items */}
+          <div style={{
+            gridColumn: 2, gridRow: 1,
+            display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4,
+            alignSelf: 'start',
+          }}>
+            {!house && zoneBadge && <span style={{ ...badgePillStyle, marginRight: -6 }}>{zoneBadge}</span>}
+          </div>
+          {/* row 2 left: name + sweetness cubes */}
+          <span style={{
+            gridColumn: 1, gridRow: 2, display: 'inline-flex', alignItems: 'center', gap: 7,
+            minWidth: 0, alignSelf: 'end',
+          }}>
+            <span style={{
+              fontFamily: 'var(--font-display)', fontSize: 'var(--card-title-size, 0.9375rem)',
+              letterSpacing: '0.01em', color: 'var(--ink)', lineHeight: 1.1,
+            }}>
+              {name}
+            </span>
+            {sweet && (
+              <span style={{ color: 'var(--brand)', display: 'inline-flex', flexShrink: 0 }}>
+                <TasteMark taste="sweet" n={sweet} size={12} />
+              </span>
+            )}
+          </span>
+          {/* row 2 right: price */}
+          <span style={{
+            gridColumn: 2, gridRow: 2,
+            fontFamily: 'var(--font-text)', fontSize: '0.8125rem',
+            letterSpacing: '0.03em', color: 'var(--brand)', textAlign: 'right',
+            alignSelf: 'end',
+          }}>
+            {displayPrice}
+          </span>
         </div>
-        {/* row 2 left: name */}
-        <span style={{
-          gridColumn: 1, gridRow: 2,
-          fontFamily: 'var(--font-display)', fontSize: '0.9375rem',
-          letterSpacing: '0.01em', color: 'var(--ink)', lineHeight: 1.1,
-          alignSelf: 'end',
-        }}>
-          {name}
-        </span>
-        {/* row 2 right: price */}
-        <span style={{
-          gridColumn: 2, gridRow: 2,
-          fontFamily: 'var(--font-text)', fontSize: '0.8125rem',
-          letterSpacing: '0.03em', color: 'var(--brand)', textAlign: 'right',
-          alignSelf: 'end',
-        }}>
-          {displayPrice}
-        </span>
       </div>
     </div>
   )

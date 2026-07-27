@@ -8,11 +8,13 @@
 import { bbMenuData, type VenueMenuData, type MenuSection, type MenuItem } from './menu-data'
 import { salyMenuData } from './saly-data'
 import { coteMenuData } from './cote-data'
+import { amourMenuData } from './amour-data'
 
 const menuData: Record<string, VenueMenuData> = {
   'bottle-brothers': bbMenuData,
   'saly': salyMenuData,
   'cote': coteMenuData,
+  'amour': amourMenuData,
 }
 
 // Venues whose sections/items live in Supabase. The rest stay on static data.
@@ -154,7 +156,7 @@ export interface VenueConfig {
   defaultCategory?: 'cocktails' | 'drinks' | 'food'
   drinksCategoryLabel?: 'cocktails' | 'drinks'  // label for left category tab (default: 'cocktails')
   forceCompact?: boolean  // always render items in compact list mode, hide view toggle
-  houseIndicator?: 'olive' | 'shell' | 'fish'
+  houseIndicator?: 'olive' | 'shell' | 'fish' | 'heart'
   showCocktailGuide?: boolean
   backgroundTheme?: 'seafood' | 'cocktail' | 'patisserie' | 'none'
   headerDecor?: string
@@ -164,6 +166,29 @@ export interface VenueConfig {
 }
 
 const venues: Record<string, VenueConfig> = {
+  'amour': {
+    slug: 'amour',
+    name: 'Amour',
+    locales: ['en', 'sq', 'it', 'uk'],
+    defaultLocale: 'en',
+    brand: {
+      themeAttr: 'amour',
+      stylesheet: '/themes/amour.css',
+      fonts: [
+        { family: 'Cormorant Garamond', href: 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&display=swap' },
+        { family: 'Mulish', href: 'https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700&display=swap' },
+      ],
+    },
+    logoSrc: '/venue-assets/amour/amour-logo.png',
+    defaultCategory: 'food',
+    drinksCategoryLabel: 'drinks',
+    houseIndicator: 'heart',
+    showCocktailGuide: false,
+    backgroundTheme: 'patisserie',
+    onboarding: {
+      pricesNote: 'Prices in Albanian Lek',
+    },
+  },
   'saly': {
     slug: 'saly',
     name: 'Saly',

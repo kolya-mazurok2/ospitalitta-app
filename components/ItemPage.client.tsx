@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import TasteMark from '@/components/TasteMark'
+import { HouseMark } from '@/components/ItemCard'
 import CartBar from '@/components/CartBar'
 import SectionNote from '@/components/SectionNote'
 import ListSheet from '@/components/ListSheet'
@@ -19,6 +20,7 @@ interface Props {
   detail: ItemDetail
   venueSlug: string
   reviewUrl?: string
+  houseIndicator?: string
 }
 
 /**
@@ -29,11 +31,21 @@ interface Props {
  * written to localStorage before navigating, which is the same channel the menu already
  * reads its landing tab from.
  */
-export default function ItemPage({ detail, venueSlug, reviewUrl }: Props) {
+export default function ItemPage({ detail, venueSlug, reviewUrl, houseIndicator }: Props) {
   const t = useTranslations()
   const router = useRouter()
   const { cart, count, total, toast, add, changeQty, clear, placed, place, unplace } = useCart(venueSlug)
   const [showList, setShowList] = useState(false)
+
+  // Size (S/M/L) or variant (flavour) options — one selected at a time, price follows.
+  const options = detail.sizes ?? detail.variants
+  const optionLabel = detail.sizes ? 'Size' : 'Flavour'
+  const [optIdx, setOptIdx] = useState(0)
+  const selected = options?.[optIdx]
+  const selPriceRaw = selected ? (Number(selected.price.replace(/\D/g, '')) || 0) : detail.rawPrice
+  const selPriceText = selected ? money(selected.price) : detail.price
+  const addName = selected ? `${detail.name} (${selected.label})` : detail.name
+  const addSlug = selected ? `${detail.slug}-${selected.label.toLowerCase().replace(/\s+/g, '-')}` : detail.slug
 
   const menuHref = `/venue/${venueSlug}/menu`
 
@@ -141,12 +153,8 @@ export default function ItemPage({ detail, venueSlug, reviewUrl }: Props) {
             }}>
               {detail.name}
             </h1>
-            {detail.house && (
-              <svg width="12" height="14" viewBox="0 0 24 24" style={{ display: 'block', flexShrink: 0 }} aria-hidden>
-                <ellipse cx="12" cy="12" rx="6.6" ry="8.8" transform="rotate(-18 12 12)" fill="#7E8C50" />
-                <ellipse cx="9.7" cy="7.6" rx="1.5" ry="2.3" transform="rotate(-18 12 12)" fill="#B6C07A" />
-                <ellipse cx="13.4" cy="14.2" rx="1.4" ry="1.9" transform="rotate(-18 12 12)" fill="#C7503B" />
-              </svg>
+            {detail.house && houseIndicator && (
+              <HouseMark kind={houseIndicator} size={16} inline />
             )}
           </div>
 
@@ -161,16 +169,46 @@ export default function ItemPage({ detail, venueSlug, reviewUrl }: Props) {
           <p style={{
             fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '1rem',
             lineHeight: 1.5, color: 'var(--ink-body)',
-            textWrap: 'pretty', margin: '14px 0 0',
+            textWrap: 'pretty', margin: '5px 0 0',
           }}>
             {detail.desc}
           </p>
 
+          {options && (
+            <div style={{ marginTop: 18 }}>
+              <div style={{
+                fontFamily: 'var(--font-text)', fontSize: '0.6875rem', fontWeight: 700,
+                letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-faint)',
+                marginBottom: 9,
+              }}>
+                {optionLabel}
+              </div>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                {options.map((o, i) => (
+                  <button
+                    key={o.label}
+                    onClick={() => setOptIdx(i)}
+                    style={{
+                      fontFamily: 'var(--font-text)', fontSize: '0.8125rem', fontWeight: 600,
+                      letterSpacing: '0.04em', padding: '7px 15px', borderRadius: 999, cursor: 'pointer',
+                      border: '1px solid ' + (i === optIdx ? 'var(--brand)' : 'var(--line-strong)'),
+                      background: i === optIdx ? 'var(--brand)' : 'transparent',
+                      color: i === optIdx ? 'var(--fab-fg)' : 'var(--ink-body)',
+                    }}
+                  >
+                    {o.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div style={{
-            fontFamily: 'var(--font-text)', fontSize: '0.875rem',
+            fontFamily: 'var(--font-text)', fontSize: options ? '1.0625rem' : '0.875rem',
+            fontWeight: options ? 600 : 400,
             letterSpacing: '0.03em', color: 'var(--brand)', marginTop: 12,
           }}>
-            {detail.price}
+            {selPriceText}
           </div>
 
           {detail.dishes.length > 0 && (
@@ -242,7 +280,7 @@ export default function ItemPage({ detail, venueSlug, reviewUrl }: Props) {
       {/* add to cart — hidden while the waiter list is up, it would float over the sheet */}
       {!showList && (
       <button
-        onClick={() => add(detail.slug, detail.name, detail.rawPrice)}
+        onClick={() => add(addSlug, addName, selPriceRaw)}
         style={{
           position: 'absolute', right: 24, bottom: count > 0 ? 96 : 28,
           width: 56, height: 56, borderRadius: '50%',

@@ -1,0 +1,106 @@
+/* =============================================================
+   Amour Pasticeri — venue theme (3-layer token system, DEC-007)
+   Palette measured from amour-logo + brand media-playbook.
+   Gold-on-cream patisserie, paper world (no dark theme block).
+   ============================================================= */
+
+/* ---------- 1 · PRIMITIVES ---------- */
+:root {
+  --amour-cream:        #F3EAD8;  /* warm deep cream, main surface (not white) */
+  --amour-cream-light:  #FBF5EA;  /* bright print                          */
+  --amour-card:         #EADCC4;  /* raised cards — warmer, reads on ground */
+  --amour-card-active:  #DFCEB0;  /* card on press                         */
+  --amour-frame:        #E6D7BE;  /* framed callouts                       */
+  --amour-espresso:     #33261B;  /* dark surfaces (bar, fab) — warm brown */
+  --amour-espresso-deep:#211710;  /* deepest: cart bar, footer             */
+
+  --amour-ink:          #2E241C;  /* warm brown-black ink                  */
+  --amour-ink-body:     rgba(46, 36, 28, 0.66);
+  --amour-on-dark:      #F3EBDC;  /* cream text on espresso                */
+  --amour-on-dark-2:    #CBB791;  /* secondary on dark                     */
+
+  --amour-cocoa:        #7A5A3C;  /* mid chocolate brown — hairlines, dividers */
+  --amour-caramel:      #B07E52;  /* caramel accent                        */
+  --amour-gold:         #B0862F;  /* prices, labels — deeper gold, not cheap */
+  --amour-gold-ui:      #C39A3E;  /* tab underline, selection              */
+  --amour-gold-bright:  #E0B95D;  /* headings on espresso / logo           */
+  --amour-gold-logo:    #E0B95D;
+  --amour-berry:        #8C5A72;  /* tiny accent only                      */
+}
+
+/* ---------- 2 · SEMANTIC / ALIAS — the ONLY layer app UI reads ---------- */
+[data-venue="amour"] {
+  --surface:        var(--amour-cream);
+  --surface-card:   var(--amour-card);
+  --surface-card-a: var(--amour-card-active);
+  --surface-frame:  var(--amour-frame);
+  --surface-dark:   var(--amour-espresso);
+  --surface-dark-2: var(--amour-espresso-deep);
+
+  --ink:            var(--amour-ink);
+  --ink-heading:    rgba(42, 35, 32, 0.80);
+  --ink-body:       var(--amour-ink-body);
+  --ink-body-2:     var(--amour-ink-body);
+  --on-dark:        var(--amour-on-dark);
+  --on-dark-2:      var(--amour-on-dark-2);
+
+  --brand:          var(--amour-gold);
+  --brand-on-dark:  var(--amour-gold-ui);
+  --brand-bright:   var(--amour-gold-bright);
+  --hairline:       var(--amour-cocoa);
+  --accent-pit:     var(--amour-berry);
+
+  --line:           rgba(74, 54, 36, 0.16);
+  --line-strong:    rgba(74, 54, 36, 0.30);
+  --line-soft:      rgba(74, 54, 36, 0.11);
+  --ink-faint:      rgba(74, 54, 36, 0.44);
+
+  --font-display:   'Cormorant Garamond', serif;
+  --font-text:      'Mulish', sans-serif;
+}
+
+/* ---------- 3 · COMPONENT ---------- */
+[data-venue="amour"] {
+  --card-bg:        var(--surface-card);
+  --card-bg-active: var(--surface-card-a);
+  --card-border:    var(--line-soft);
+  --card-radius:    12px;
+  --card-shadow:    0 4px 18px rgb(51 38 27 / 0.16);
+  --card-peek-scrim: rgb(0 0 0 / 0.4);
+  --card-peek-bg:   rgb(0 0 0 / 0.34);
+  --card-peek-fg:   #fff;
+
+  --sheet-bg:       var(--surface);
+  --sheet-radius:   20px 20px 0 0;
+  --sheet-scrim:    rgba(30, 23, 18, 0.55);
+
+  --bar-bg:         var(--surface-dark-2);
+  --bar-fg:         var(--on-dark);
+  --bar-accent:     var(--brand-bright);
+
+  --fab-bg:         var(--surface-dark-2);
+  --fab-fg:         var(--on-dark);
+  --fab-radius:     50%;
+
+  --tab-underline:  var(--brand-on-dark);
+
+  --badge-weight:      600;
+  --badge-size:        0.5rem;
+  --badge-color:       var(--brand);
+  --badge-bg:          transparent;
+  --badge-border:      1px solid var(--brand);
+  --badge-radius:      20px;
+  --badge-padding:     2px 7px;
+
+  --note-bg:           var(--surface-frame);
+  --note-border-color: var(--brand);
+  --note-text-color:   var(--ink-body);
+
+  --section-sub-color: var(--ink-faint);
+  --section-sub-size:  0.625rem;
+
+  /* Cormorant has a small x-height — bump the card title so it reads at a comfortable size */
+  --card-title-size: 1.1875rem;
+
+  --font-scale: 1;
+}
