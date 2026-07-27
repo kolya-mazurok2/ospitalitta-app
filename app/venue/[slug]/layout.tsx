@@ -55,7 +55,7 @@ export default async function VenueLayout({ children, params }: Props) {
         data-theme="dark"
         data-locale={locale}
         data-lead-taste={leadTaste}
-        style={{ height: '100dvh', display: 'flex', justifyContent: 'center', background: 'var(--surface-dark, #15110e)' }}
+        style={{ height: '100dvh', display: 'flex', justifyContent: 'center', background: 'var(--app-frame, var(--surface-dark, #15110e))' }}
       >
         {/* Mobile menu — capped at 640, centered. Sheets (position:absolute) anchor to the
             Menu.client root inside this frame, so they stay within the 640 column on desktop. */}

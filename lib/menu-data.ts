@@ -44,6 +44,7 @@ export interface FoodProfile {
 export interface ItemOption {
   label: string          // 'S' | 'M' | 'L'  or  'Chocolate' | 'Caramel' …
   price: string          // 'L1000'
+  posterSrc?: string     // per-variant image (carousel); falls back to the item poster/placeholder
 }
 
 export interface MenuItem {

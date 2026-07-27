@@ -293,6 +293,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
 
   const currentSection = menuData.sections.find(s => s.key === tab)
   const currentFoodSection = menuData.foodSections.find(s => s.key === foodTab)
+  const [showTop, setShowTop] = useState(false)
 
   // shared tab button style
   const tabBtn = (active: boolean) => ({
@@ -311,81 +312,87 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
 
       <MenuBackdrop theme={backgroundTheme ?? 'none'} />
 
-      <HeaderControls
-        logoSrc={logoSrc} logoText={logoText}
-        locale={locale} locales={locales} fontScale={fontScale}
-        onOpenLegend={() => setLegendOpen(true)}
-        onLocaleChange={handleLocaleChange}
-        onScaleChange={handleScaleChange}
-        headerDecor={headerDecor}
-        headerDecorLeft={headerDecorLeft}
-      />
+      {/* Scrollable content — logo header scrolls away; filters stick. IO root for impressions. */}
+      <div ref={scrollRef} className="scrollbar-none" onScroll={e => setShowTop(e.currentTarget.scrollTop > 320)} style={{ flex: 1, minHeight: 0, overflowY: 'auto', position: 'relative', zIndex: 1 }}>
 
-      {/* Category nav — hidden for food-only venues */}
-      {hasCocktails && menuData.foodSections.length > 0 && (
-        <div style={{ flexShrink: 0, background: 'var(--surface)', borderBottom: '1px solid var(--line)' }}>
-          <div style={{ display: 'flex', padding: '0 18px' }}>
-            {(defaultCategory === 'food'
-              ? ['food', 'cocktails'] as const
-              : ['cocktails', 'food'] as const
-            ).map(cat => {
-              const active = category === cat
-              return (
-                <button key={cat} onClick={() => changeCategory(cat)} style={tabBtn(active)}>
-                  {cat === 'cocktails'
-                    ? t(`category.${drinksCategoryLabel ?? 'cocktails'}`)
-                    : t('category.food')}
-                  {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
-                </button>
-              )
-            })}
-          </div>
+        {/* logo header — scrolls away with the content */}
+        <div style={{ background: 'var(--header-bg, var(--surface))' }}>
+          <HeaderControls
+            logoSrc={logoSrc} logoText={logoText}
+            locale={locale} locales={locales} fontScale={fontScale}
+            onOpenLegend={() => setLegendOpen(true)}
+            onLocaleChange={handleLocaleChange}
+            onScaleChange={handleScaleChange}
+            headerDecor={headerDecor}
+            headerDecorLeft={headerDecorLeft}
+          />
         </div>
-      )}
 
-      {/* Tabs outside scrollable — backdrop paints over them like CategoryNav */}
-      {category === 'cocktails' && (
-        <div style={{ flexShrink: 0, background: 'var(--surface)', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center' }}>
-          <div className="scrollbar-none" style={{ flex: 1, overflowX: 'auto' }}>
-            <div style={{ display: 'flex', padding: '0 16px', width: 'max-content' }}>
-              {cocktailTabs.map(tk => {
-                const active = tab === tk
-                const sec = sectionByKey[tk]
-                const label = sec ? pl(sec.i18n).label : tk
-                return (
-                  <button key={tk} onClick={() => { track('taste_tab_switch', { venue_slug: venueSlug, taste: tk }); changeTab(tk) }} style={{ ...tabBtn(active), display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                    {label}
-                    <TasteIcon taste={tk} active={active} />
-                    {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
-                  </button>
-                )
-              })}
+        {/* filters — stick to the top while the content scrolls under them */}
+        <div style={{ position: 'sticky', top: 0, zIndex: 6 }}>
+          {/* Category nav — hidden for food-only venues */}
+          {hasCocktails && menuData.foodSections.length > 0 && (
+            <div style={{ flexShrink: 0, background: 'var(--surface)', borderBottom: '1px solid var(--line)' }}>
+              <div style={{ display: 'flex', padding: '0 18px' }}>
+                {(defaultCategory === 'food'
+                  ? ['food', 'cocktails'] as const
+                  : ['cocktails', 'food'] as const
+                ).map(cat => {
+                  const active = category === cat
+                  return (
+                    <button key={cat} onClick={() => changeCategory(cat)} style={tabBtn(active)}>
+                      {cat === 'cocktails'
+                        ? t(`category.${drinksCategoryLabel ?? 'cocktails'}`)
+                        : t('category.food')}
+                      {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
+                    </button>
+                  )
+                })}
+              </div>
             </div>
-          </div>
-          {!forceCompact && <ViewToggle mode={viewMode} onChange={changeViewMode} />}
-        </div>
-      )}
-      {category === 'food' && (
-        <div style={{ flexShrink: 0, background: 'var(--surface)', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center' }}>
-          <div className="scrollbar-none" style={{ flex: 1, overflowX: 'auto' }}>
-            <div style={{ display: 'flex', padding: '0 16px', width: 'max-content' }}>
-              {menuData.foodSections.map(sec => {
-                const active = foodTab === sec.key
-                return (
-                  <button key={sec.key} onClick={() => changeFoodTab(sec.key as FoodKey)} style={tabBtn(active)}>
-                    {foodTabLabel(sec)}
-                    {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-          {!forceCompact && <ViewToggle mode={viewMode} onChange={changeViewMode} />}
-        </div>
-      )}
+          )}
 
-      {/* Scrollable content — also the IntersectionObserver root for item impressions */}
-      <div ref={scrollRef} className="scrollbar-none" style={{ flex: 1, minHeight: 0, overflowY: 'auto', position: 'relative', zIndex: 1 }}>
+          {category === 'cocktails' && (
+            <div style={{ flexShrink: 0, background: 'var(--surface)', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center' }}>
+              <div className="scrollbar-none" style={{ flex: 1, overflowX: 'auto' }}>
+                <div style={{ display: 'flex', padding: '0 16px', width: 'max-content' }}>
+                  {cocktailTabs.map(tk => {
+                    const active = tab === tk
+                    const sec = sectionByKey[tk]
+                    const label = sec ? pl(sec.i18n).label : tk
+                    return (
+                      <button key={tk} onClick={() => { track('taste_tab_switch', { venue_slug: venueSlug, taste: tk }); changeTab(tk) }} style={{ ...tabBtn(active), display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                        {label}
+                        <TasteIcon taste={tk} active={active} />
+                        {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+              {!forceCompact && <ViewToggle mode={viewMode} onChange={changeViewMode} />}
+            </div>
+          )}
+          {category === 'food' && (
+            <div style={{ flexShrink: 0, background: 'var(--surface)', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center' }}>
+              <div className="scrollbar-none" style={{ flex: 1, overflowX: 'auto' }}>
+                <div style={{ display: 'flex', padding: '0 16px', width: 'max-content' }}>
+                  {menuData.foodSections.map(sec => {
+                    const active = foodTab === sec.key
+                    return (
+                      <button key={sec.key} onClick={() => changeFoodTab(sec.key as FoodKey)} style={tabBtn(active)}>
+                        {foodTabLabel(sec)}
+                        {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+              {!forceCompact && <ViewToggle mode={viewMode} onChange={changeViewMode} />}
+            </div>
+          )}
+        </div>
+
 
         {/* ===== COCKTAILS ===== */}
         {category === 'cocktails' && (
@@ -397,17 +404,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
               {currentSection && (() => {
                 const secText = pl(currentSection.i18n) as { label: string; sub?: string; note?: string }
                 if (!secText.note) return null
-                return (
-                  <div style={{
-                    background: 'var(--note-bg, var(--surface-frame))',
-                    borderLeft: '3px solid var(--note-border-color, var(--brand))',
-                    padding: '10px 14px', marginTop: 24,
-                    fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.75rem', lineHeight: 1.5,
-                    color: 'var(--note-text-color, var(--ink-body))',
-                  }}>
-                    {secText.note}
-                  </div>
-                )
+                return <SectionNote bodyText={secText.note} />
               })()}
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: viewMode === 'compact' ? 0 : 14, marginTop: viewMode === 'compact' ? 8 : 16 }}>
@@ -479,8 +476,10 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
                 // The block still renders for the extras a section may carry (badge, sub, note);
                 // with none of them there is nothing left to show.
                 if (!secText.badge && !secText.sub && !secText.note) return null
+                // note-only section → reuse the shared quiet aside (BB SectionNote, with its quote icon)
+                if (secText.note && !secText.badge && !secText.sub) return <SectionNote bodyText={secText.note} />
                 return (
-                  <div style={{ marginTop: 24, borderBottom: '1px solid var(--line-strong)', paddingBottom: 7 }}>
+                  <div style={{ marginTop: 12, borderBottom: '1px solid var(--line-strong)', paddingBottom: 7 }}>
                     <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 10 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
                         {secText.badge && (
@@ -516,7 +515,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
                         fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.75rem', lineHeight: 1.5,
                         color: 'var(--note-text-color, var(--ink-body))',
                       }}>
-                        {secText.note}
+                        “{secText.note}”
                       </div>
                     )}
                   </div>
@@ -538,6 +537,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
                       badge={item.badge}
                       house={item.house}
                       houseIndicator={houseIndicator}
+                      variants={item.variants}
                       compact={viewMode === 'compact'}
                       priority={i === 0}
                       videoSrc={item.videoSrc}
@@ -561,6 +561,25 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
           </>
         )}
       </div>
+
+      {/* scroll to top — appears after scrolling down */}
+      {showTop && (
+        <button
+          onClick={() => scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' })}
+          aria-label="Back to top"
+          style={{
+            position: 'absolute', right: 16, bottom: count > 0 ? 88 : 20, zIndex: 20,
+            width: 44, height: 44, borderRadius: '50%',
+            background: 'var(--fab-bg)', color: 'var(--fab-fg)', border: 'none',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+            boxShadow: '0 6px 18px rgb(0 0 0 / 0.3)',
+          }}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }} aria-hidden>
+            <path d="M12 19V5M6 11l6-6 6 6" />
+          </svg>
+        </button>
+      )}
 
       {toast && <AddedToast id={toast.id} text={t('cart.added', { name: toast.name })} />}
 

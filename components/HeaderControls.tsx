@@ -7,7 +7,7 @@ import { FLAG_SPRITE, FLAG_LOCALES } from '@/lib/flag-sprite'
 /** Chrome icon from the inlined sprite — same-document <use>, no extra request. */
 function UiIcon({ name, size = 24 }: { name: 'info' | 'typography' | 'language'; size?: number }) {
   return (
-    <svg width={size} height={size} style={{ display: 'block', color: 'var(--ink-faint)' }} aria-hidden>
+    <svg width={size} height={size} style={{ display: 'block', color: 'var(--header-fg, var(--ink-faint))' }} aria-hidden>
       <use href={`#ui-${name}`} />
     </svg>
   )
@@ -89,7 +89,7 @@ export default function HeaderControls({
   return (
     <div style={{
       flexShrink: 0, padding: '20px 20px 12px',
-      background: 'var(--surface)', position: 'relative', zIndex: 6,
+      background: 'var(--header-bg, var(--surface))', position: 'relative', zIndex: 6,
     }}>
       <svg style={{ display: 'none' }} aria-hidden dangerouslySetInnerHTML={{ __html: FLAG_SPRITE }} />
       {headerDecor && (

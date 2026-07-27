@@ -1,10 +1,12 @@
 'use client'
 
+import { useState } from 'react'
 import CardVideo from '@/components/CardVideo'
 import { HouseMark, EyeSvg } from '@/components/ItemCard'
 import TasteMark from '@/components/TasteMark'
 import { parsePriceDisplay } from '@/lib/locale'
 import { clampDesc, sweetLevel } from '@/lib/text'
+import type { ItemOption } from '@/lib/menu-data'
 
 interface Props {
   id: string
@@ -18,6 +20,7 @@ interface Props {
   compact?: boolean
   videoSrc?: string
   posterSrc?: string
+  variants?: ItemOption[]   // flavour variants — media becomes a carousel through their images
   priority?: boolean   // first card in the list — eager, everything below stays lazy
   onTap: () => void
   onAdd: (e: React.MouseEvent) => void
@@ -39,11 +42,14 @@ const badgePillStyle: React.CSSProperties = {
   flexShrink: 0,
 }
 
-export default function FoodCard({ id, name, desc, price, priceRange, badge, house, houseIndicator, compact, videoSrc, posterSrc, priority, onTap, onAdd }: Props) {
+export default function FoodCard({ id, name, desc, price, priceRange, badge, house, houseIndicator, compact, videoSrc, posterSrc, variants, priority, onTap, onAdd }: Props) {
   const { amount, unit } = parsePriceDisplay(price)
   // price shows amount only; unit becomes a badge label (rule: per-unit info belongs near name, not in price)
   const displayPrice = priceRange ?? amount
   const sweet = sweetLevel(desc)
+  const [vIdx, setVIdx] = useState(0)
+  const hasCarousel = !!(variants && variants.length > 1 && variants.some(v => v.posterSrc))
+  const carouselSrc = hasCarousel ? (variants![vIdx % variants!.length].posterSrc ?? posterSrc) : undefined
   // derive unit badge from price string if no explicit badge set
   const zoneBadge = badge ?? (unit ? 'Per ' + unit.replace('PER ', '').toLowerCase() : null)
 
@@ -61,7 +67,12 @@ export default function FoodCard({ id, name, desc, price, priceRange, badge, hou
       >
         <div style={{ flex: 1, minWidth: 0 }}>
           {/* Line 1: name + badge */}
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 5, overflow: 'hidden' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, overflow: 'hidden' }}>
+            {house && houseIndicator && (
+              <span style={{ color: 'var(--brand)', display: 'inline-flex', flexShrink: 0 }}>
+                <HouseMark kind={houseIndicator} size={11} inline />
+              </span>
+            )}
             <span style={{
               flex: 1, minWidth: 0,
               fontFamily: 'var(--font-display)', fontSize: 'var(--card-title-size, 0.9375rem)',
@@ -69,7 +80,12 @@ export default function FoodCard({ id, name, desc, price, priceRange, badge, hou
             }}>
               {name}
             </span>
-            {zoneBadge && (
+            {sweet && (
+              <span style={{ color: 'var(--brand)', display: 'inline-flex', flexShrink: 0 }}>
+                <TasteMark taste="sweet" n={sweet} size={11} />
+              </span>
+            )}
+            {!house && zoneBadge && (
               <span style={{ ...badgePillStyle, fontSize: '0.45rem', padding: '2px 6px' }}>
                 {zoneBadge}
               </span>
@@ -125,7 +141,30 @@ export default function FoodCard({ id, name, desc, price, priceRange, badge, hou
         overflow: 'hidden',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
-        {videoSrc ? (
+        {hasCarousel ? (
+          <>
+            <img
+              src={carouselSrc} alt={`${name} — ${variants![vIdx % variants!.length].label}`}
+              loading={priority ? 'eager' : 'lazy'} decoding="async"
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            />
+            <button
+              onClick={(e) => { e.stopPropagation(); setVIdx(i => (i - 1 + variants!.length) % variants!.length) }}
+              aria-label="Previous variant"
+              style={{ position: 'absolute', top: '50%', left: 6, transform: 'translateY(-50%)', zIndex: 2, width: 30, height: 30, borderRadius: '50%', border: 'none', background: 'rgb(0 0 0 / 0.4)', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, lineHeight: 0, paddingBottom: 2, backdropFilter: 'blur(2px)' }}
+            >‹</button>
+            <button
+              onClick={(e) => { e.stopPropagation(); setVIdx(i => (i + 1) % variants!.length) }}
+              aria-label="Next variant"
+              style={{ position: 'absolute', top: '50%', right: 6, transform: 'translateY(-50%)', zIndex: 2, width: 30, height: 30, borderRadius: '50%', border: 'none', background: 'rgb(0 0 0 / 0.4)', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, lineHeight: 0, paddingBottom: 2, backdropFilter: 'blur(2px)' }}
+            >›</button>
+            <div style={{ position: 'absolute', bottom: 8, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 4, zIndex: 2 }}>
+              {variants!.map((_, i) => (
+                <span key={i} style={{ width: 5, height: 5, borderRadius: '50%', background: i === vIdx % variants!.length ? '#fff' : 'rgb(255 255 255 / 0.5)' }} />
+              ))}
+            </div>
+          </>
+        ) : videoSrc ? (
           <CardVideo
             src={videoSrc} poster={posterSrc}
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
@@ -140,11 +179,11 @@ export default function FoodCard({ id, name, desc, price, priceRange, badge, hou
           />
         ) : null}
 
-        {/* "peek" affordance — signals the card is openable (matches ItemCard). pointer-events:none so tap falls through to the card. */}
-        {(videoSrc || posterSrc) && (
+        {/* "peek" affordance — only for a plain static image (not video, not carousel). */}
+        {posterSrc && !videoSrc && !hasCarousel && (
           <div style={{ position: 'absolute', inset: 0, background: 'var(--card-peek-scrim, rgb(0 0 0 / 0.4))', pointerEvents: 'none' }} aria-hidden />
         )}
-        {(videoSrc || posterSrc) && (
+        {posterSrc && !videoSrc && !hasCarousel && (
           <div style={{
             position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
             width: 44, height: 44, borderRadius: '50%',
@@ -191,6 +230,12 @@ export default function FoodCard({ id, name, desc, price, priceRange, badge, hou
             <span>{badge ?? 'Best seller'}</span>
           </div>
         )}
+        {/* sweetness — sugar mark above the description */}
+        {sweet && (
+          <span style={{ color: 'var(--brand)', display: 'inline-flex', alignSelf: 'flex-start' }}>
+            <TasteMark taste="sweet" n={sweet} size={12} />
+          </span>
+        )}
         {/* 2×2 grid — desc/name left col, badge/price right col */}
         <div style={{
           display: 'grid',
@@ -209,30 +254,22 @@ export default function FoodCard({ id, name, desc, price, priceRange, badge, hou
           }}>
             {desc}
           </p>
-          {/* row 1 right: corner badge (unit labels) — suppressed for signature items */}
+          {/* row 1 right: sweetness above the price (BB position) + optional unit badge */}
           <div style={{
             gridColumn: 2, gridRow: 1,
-            display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4,
+            display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 5,
             alignSelf: 'start',
           }}>
             {!house && zoneBadge && <span style={{ ...badgePillStyle, marginRight: -6 }}>{zoneBadge}</span>}
           </div>
-          {/* row 2 left: name + sweetness cubes */}
+          {/* row 2 left: name */}
           <span style={{
-            gridColumn: 1, gridRow: 2, display: 'inline-flex', alignItems: 'center', gap: 7,
-            minWidth: 0, alignSelf: 'end',
+            gridColumn: 1, gridRow: 2,
+            fontFamily: 'var(--font-display)', fontSize: 'var(--card-title-size, 0.9375rem)',
+            letterSpacing: '0.01em', color: 'var(--ink)', lineHeight: 1.1,
+            alignSelf: 'end',
           }}>
-            <span style={{
-              fontFamily: 'var(--font-display)', fontSize: 'var(--card-title-size, 0.9375rem)',
-              letterSpacing: '0.01em', color: 'var(--ink)', lineHeight: 1.1,
-            }}>
-              {name}
-            </span>
-            {sweet && (
-              <span style={{ color: 'var(--brand)', display: 'inline-flex', flexShrink: 0 }}>
-                <TasteMark taste="sweet" n={sweet} size={12} />
-              </span>
-            )}
+            {name}
           </span>
           {/* row 2 right: price */}
           <span style={{

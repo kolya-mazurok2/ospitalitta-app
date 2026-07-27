@@ -202,7 +202,7 @@ export default function ItemCard({
         {/* "peek" affordance — centred over the media so the card reads as openable.
             pointer-events:none so the tap falls through to the card's own onTap.
             Skipped on the glass-silhouette fallback: both live dead-centre and would collide. */}
-        {(videoSrc || posterSrc) && (
+        {posterSrc && !videoSrc && (
           <div
             style={{
               position: 'absolute', inset: 0,
@@ -213,7 +213,7 @@ export default function ItemCard({
           />
         )}
 
-        {(videoSrc || posterSrc) && (
+        {posterSrc && !videoSrc && (
           <div style={{
             position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
             width: 44, height: 44, borderRadius: '50%',

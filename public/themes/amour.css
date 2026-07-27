@@ -102,5 +102,13 @@
   /* Cormorant has a small x-height — bump the card title so it reads at a comfortable size */
   --card-title-size: 1.1875rem;
 
+  /* logo header band — espresso surface so the gold logo pops; controls go light.
+     3-layer: primitive --amour-espresso → semantic --surface-dark/--on-dark → component here. */
+  --header-bg: var(--surface-dark);
+  --header-fg: var(--on-dark);
+
+  /* app frame (letterbox behind the menu column) — cream, so it is not the espresso header */
+  --app-frame: var(--surface);
+
   --font-scale: 1;
 }

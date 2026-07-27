@@ -218,7 +218,7 @@ export default function LegendSheet({
           borderTop: '1px solid var(--line-soft)',
           fontFamily: 'var(--font-text)', fontWeight: 400, fontSize: '0.6875rem',
           letterSpacing: '0.18em', textTransform: 'uppercase',
-          color: 'var(--ink-faint)',
+          color: 'var(--ink-faint)', textAlign: 'center',
         }}>
           {pricesNote}
         </div>

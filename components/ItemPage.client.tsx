@@ -98,11 +98,11 @@ export default function ItemPage({ detail, venueSlug, reviewUrl, houseIndicator 
         }}>
           {/* Still only. The card in the list is where the clip plays; repeating it here
               would fetch several MB for a screen the guest is reading, not scanning. */}
-          {detail.posterSrc && (
+          {(selected?.posterSrc ?? detail.posterSrc) && (
             // Same file the card already showed, so this is a cache hit, not a second download.
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={detail.posterSrc} alt={detail.name}
+              src={selected?.posterSrc ?? detail.posterSrc} alt={detail.name}
               fetchPriority="high" decoding="async"
               style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
             />
