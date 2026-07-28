@@ -3,10 +3,9 @@
 import { useState, useEffect } from 'react'
 import CardVideo from '@/components/CardVideo'
 import { HouseMark, EyeSvg } from '@/components/ItemCard'
-import TasteMark from '@/components/TasteMark'
 import VariantSlider from '@/components/VariantSlider'
 import { parsePriceDisplay } from '@/lib/locale'
-import { clampDesc, sweetLevel } from '@/lib/text'
+import { clampDesc } from '@/lib/text'
 import type { ItemOption } from '@/lib/menu-data'
 
 interface Props {
@@ -46,12 +45,11 @@ const badgePillStyle: React.CSSProperties = {
   flexShrink: 0,
 }
 
-export default function FoodCard({ id, name, desc, price, priceRange, badge, house, houseIndicator, noDetail, compact, last, sweet: sweetOverride, videoSrc, posterSrc, variants, priority, onTap, onAdd }: Props) {
+export default function FoodCard({ id, name, desc, price, priceRange, badge, house, houseIndicator, noDetail, compact, last, videoSrc, posterSrc, variants, priority, onTap, onAdd }: Props) {
   const { amount, unit } = parsePriceDisplay(price)
   // price shows amount only; unit becomes a badge label (rule: per-unit info belongs near name, not in price)
   const displayPrice = priceRange ?? amount
   // Prefer the base-locale level passed in; fall back to parsing the (possibly localized) desc.
-  const sweet = sweetOverride ?? sweetLevel(desc)
   const [vIdx, setVIdx] = useState(0)
   const [interacted, setInteracted] = useState(false)
   const hasCarousel = !!(variants && variants.length > 1 && variants.some(v => v.posterSrc))
@@ -220,12 +218,6 @@ export default function FoodCard({ id, name, desc, price, priceRange, badge, hou
             {houseIndicator && <HouseMark kind={houseIndicator} size={10} inline />}
             <span>{badge ?? 'Best seller'}</span>
           </div>
-        )}
-        {/* sweetness — sugar mark above the description */}
-        {sweet && (
-          <span style={{ color: 'var(--brand)', display: 'inline-flex', alignSelf: 'flex-start' }}>
-            <TasteMark taste="sweet" n={sweet} size={14} />
-          </span>
         )}
         {/* 2×2 grid — desc/name left col, badge/price right col */}
         <div style={{

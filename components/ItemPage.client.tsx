@@ -9,6 +9,33 @@ import VariantSlider from '@/components/VariantSlider'
 const TASTE_LABEL: Record<'bitter' | 'sour' | 'sweet', string> = {
   bitter: 'Bitterness', sour: 'Sourness', sweet: 'Sweetness',
 }
+
+/** One taste characteristic in its own box: small mark + label on top, n-of-3 scale below.
+ *  Boxes sit in a row, so several characteristics read as a set, not a stack. */
+function TasteBox({ taste, label, n, single }: {
+  taste: 'bitter' | 'sour' | 'sweet'; label: string; n: 1 | 2 | 3; single?: boolean
+}) {
+  return (
+    <div style={{
+      border: '1px solid var(--line)', borderRadius: 10, padding: '10px 14px',
+      display: 'flex', flexDirection: 'column', gap: 8,
+    }}>
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: 5,
+        fontFamily: 'var(--font-text)', fontSize: '0.625rem', fontWeight: 700,
+        letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-faint)',
+      }}>
+        <span style={{ color: 'var(--brand)', display: 'inline-flex' }}>
+          <TasteMark taste={taste} n={1} single size={13} />
+        </span>
+        <span>{label}</span>
+      </div>
+      <div style={{ color: 'var(--brand)' }}>
+        <TasteMark taste={taste} n={n} single={single} size={22} style={{ gap: 5 }} />
+      </div>
+    </div>
+  )
+}
 import { HouseMark } from '@/components/ItemCard'
 import CartBar from '@/components/CartBar'
 import SectionNote from '@/components/SectionNote'
@@ -218,41 +245,12 @@ export default function ItemPage({ detail, venueSlug, reviewUrl, houseIndicator 
             </div>
           )}
 
-          {/* Sweetness — one small mark + label (like Flavour), then a bigger n-of-3 scale below. */}
-          {foodSweet && (
-            <div style={{ marginTop: 14 }}>
-              <div style={{
-                display: 'flex', alignItems: 'center', gap: 5, marginBottom: 9,
-                fontFamily: 'var(--font-text)', fontSize: '0.6875rem', fontWeight: 700,
-                letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-faint)',
-              }}>
-                <span style={{ color: 'var(--brand)', display: 'inline-flex' }}><TasteMark taste="sweet" n={1} single size={13} /></span>
-                <span>Sweetness</span>
-              </div>
-              <div style={{ color: 'var(--brand)' }}>
-                <TasteMark taste="sweet" n={foodSweet} size={24} style={{ gap: 6 }} />
-              </div>
-            </div>
-          )}
-
-          {tasteRows.length > 0 && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginTop: 14 }}>
+          {/* Taste characteristics — each in its own box, all in a row (not a stack). */}
+          {(foodSweet || tasteRows.length > 0) && (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 14, marginInline: -15 }}>
+              {foodSweet && <TasteBox taste="sweet" label="Sweetness" n={foodSweet} />}
               {tasteRows.map((r, i) => (
-                <div key={i}>
-                  <div style={{
-                    display: 'flex', alignItems: 'center', gap: 5, marginBottom: 9,
-                    fontFamily: 'var(--font-text)', fontSize: '0.6875rem', fontWeight: 700,
-                    letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-faint)',
-                  }}>
-                    <span style={{ color: 'var(--brand)', display: 'inline-flex' }}>
-                      <TasteMark taste={r.taste} n={1} single size={13} />
-                    </span>
-                    <span>{TASTE_LABEL[r.taste]}</span>
-                  </div>
-                  <div style={{ color: 'var(--brand)' }}>
-                    <TasteMark taste={r.taste} n={r.n} single={detail.single} size={24} style={{ gap: 6 }} />
-                  </div>
-                </div>
+                <TasteBox key={i} taste={r.taste} label={TASTE_LABEL[r.taste]} n={r.n} single={detail.single} />
               ))}
             </div>
           )}
@@ -272,6 +270,9 @@ export default function ItemPage({ detail, venueSlug, reviewUrl, houseIndicator 
           }}>
             {selPriceText}
           </div>
+
+          {/* Divider — full-bleed to the screen edges (past the 24px content gutter). */}
+          <div style={{ borderTop: '1px solid var(--line)', marginTop: 24, marginInline: -24 }} />
 
           {/* Item-level serving note (e.g. espresso "Served with a glass of water.") — same quiet quote as pairings */}
           {detail.note && (

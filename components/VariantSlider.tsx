@@ -1,14 +1,15 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Chevron, sliderArrow } from '@/components/SliderArrow'
 
 export interface SliderImage { src: string; alt: string }
 
 /**
- * Swipeable variant/size image strip. Controlled: the parent owns the index (so it can
- * stay in sync with size/flavour selection and price). Same slider on the grid card and
- * the detail view.
+ * Seamless infinite variant/size slider. The strip is [clone(last), ...images, clone(first)],
+ * so stepping past the last slide keeps moving FORWARD into the leading clone and then snaps
+ * back to the real first without a transition. Controlled: the parent owns the logical `index`
+ * (drives size/flavour selection + price); the slider animates toward it.
  */
 export default function VariantSlider({
   images,
@@ -23,9 +24,37 @@ export default function VariantSlider({
   priority?: boolean
   onInteract?: () => void
 }) {
-  const dragRef = useRef({ startX: 0, dragging: false, w: 0 })
-  const [dragPx, setDragPx] = useState(0)
   const len = images.length
+  const slides = [images[len - 1], ...images, images[0]] // +1 leading clone, +1 trailing clone
+  const [pos, setPos] = useState(index + 1)
+  const [trans, setTrans] = useState(true)
+  const [dragPx, setDragPx] = useState(0)
+  const dragRef = useRef({ startX: 0, dragging: false, w: 0 })
+
+  const logical = (p: number) => (((p - 1) % len) + len) % len
+
+  // Animate toward an externally-set index (size buttons, auto-advance). Forward on a +1 wrap,
+  // backward on a -1 wrap, direct jump otherwise. No-op when it already matches (self-initiated).
+  useEffect(() => {
+    setPos((prev) => {
+      if (logical(prev) === index) return prev
+      if (index === (logical(prev) + 1) % len) return prev + 1
+      if (index === (logical(prev) - 1 + len) % len) return prev - 1
+      return index + 1
+    })
+    setTrans(true)
+  }, [index]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Snap the transient clone back to its real twin once the slide settles — no transition,
+  // so the jump is invisible and the next move continues forward.
+  const onEnd = () => {
+    if (pos === len + 1) { setTrans(false); setPos(1) }
+    else if (pos === 0) { setTrans(false); setPos(len) }
+  }
+
+  const go = (nextPos: number) => { setTrans(true); setPos(nextPos); onIndexChange(logical(nextPos)) }
+  const cur = () => (pos <= 0 ? len : pos >= len + 1 ? 1 : pos) // normalise off a clone
+  const step = (dir: 1 | -1) => { onInteract?.(); go(cur() + dir) }
 
   return (
     <div
@@ -34,6 +63,7 @@ export default function VariantSlider({
         dragRef.current = { startX: e.clientX, dragging: true, w: el.clientWidth }
         onInteract?.()
         el.setPointerCapture(e.pointerId)
+        setTrans(false)
       }}
       onPointerMove={(e) => { if (dragRef.current.dragging) setDragPx(e.clientX - dragRef.current.startX) }}
       onPointerUp={(e) => {
@@ -41,41 +71,44 @@ export default function VariantSlider({
         if (!d.dragging) return
         d.dragging = false
         const dx = e.clientX - d.startX
-        const ni = dx < -d.w * 0.18 ? Math.min(index + 1, len - 1)
-          : dx > d.w * 0.18 ? Math.max(index - 1, 0) : index
-        onIndexChange(ni)
         setDragPx(0)
+        if (dx < -d.w * 0.18) go(cur() + 1)
+        else if (dx > d.w * 0.18) go(cur() - 1)
+        else setTrans(true)
       }}
-      onPointerCancel={() => { dragRef.current.dragging = false; setDragPx(0) }}
+      onPointerCancel={() => { dragRef.current.dragging = false; setDragPx(0); setTrans(true) }}
       onClick={(e) => { if (Math.abs(e.clientX - dragRef.current.startX) > 6) e.stopPropagation() }}
       style={{ position: 'absolute', inset: 0, overflow: 'hidden', touchAction: 'pan-y', cursor: 'grab' }}
     >
-      <div style={{
-        display: 'flex', width: '100%', height: '100%',
-        transform: `translateX(calc(${-index * 100}% + ${dragPx}px))`,
-        transition: dragRef.current.dragging ? 'none' : 'transform 0.34s cubic-bezier(0.22, 1, 0.36, 1)',
-      }}>
-        {images.map((im, i) => (
+      <div
+        onTransitionEnd={onEnd}
+        style={{
+          display: 'flex', width: '100%', height: '100%',
+          transform: `translateX(calc(${-pos * 100}% + ${dragPx}px))`,
+          transition: trans && !dragRef.current.dragging ? 'transform 0.34s cubic-bezier(0.22, 1, 0.36, 1)' : 'none',
+        }}
+      >
+        {slides.map((im, i) => (
           <img
             key={i}
             src={im.src} alt={im.alt}
             draggable={false}
-            loading={i === 0 && priority ? 'eager' : 'lazy'} decoding="async"
+            loading={i <= 1 && priority ? 'eager' : 'lazy'} decoding="async"
             style={{ flex: '0 0 100%', width: '100%', height: '100%', objectFit: 'cover', display: 'block', pointerEvents: 'none' }}
           />
         ))}
       </div>
       <button
-        onClick={(e) => { e.stopPropagation(); onInteract?.(); onIndexChange(Math.max(0, index - 1)) }}
+        onClick={(e) => { e.stopPropagation(); step(-1) }}
         aria-label="Previous" style={sliderArrow('left')}
       ><Chevron dir="left" /></button>
       <button
-        onClick={(e) => { e.stopPropagation(); onInteract?.(); onIndexChange(Math.min(len - 1, index + 1)) }}
+        onClick={(e) => { e.stopPropagation(); step(1) }}
         aria-label="Next" style={sliderArrow('right')}
       ><Chevron dir="right" /></button>
       <div style={{ position: 'absolute', bottom: 8, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 4, zIndex: 2 }}>
         {images.map((_, i) => (
-          <span key={i} style={{ width: 5, height: 5, borderRadius: '50%', background: i === index ? '#fff' : 'rgb(255 255 255 / 0.5)' }} />
+          <span key={i} style={{ width: 5, height: 5, borderRadius: '50%', background: i === logical(pos) ? '#fff' : 'rgb(255 255 255 / 0.5)' }} />
         ))}
       </div>
     </div>
