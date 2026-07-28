@@ -32,7 +32,7 @@ const coffee: MenuSection = {
   type: 'cocktail',
   i18n: {
     en: { label: 'Coffee', note: 'We serve espresso and americano with water.' },
-    sq: { label: 'Kafe',   note: 'Espresson dhe amerikanon i shërbejmë me ujë.' },
+    sq: { label: 'Kafe',   note: 'Espresso dhe Americano shërbehen me ujë.' },
     it: { label: 'Caffè',  note: 'Serviamo espresso e americano con acqua.' },
     pl: { label: 'Kawa',   note: 'Espresso i americano podajemy z wodą.' },
     uk: { label: 'Кава',   note: 'Еспресо й американо подаємо з водою.' },
@@ -44,7 +44,7 @@ const coffee: MenuSection = {
     { id: 'cappuccino',     slug: 'cappuccino',     price: '150', posterSrc: '/venue-assets/amour/cappuccino.jpg', coffee: 'cappuccino',
       i18n: {
         en: { name: 'Cappuccino', desc: 'Espresso, steamed milk and foam, one third each.' },
-        sq: { name: 'Cappuccino', desc: 'Espresso, qumësht i avulluar dhe shkumë, nga një e treta secila.' },
+        sq: { name: 'Cappuccino', desc: 'Espresso, qumësht i avulluar dhe shkumë qumështi, nga një e treta secila.' },
         it: { name: 'Cappuccino', desc: 'Espresso, latte montato e schiuma, un terzo ciascuno.' },
         pl: { name: 'Cappuccino', desc: 'Espresso, spienione mleko i pianka, po jednej trzeciej.' },
         uk: { name: 'Cappuccino', desc: 'Еспресо, парне молоко й піна, по третині кожного.' },
@@ -55,7 +55,7 @@ const coffee: MenuSection = {
     { id: 'espresso',       slug: 'espresso',       price: '80', ph: 'coffee-water', coffee: 'espresso',
       i18n: {
         en: { name: 'Espresso', desc: '30 ml, brewed under high pressure.', note: 'Served with a glass of water.' },
-        sq: { name: 'Espresso', desc: '30 ml, i përgatitur nën presion të lartë.', note: 'Shërbehet me një gotë ujë.' },
+        sq: { name: 'Espresso', desc: '30 ml, përgatitur nën presion të lartë.', note: 'Shërbehet me një gotë ujë.' },
         it: { name: 'Espresso', desc: '30 ml, estratto ad alta pressione.', note: "Servito con un bicchiere d'acqua." },
         pl: { name: 'Espresso', desc: '30 ml, parzone pod wysokim ciśnieniem.', note: 'Podawane ze szklanką wody.' },
         uk: { name: 'Espresso', desc: '30 мл, приготоване під високим тиском.', note: 'Подається зі склянкою води.' },
@@ -66,7 +66,7 @@ const coffee: MenuSection = {
     { id: 'americano',      slug: 'americano',      price: '90', posterSrc: '/venue-assets/amour/americano.png', coffee: 'americano',
       i18n: {
         en: { name: 'Americano', desc: 'Espresso topped up with hot water.', note: 'Served with a glass of water.' },
-        sq: { name: 'Americano', desc: 'Espresso i mbushur me ujë të nxehtë.', note: 'Shërbehet me një gotë ujë.' },
+        sq: { name: 'Americano', desc: 'Espresso i zgjatur me ujë të nxehtë.', note: 'Shërbehet me një gotë ujë.' },
         it: { name: 'Americano', desc: 'Espresso allungato con acqua calda.', note: "Servito con un bicchiere d'acqua." },
         pl: { name: 'Americano', desc: 'Espresso dopełnione gorącą wodą.', note: 'Podawane ze szklanką wody.' },
         uk: { name: 'Americano', desc: 'Еспресо, доповнене гарячою водою.', note: 'Подається зі склянкою води.' },
@@ -77,7 +77,7 @@ const coffee: MenuSection = {
     { id: 'ice-coffee',     slug: 'ice-coffee',     price: '150', ph: 'coffee', coffee: 'ice-coffee',
       i18n: {
         en: { name: 'Ice Coffee', desc: 'Espresso poured over ice.' },
-        sq: { name: 'Ice Coffee', desc: 'Espresso i derdhur mbi akull.' },
+        sq: { name: 'Ice Coffee', desc: 'Espresso i hedhur mbi akull.' },
         it: { name: 'Ice Coffee', desc: 'Espresso versato sul ghiaccio.' },
         pl: { name: 'Ice Coffee', desc: 'Espresso zalane lodem.' },
         uk: { name: 'Ice Coffee', desc: 'Еспресо, залите на лід.' },
@@ -89,7 +89,7 @@ const coffee: MenuSection = {
       sizes: [{ label: 'S', price: '90' }, { label: 'M', price: '150' }],
       i18n: {
         en: { name: 'Macchiato', desc: 'Espresso marked with a spoonful of milk foam.' },
-        sq: { name: 'Macchiato', desc: 'Espresso i shënuar me një lugë shkumë qumështi.' },
+        sq: { name: 'Macchiato', desc: 'Espresso me një lugë shkumë qumështi sipër.' },
         it: { name: 'Macchiato', desc: 'Espresso macchiato con un cucchiaio di schiuma di latte.' },
         pl: { name: 'Macchiato', desc: 'Espresso z łyżką mlecznej pianki.' },
         uk: { name: 'Macchiato', desc: 'Еспресо з ложкою молочної піни.' },
@@ -111,7 +111,7 @@ const coffee: MenuSection = {
     { id: 'cold-chocolate', slug: 'cold-chocolate', price: '150', ph: 'coffee', coffee: 'cold-chocolate',
       i18n: {
         en: { name: 'Cold Chocolate',  desc: 'Cold chocolate with milk, over ice.' },
-        sq: { name: 'Cold Chocolate',  desc: 'Çokollatë e ftohtë me qumësht, mbi akull.' },
+        sq: { name: 'Cold Chocolate',  desc: 'Çokollatë e ftohtë me qumësht dhe akull.' },
         it: { name: 'Cold Chocolate',  desc: 'Cioccolato freddo con latte, sul ghiaccio.' },
         pl: { name: 'Cold Chocolate',  desc: 'Zimna czekolada z mlekiem, z lodem.' },
         uk: { name: 'Cold Chocolate', desc: 'Холодний шоколад з молоком, на льоду.' },
@@ -122,7 +122,7 @@ const coffee: MenuSection = {
     { id: 'nescafe',        slug: 'nescafe',        price: '150', ph: 'coffee', coffee: 'nescafe',
       i18n: {
         en: { name: 'Nescafé', desc: 'Instant coffee.' },
-        sq: { name: 'Nescafé', desc: 'Kafe e çastit.' },
+        sq: { name: 'Nescafé', desc: 'Kafe e tretshme.' },
         it: { name: 'Nescafé', desc: 'Caffè solubile.' },
         pl: { name: 'Nescafé', desc: 'Kawa rozpuszczalna.' },
         uk: { name: 'Nescafé', desc: 'Розчинна кава.' },
@@ -163,7 +163,7 @@ const drinks: MenuSection = {
       variants: [{ label: 'Harmony', price: '100' }, { label: 'Immunity', price: '100' }],
       i18n: {
         en: { name: 'Glina Vitamina', desc: 'Vitamin water, apple and aloe vera or orange.' },
-        sq: { name: 'Glina Vitamina', desc: 'Ujë vitaminash, mollë dhe aloe vera ose portokall.' },
+        sq: { name: 'Glina Vitamina', desc: 'Ujë me vitamina, me mollë dhe aloe vera ose me portokall.' },
         it: { name: 'Glina Vitamina', desc: 'Acqua vitaminica, mela e aloe vera oppure arancia.' },
         pl: { name: 'Glina Vitamina', desc: 'Woda witaminowa, jabłko i aloes lub pomarańcza.' },
         uk: { name: 'Glina Vitamina', desc: 'Вітамінна вода, яблуко й алое віра або апельсин.' },
@@ -174,7 +174,7 @@ const drinks: MenuSection = {
     { id: 'sparkling-water', slug: 'sparkling-water', price: '70',
       i18n: {
         en: { name: 'Sparkling Water', desc: 'Natural sparkling water.' },
-        sq: { name: 'Sparkling Water', desc: 'Ujë natyral me gaz.' },
+        sq: { name: 'Sparkling Water', desc: 'Ujë natyral i gazuar.' },
         it: { name: 'Sparkling Water', desc: 'Acqua naturale frizzante.' },
         pl: { name: 'Sparkling Water', desc: 'Naturalna woda gazowana.' },
         uk: { name: 'Sparkling Water', desc: 'Природна газована вода.' },
@@ -185,7 +185,7 @@ const drinks: MenuSection = {
     { id: 'glina-still',     slug: 'glina-still',     price: '150',
       i18n: {
         en: { name: 'Glina Still Water', desc: 'Natural mineral water.' },
-        sq: { name: 'Glina Still Water', desc: 'Ujë natyral mineral.' },
+        sq: { name: 'Glina Still Water', desc: 'Ujë mineral natyral.' },
         it: { name: 'Glina Still Water', desc: 'Acqua minerale naturale.' },
         pl: { name: 'Glina Still Water', desc: 'Naturalna woda mineralna.' },
         uk: { name: 'Glina Still Water', desc: 'Природна мінеральна вода.' },
@@ -220,7 +220,7 @@ const drinks: MenuSection = {
       variants: [{ label: 'Orange', price: '150' }, { label: 'Exotic', price: '150' }],
       i18n: {
         en: { name: 'Fanta', desc: 'Fruit soda.' },
-        sq: { name: 'Fanta', desc: 'Pije freskuese me fruta.' },
+        sq: { name: 'Fanta', desc: 'Pije e gazuar me shije frutash.' },
         it: { name: 'Fanta', desc: 'Bibita gassata alla frutta.' },
         pl: { name: 'Fanta', desc: 'Napój gazowany owocowy.' },
         uk: { name: 'Fanta', desc: 'Фруктова газованка.' },
@@ -234,7 +234,7 @@ const drinks: MenuSection = {
         sq: { name: 'Pepsi', desc: 'Kola.' },
         it: { name: 'Pepsi', desc: 'Cola.' },
         pl: { name: 'Pepsi', desc: 'Cola.' },
-        uk: { name: 'Pepsi', desc: 'Кола.' },
+        uk: { name: 'Pepsi', desc: 'Cola.' },
         de: { name: 'Pepsi', desc: 'Cola.' },
         fr: { name: 'Pepsi', desc: 'Cola.' },
         no: { name: 'Pepsi', desc: 'Cola.' },
@@ -242,7 +242,7 @@ const drinks: MenuSection = {
     { id: 'lemon-soda',      slug: 'lemon-soda',      price: '150',
       i18n: {
         en: { name: 'Lemon Soda', desc: 'Italian lemon soda (Crodo).' },
-        sq: { name: 'Lemon Soda', desc: 'Pije limoni italiane (Crodo).' },
+        sq: { name: 'Lemon Soda', desc: 'Limonatë italiane me gaz (Crodo).' },
         it: { name: 'Lemon Soda', desc: 'Soda al limone italiana (Crodo).' },
         pl: { name: 'Lemon Soda', desc: 'Włoska lemoniada gazowana (Crodo).' },
         uk: { name: 'Lemon Soda', desc: 'Італійська лимонна газованка (Crodo).' },
@@ -254,7 +254,7 @@ const drinks: MenuSection = {
       variants: [{ label: 'Limon', price: '150' }, { label: 'Ricoco', price: '150' }],
       i18n: {
         en: { name: 'ivi', desc: 'Sparkling soda.' },
-        sq: { name: 'ivi', desc: 'Pije freskuese me gaz.' },
+        sq: { name: 'ivi', desc: 'Sodë e gazuar.' },
         it: { name: 'ivi', desc: 'Bibita gassata.' },
         pl: { name: 'ivi', desc: 'Napój gazowany.' },
         uk: { name: 'ivi', desc: 'Газований напій.' },
@@ -277,7 +277,7 @@ const drinks: MenuSection = {
       variants: [{ label: 'Lemon', price: '150' }, { label: 'Peach', price: '150' }],
       i18n: {
         en: { name: 'Lipton Ice Tea', desc: 'Chilled iced tea.' },
-        sq: { name: 'Lipton Ice Tea', desc: 'Çaj i ftohtë i akullt.' },
+        sq: { name: 'Lipton Ice Tea', desc: 'Çaj i ftohtë.' },
         it: { name: 'Lipton Ice Tea', desc: 'Tè freddo ghiacciato.' },
         pl: { name: 'Lipton Ice Tea', desc: 'Schłodzona mrożona herbata.' },
         uk: { name: 'Lipton Ice Tea', desc: 'Охолоджений холодний чай.' },
@@ -299,7 +299,7 @@ const drinks: MenuSection = {
     { id: 'anna-iced-coffee', slug: 'anna-iced-coffee', price: '150',
       i18n: {
         en: { name: 'Iced Coffee', desc: 'Cold coffee drink with milk, cappuccino.' },
-        sq: { name: 'Iced Coffee', desc: 'Pije kafeje e ftohtë me qumësht, kapuçino.' },
+        sq: { name: 'Iced Coffee', desc: 'Pije e ftohtë me kafe dhe qumësht, me shije cappuccino.' },
         it: { name: 'Iced Coffee', desc: 'Bevanda al caffè fredda con latte, cappuccino.' },
         pl: { name: 'Iced Coffee', desc: 'Zimny napój kawowy z mlekiem, cappuccino.' },
         uk: { name: 'Iced Coffee', desc: 'Холодний кавовий напій з молоком, капучино.' },
@@ -310,7 +310,7 @@ const drinks: MenuSection = {
     { id: 'lufra-dhalle',    slug: 'lufra-dhalle',    price: '150',
       i18n: {
         en: { name: 'Lufra Dhallë', desc: 'Traditional salted yogurt drink (ayran).' },
-        sq: { name: 'Lufra Dhallë', desc: 'Dhallë tradicionale (ajran).' },
+        sq: { name: 'Lufra Dhallë', desc: 'Pije tradicionale me kos të kripur (ajran).' },
         it: { name: 'Lufra Dhallë', desc: 'Bevanda tradizionale di yogurt salato (ayran).' },
         pl: { name: 'Lufra Dhallë', desc: 'Tradycyjny słony napój jogurtowy (ayran).' },
         uk: { name: 'Lufra Dhallë', desc: 'Традиційний солоний йогуртовий напій (айран).' },
@@ -328,7 +328,7 @@ const desserts: MenuSection = {
   type: 'food',
   i18n: {
     en: { label: 'Desserts',  note: "If you haven't finished your dessert, we'll gladly pack it to go. Enjoy!" },
-    sq: { label: 'Ëmbëlsira', note: 'Nëse nuk e mbaroni ëmbëlsirën, me kënaqësi jua paketojmë për ta marrë me vete. Shijoni!' },
+    sq: { label: 'Ëmbëlsira', note: 'Nëse nuk e keni përfunduar ëmbëlsirën, me kënaqësi jua paketojmë për ta marrë me vete. Shijojeni!' },
     it: { label: 'Dolci',     note: 'Se non finisci il dolce, te lo incartiamo volentieri da portare via. Buon appetito!' },
     pl: { label: 'Desery',    note: 'Jeśli nie dokończysz deseru, chętnie zapakujemy go na wynos. Smacznego!' },
     uk: { label: 'Десерти',   note: 'Якщо не доїли десерт, залюбки спакуємо з собою. Смачного!' },
@@ -342,7 +342,7 @@ const desserts: MenuSection = {
     { id: 'trilece',     slug: 'trilece',     price: '150', posterSrc: '/venue-assets/amour/trilece.jpg',
       i18n: {
         en: { name: 'Trileçe', desc: 'Very sweet. Milk, heavy cream, caramel cake.' },
-        sq: { name: 'Trileçe', desc: 'Shumë e ëmbël. Qumësht, ajkë e trashë, tortë karameli.' },
+        sq: { name: 'Trileçe', desc: 'Shumë e ëmbël. Qumësht, pana dhe kek me karamel.' },
         it: { name: 'Trileçe', desc: 'Molto dolce. Latte, panna, torta al caramello.' },
         pl: { name: 'Trileçe', desc: 'Bardzo słodkie. Mleko, śmietana, ciasto karmelowe.' },
         uk: { name: 'Trileçe', desc: 'Дуже солодкий. Молоко, вершки, карамельний корж.' },
@@ -353,7 +353,7 @@ const desserts: MenuSection = {
     { id: 'cheesecake',  slug: 'cheesecake',  price: '350', posterSrc: '/venue-assets/amour/cheesecake.jpg', videoSrc: '/venue-assets/amour/cheesecake.mp4',
       i18n: {
         en: { name: 'Cheesecake', desc: 'Medium sweet. Forest berries.' },
-        sq: { name: 'Cheesecake', desc: 'Mesatarisht e ëmbël. Manaferra pylli.' },
+        sq: { name: 'Cheesecake', desc: 'Mesatarisht e ëmbël. Fruta pylli.' },
         it: { name: 'Cheesecake', desc: 'Mediamente dolce. Frutti di bosco.' },
         pl: { name: 'Cheesecake', desc: 'Średnio słodkie. Owoce leśne.' },
         uk: { name: 'Cheesecake', desc: 'Помірно солодкий. Лісові ягоди.' },
@@ -369,7 +369,7 @@ const desserts: MenuSection = {
       ],
       i18n: {
         en: { name: 'Pastasciutta', desc: 'Medium sweet. Choux pastry with vanilla cream.' },
-        sq: { name: 'Pastasciutta', desc: 'Mesatarisht e ëmbël. Brumë çu me krem vanilje.' },
+        sq: { name: 'Pastasciutta', desc: 'Mesatarisht e ëmbël. Brumë choux me krem vaniljeje.' },
         it: { name: 'Pastasciutta', desc: 'Mediamente dolce. Pasta choux con crema alla vaniglia.' },
         pl: { name: 'Pastasciutta', desc: 'Średnio słodkie. Ciasto parzone z kremem waniliowym.' },
         uk: { name: 'Pastasciutta', desc: 'Помірно солодкий. Заварне тісто з ванільним кремом.' },
@@ -380,7 +380,7 @@ const desserts: MenuSection = {
     { id: 'strawberry-d', slug: 'strawberry-d', price: '300', posterSrc: '/venue-assets/amour/strawberry-d.jpg',
       i18n: {
         en: { name: 'Strawberry', desc: 'Medium sweet. Vanilla cream with strawberry pieces inside.' },
-        sq: { name: 'Strawberry', desc: 'Mesatarisht e ëmbël. Krem vanilje me copa luleshtrydhe brenda.' },
+        sq: { name: 'Strawberry', desc: 'Mesatarisht e ëmbël. Krem vaniljeje me copa luleshtrydheje brenda.' },
         it: { name: 'Strawberry', desc: "Mediamente dolce. Crema alla vaniglia con pezzi di fragola all'interno." },
         pl: { name: 'Strawberry', desc: 'Średnio słodkie. Krem waniliowy z kawałkami truskawek w środku.' },
         uk: { name: 'Strawberry', desc: 'Помірно солодкий. Ванільний крем зі шматочками полуниці всередині.' },
@@ -391,7 +391,7 @@ const desserts: MenuSection = {
     { id: 'millefeuille', slug: 'millefeuille', price: '150', posterSrc: '/venue-assets/amour/millefeuille.jpg', badge: 'Best seller', house: true,
       i18n: {
         en: { name: 'Millefeuille', desc: 'Medium sweet. Puff pastry, vanilla cream.' },
-        sq: { name: 'Millefeuille', desc: 'Mesatarisht e ëmbël. Brumë me shtresa, krem vanilje.' },
+        sq: { name: 'Millefeuille', desc: 'Mesatarisht e ëmbël. Sfoliatë me krem vaniljeje.' },
         it: { name: 'Millefeuille', desc: 'Mediamente dolce. Pasta sfoglia, crema alla vaniglia.' },
         pl: { name: 'Millefeuille', desc: 'Średnio słodkie. Ciasto francuskie, krem waniliowy.' },
         uk: { name: 'Millefeuille', desc: 'Помірно солодкий. Листкове тісто, ванільний крем.' },
@@ -402,7 +402,7 @@ const desserts: MenuSection = {
     { id: 'apple',       slug: 'apple',       price: '300', ph: 'fruit',
       i18n: {
         en: { name: 'Apple', desc: 'Medium sweet. Vanilla cream with apple pieces inside.' },
-        sq: { name: 'Apple', desc: 'Mesatarisht e ëmbël. Krem vanilje me copa molle brenda.' },
+        sq: { name: 'Apple', desc: 'Mesatarisht e ëmbël. Krem vaniljeje me copa molle brenda.' },
         it: { name: 'Apple', desc: "Mediamente dolce. Crema alla vaniglia con pezzi di mela all'interno." },
         pl: { name: 'Apple', desc: 'Średnio słodkie. Krem waniliowy z kawałkami jabłka w środku.' },
         uk: { name: 'Apple', desc: 'Помірно солодкий. Ванільний крем зі шматочками яблука всередині.' },
@@ -413,7 +413,7 @@ const desserts: MenuSection = {
     { id: 'mango',       slug: 'mango',       price: '300', ph: 'fruit',
       i18n: {
         en: { name: 'Mango', desc: 'Medium sweet. Vanilla cream with mango pieces inside.' },
-        sq: { name: 'Mango', desc: 'Mesatarisht e ëmbël. Krem vanilje me copa mango brenda.' },
+        sq: { name: 'Mango', desc: 'Mesatarisht e ëmbël. Krem vaniljeje me copa mangoje brenda.' },
         it: { name: 'Mango', desc: "Mediamente dolce. Crema alla vaniglia con pezzi di mango all'interno." },
         pl: { name: 'Mango', desc: 'Średnio słodkie. Krem waniliowy z kawałkami mango w środku.' },
         uk: { name: 'Mango', desc: 'Помірно солодкий. Ванільний крем зі шматочками манго всередині.' },
@@ -424,7 +424,7 @@ const desserts: MenuSection = {
     { id: 'lotus',       slug: 'lotus',       price: '250', posterSrc: '/venue-assets/amour/lotus.jpg',
       i18n: {
         en: { name: 'Lotus', desc: 'Medium sweet. Vanilla cream, chocolate, biscuit.' },
-        sq: { name: 'Lotus', desc: 'Mesatarisht e ëmbël. Krem vanilje, çokollatë, biskotë.' },
+        sq: { name: 'Lotus', desc: 'Mesatarisht e ëmbël. Krem vaniljeje, çokollatë dhe biskotë.' },
         it: { name: 'Lotus', desc: 'Mediamente dolce. Crema alla vaniglia, cioccolato, biscotto.' },
         pl: { name: 'Lotus', desc: 'Średnio słodkie. Krem waniliowy, czekolada, herbatnik.' },
         uk: { name: 'Lotus', desc: 'Помірно солодкий. Ванільний крем, шоколад, печиво.' },
@@ -435,7 +435,7 @@ const desserts: MenuSection = {
     { id: 'tiramisu',    slug: 'tiramisu',    price: '200', posterSrc: '/venue-assets/amour/tiramisu.jpg',
       i18n: {
         en: { name: 'Tiramisu Cacao', desc: 'Medium sweet. Biscuit, mascarpone, cacao.' },
-        sq: { name: 'Tiramisu Cacao', desc: 'Mesatarisht e ëmbël. Biskotë, maskarpone, kakao.' },
+        sq: { name: 'Tiramisu Cacao', desc: 'Mesatarisht e ëmbël. Biskotë, mascarpone dhe kakao.' },
         it: { name: 'Tiramisu Cacao', desc: 'Mediamente dolce. Savoiardi, mascarpone, cacao.' },
         pl: { name: 'Tiramisu Cacao', desc: 'Średnio słodkie. Biszkopt, mascarpone, kakao.' },
         uk: { name: 'Tiramisu Cacao', desc: 'Помірно солодкий. Печиво, маскарпоне, какао.' },
@@ -446,7 +446,7 @@ const desserts: MenuSection = {
     { id: 'sacher',      slug: 'sacher',      price: '200', posterSrc: '/venue-assets/amour/sacher.jpg',
       i18n: {
         en: { name: 'Sacher', desc: 'Medium sweet. Apricot jam, chocolate.' },
-        sq: { name: 'Sacher', desc: 'Mesatarisht e ëmbël. Reçel kajsie, çokollatë.' },
+        sq: { name: 'Sacher', desc: 'Mesatarisht e ëmbël. Reçel kajsie dhe çokollatë.' },
         it: { name: 'Sacher', desc: 'Mediamente dolce. Confettura di albicocche, cioccolato.' },
         pl: { name: 'Sacher', desc: 'Średnio słodkie. Dżem morelowy, czekolada.' },
         uk: { name: 'Sacher', desc: 'Помірно солодкий. Абрикосовий джем, шоколад.' },
@@ -457,7 +457,7 @@ const desserts: MenuSection = {
     { id: 'ferrero',     slug: 'ferrero',     price: '200', ph: 'cake-slice',
       i18n: {
         en: { name: 'Ferrero', desc: 'Very sweet. Nuts, chocolate, vanilla cream.' },
-        sq: { name: 'Ferrero', desc: 'Shumë e ëmbël. Arra, çokollatë, krem vanilje.' },
+        sq: { name: 'Ferrero', desc: 'Shumë e ëmbël. Fruta të thata, çokollatë dhe krem vaniljeje.' },
         it: { name: 'Ferrero', desc: 'Molto dolce. Nocciole, cioccolato, crema alla vaniglia.' },
         pl: { name: 'Ferrero', desc: 'Bardzo słodkie. Orzechy, czekolada, krem waniliowy.' },
         uk: { name: 'Ferrero', desc: 'Дуже солодкий. Горіхи, шоколад, ванільний крем.' },
@@ -468,7 +468,7 @@ const desserts: MenuSection = {
     { id: 'raffaello',   slug: 'raffaello',   price: '200', posterSrc: '/venue-assets/amour/raffaello.jpg',
       i18n: {
         en: { name: 'Raffaello', desc: 'Medium sweet. Sponge cake, vanilla cream, Raffaello.' },
-        sq: { name: 'Raffaello', desc: 'Mesatarisht e ëmbël. Pandispanjë, krem vanilje, Raffaello.' },
+        sq: { name: 'Raffaello', desc: 'Mesatarisht e ëmbël. Pandispanjë, krem vaniljeje dhe Raffaello.' },
         it: { name: 'Raffaello', desc: 'Mediamente dolce. Pan di Spagna, crema alla vaniglia, Raffaello.' },
         pl: { name: 'Raffaello', desc: 'Średnio słodkie. Biszkopt, krem waniliowy, Raffaello.' },
         uk: { name: 'Raffaello', desc: 'Помірно солодкий. Бісквіт, ванільний крем, Raffaello.' },
@@ -479,7 +479,7 @@ const desserts: MenuSection = {
     { id: 'red-velvet',  slug: 'red-velvet',  price: '200', ph: 'cake-slice',
       i18n: {
         en: { name: 'Red Velvet', desc: 'Medium sweet. Red sponge cake, cherry cream.' },
-        sq: { name: 'Red Velvet', desc: 'Mesatarisht e ëmbël. Pandispanjë e kuqe, krem qershie.' },
+        sq: { name: 'Red Velvet', desc: 'Mesatarisht e ëmbël. Pandispanjë e kuqe dhe krem qershie.' },
         it: { name: 'Red Velvet', desc: 'Mediamente dolce. Pan di Spagna rosso, crema di ciliegia.' },
         pl: { name: 'Red Velvet', desc: 'Średnio słodkie. Czerwony biszkopt, krem wiśniowy.' },
         uk: { name: 'Red Velvet', desc: 'Помірно солодкий. Червоний бісквіт, вишневий крем.' },
@@ -490,7 +490,7 @@ const desserts: MenuSection = {
     { id: 'mousse',      slug: 'mousse',      price: '200', ph: 'cake-slice',
       i18n: {
         en: { name: 'Mousse', desc: 'Medium sweet. Chocolate, vanilla cream.' },
-        sq: { name: 'Mousse', desc: 'Mesatarisht e ëmbël. Çokollatë, krem vanilje.' },
+        sq: { name: 'Mousse', desc: 'Mesatarisht e ëmbël. Çokollatë dhe krem vaniljeje.' },
         it: { name: 'Mousse', desc: 'Mediamente dolce. Cioccolato, crema alla vaniglia.' },
         pl: { name: 'Mousse', desc: 'Średnio słodkie. Czekolada, krem waniliowy.' },
         uk: { name: 'Mousse', desc: 'Помірно солодкий. Шоколад, ванільний крем.' },
@@ -501,7 +501,7 @@ const desserts: MenuSection = {
     { id: 'snickers',    slug: 'snickers',    price: '200', posterSrc: '/venue-assets/amour/snickers.jpg',
       i18n: {
         en: { name: 'Snickers', desc: 'Very sweet. Snickers and chocolate flavour.' },
-        sq: { name: 'Snickers', desc: 'Shumë e ëmbël. Shije Snickers dhe çokollate.' },
+        sq: { name: 'Snickers', desc: 'Shumë e ëmbël. Me shije Snickers dhe çokollate.' },
         it: { name: 'Snickers', desc: 'Molto dolce. Gusto Snickers e cioccolato.' },
         pl: { name: 'Snickers', desc: 'Bardzo słodkie. Smak Snickers i czekolady.' },
         uk: { name: 'Snickers', desc: 'Дуже солодкий. Смак Snickers і шоколаду.' },
@@ -512,7 +512,7 @@ const desserts: MenuSection = {
     { id: 'panna-cotta', slug: 'panna-cotta', price: '200', posterSrc: '/venue-assets/amour/panna-cotta.jpg',
       i18n: {
         en: { name: 'Panna Cotta', desc: 'Lightly sweet. Milk and forest fruit.' },
-        sq: { name: 'Panna Cotta', desc: 'Paksa e ëmbël. Qumësht dhe fruta pylli.' },
+        sq: { name: 'Panna Cotta', desc: 'Pak e ëmbël. Qumësht dhe fruta pylli.' },
         it: { name: 'Panna Cotta', desc: 'Poco dolce. Latte e frutti di bosco.' },
         pl: { name: 'Panna Cotta', desc: 'Lekko słodkie. Mleko i owoce leśne.' },
         uk: { name: 'Panna Cotta', desc: 'Злегка солодкий. Молоко й лісові ягоди.' },
@@ -523,7 +523,7 @@ const desserts: MenuSection = {
     { id: 'forest-fruits', slug: 'forest-fruits', price: '180', ph: 'dessert',
       i18n: {
         en: { name: 'Forest Fruits', desc: 'Medium sweet. Sponge cake and vanilla cream with forest-fruit pieces inside.' },
-        sq: { name: 'Forest Fruits', desc: 'Mesatarisht e ëmbël. Pandispanjë dhe krem vanilje me copa frutash pylli brenda.' },
+        sq: { name: 'Forest Fruits', desc: 'Mesatarisht e ëmbël. Pandispanjë dhe krem vaniljeje me copa frutash pylli brenda.' },
         it: { name: 'Forest Fruits', desc: "Mediamente dolce. Pan di Spagna e crema alla vaniglia con pezzi di frutti di bosco all'interno." },
         pl: { name: 'Forest Fruits', desc: 'Średnio słodkie. Biszkopt i krem waniliowy z kawałkami owoców leśnych w środku.' },
         uk: { name: 'Forest Fruits', desc: 'Помірно солодкий. Бісквіт і ванільний крем зі шматочками лісових ягід всередині.' },
@@ -534,7 +534,7 @@ const desserts: MenuSection = {
     { id: 'raffaello-paste', slug: 'raffaello-paste', price: '200', ph: 'dessert',
       i18n: {
         en: { name: 'Raffaello Paste', desc: 'Medium sweet. Sponge cake, vanilla cream, Raffaello.' },
-        sq: { name: 'Raffaello Paste', desc: 'Mesatarisht e ëmbël. Pandispanjë, krem vanilje, Raffaello.' },
+        sq: { name: 'Raffaello Paste', desc: 'Mesatarisht e ëmbël. Pandispanjë, krem vaniljeje dhe Raffaello.' },
         it: { name: 'Raffaello Paste', desc: 'Mediamente dolce. Pan di Spagna, crema alla vaniglia, Raffaello.' },
         pl: { name: 'Raffaello Paste', desc: 'Średnio słodkie. Biszkopt, krem waniliowy, Raffaello.' },
         uk: { name: 'Raffaello Paste', desc: 'Помірно солодкий. Бісквіт, ванільний крем, Raffaello.' },
@@ -545,7 +545,7 @@ const desserts: MenuSection = {
     { id: 'pistachio',   slug: 'pistachio',   price: '300', posterSrc: '/venue-assets/amour/pistachio.jpg',
       i18n: {
         en: { name: 'Pistachio', desc: 'Medium sweet. Pistachio, vanilla cream.' },
-        sq: { name: 'Pistachio', desc: 'Mesatarisht e ëmbël. Fëstëk, krem vanilje.' },
+        sq: { name: 'Pistachio', desc: 'Mesatarisht e ëmbël. Fëstëk dhe krem vaniljeje.' },
         it: { name: 'Pistachio', desc: 'Mediamente dolce. Pistacchio, crema alla vaniglia.' },
         pl: { name: 'Pistachio', desc: 'Średnio słodkie. Pistacja, krem waniliowy.' },
         uk: { name: 'Pistachio', desc: 'Помірно солодкий. Фісташка, ванільний крем.' },
@@ -561,7 +561,7 @@ const cakes: MenuSection = {
   type: 'food',
   i18n: {
     en: { label: 'Cakes',  note: 'Our cakes come in two sizes, M and L. Sizes vary from cake to cake, so ask us about each one.' },
-    sq: { label: 'Torte',  note: 'Tortat tona vijnë në dy madhësi, M dhe L. Madhësitë ndryshojnë nga torta në tortë, prandaj na pyesni për secilën.' },
+    sq: { label: 'Torta',  note: 'Tortat tona ofrohen në dy madhësi, M dhe L. Përmasat ndryshojnë sipas tortës, ndaj na pyesni për secilën.' },
     it: { label: 'Torte',  note: 'Le nostre torte sono in due misure, M e L. Le misure variano da torta a torta, quindi chiedeteci per ciascuna.' },
     pl: { label: 'Ciasta', note: 'Nasze ciasta są w dwóch rozmiarach, M i L. Rozmiary różnią się między ciastami, więc pytajcie o każde.' },
     uk: { label: 'Торти',  note: 'Наші торти у двох розмірах, M і L. Розміри різняться від торта до торта, тож питайте про кожен.' },
@@ -574,7 +574,7 @@ const cakes: MenuSection = {
       sizes: [{ label: 'M', price: '1000' }, { label: 'L', price: '1200' }],
       i18n: {
         en: { name: 'Me Peta', desc: 'Medium sweet. Layers, vanilla cream, sponge cake, forest fruits.' },
-        sq: { name: 'Me Peta', desc: 'Mesatarisht e ëmbël. Shtresa, krem vanilje, pandispanjë, fruta pylli.' },
+        sq: { name: 'Me Peta', desc: 'Mesatarisht e ëmbël. Shtresa, krem vaniljeje, pandispanjë dhe fruta pylli.' },
         it: { name: 'Me Peta', desc: 'Mediamente dolce. Strati, crema alla vaniglia, pan di Spagna, frutti di bosco.' },
         pl: { name: 'Me Peta', desc: 'Średnio słodkie. Warstwy, krem waniliowy, biszkopt, owoce leśne.' },
         uk: { name: 'Me Peta', desc: 'Помірно солодкий. Шари, ванільний крем, бісквіт, лісові ягоди.' },
@@ -586,7 +586,7 @@ const cakes: MenuSection = {
       sizes: [{ label: 'M', price: '1200' }, { label: 'L', price: '1500' }],
       i18n: {
         en: { name: 'Chocolate', desc: 'Medium sweet. Sponge cake, chocolate cream filling, chocolate coating.' },
-        sq: { name: 'Chocolate', desc: 'Mesatarisht e ëmbël. Pandispanjë, mbushje me krem çokollate, glazurë çokollate.' },
+        sq: { name: 'Chocolate', desc: 'Mesatarisht e ëmbël. Pandispanjë, mbushje me krem çokollate dhe shtresë çokollate.' },
         it: { name: 'Chocolate', desc: 'Mediamente dolce. Pan di Spagna, ripieno di crema al cioccolato, copertura di cioccolato.' },
         pl: { name: 'Chocolate', desc: 'Średnio słodkie. Biszkopt, nadzienie z kremu czekoladowego, polewa czekoladowa.' },
         uk: { name: 'Chocolate', desc: 'Помірно солодкий. Бісквіт, начинка з шоколадного крему, шоколадна глазур.' },
@@ -598,7 +598,7 @@ const cakes: MenuSection = {
       sizes: [{ label: 'M', price: '1000' }, { label: 'L', price: '1200' }],
       i18n: {
         en: { name: 'Caramel', desc: 'Very sweet. Sponge cake, caramel cream, vanilla cream.' },
-        sq: { name: 'Caramel', desc: 'Shumë e ëmbël. Pandispanjë, krem karameli, krem vanilje.' },
+        sq: { name: 'Caramel', desc: 'Shumë e ëmbël. Pandispanjë, krem karameli dhe krem vaniljeje.' },
         it: { name: 'Caramel', desc: 'Molto dolce. Pan di Spagna, crema al caramello, crema alla vaniglia.' },
         pl: { name: 'Caramel', desc: 'Bardzo słodkie. Biszkopt, krem karmelowy, krem waniliowy.' },
         uk: { name: 'Caramel', desc: 'Дуже солодкий. Бісквіт, карамельний крем, ванільний крем.' },
@@ -610,7 +610,7 @@ const cakes: MenuSection = {
       sizes: [{ label: 'M', price: '1000' }, { label: 'L', price: '1200' }],
       i18n: {
         en: { name: 'Berries', desc: 'Medium sweet. Sponge cake, vanilla cream, forest-fruit flavour, berries on top, slightly tart.' },
-        sq: { name: 'Berries', desc: 'Mesatarisht e ëmbël. Pandispanjë, krem vanilje, shije frutash pylli, manaferra sipër, paksa e thartë.' },
+        sq: { name: 'Berries', desc: 'Mesatarisht e ëmbël. Pandispanjë, krem vaniljeje me shije frutash pylli, fruta pylli sipër, pak e thartë.' },
         it: { name: 'Berries', desc: 'Mediamente dolce. Pan di Spagna, crema alla vaniglia, gusto frutti di bosco, frutti di bosco sopra, leggermente aspro.' },
         pl: { name: 'Berries', desc: 'Średnio słodkie. Biszkopt, krem waniliowy, smak owoców leśnych, owoce na wierzchu, lekko kwaśne.' },
         uk: { name: 'Berries', desc: 'Помірно солодкий. Бісквіт, ванільний крем, смак лісових ягід, ягоди зверху, злегка кислуватий.' },
@@ -622,7 +622,7 @@ const cakes: MenuSection = {
       sizes: [{ label: 'M', price: '1000' }, { label: 'L', price: '1200' }],
       i18n: {
         en: { name: 'Strawberry', desc: 'Medium sweet. Sponge cake, strawberry vanilla cream, strawberries on top.' },
-        sq: { name: 'Strawberry', desc: 'Mesatarisht e ëmbël. Pandispanjë, krem vanilje me luleshtrydhe, luleshtrydhe sipër.' },
+        sq: { name: 'Strawberry', desc: 'Mesatarisht e ëmbël. Pandispanjë, krem vaniljeje me luleshtrydhe dhe luleshtrydhe sipër.' },
         it: { name: 'Strawberry', desc: 'Mediamente dolce. Pan di Spagna, crema alla vaniglia e fragola, fragole sopra.' },
         pl: { name: 'Strawberry', desc: 'Średnio słodkie. Biszkopt, truskawkowy krem waniliowy, truskawki na wierzchu.' },
         uk: { name: 'Strawberry', desc: 'Помірно солодкий. Бісквіт, полуничний ванільний крем, полуниця зверху.' },
@@ -634,7 +634,7 @@ const cakes: MenuSection = {
       sizes: [{ label: 'M', price: '1000' }, { label: 'L', price: '1200' }],
       i18n: {
         en: { name: 'Raffaello', desc: 'Medium sweet. Sponge cake, vanilla cream, touch of chocolate, Raffaello.' },
-        sq: { name: 'Raffaello', desc: 'Mesatarisht e ëmbël. Pandispanjë, krem vanilje, pak çokollatë, Raffaello.' },
+        sq: { name: 'Raffaello', desc: 'Mesatarisht e ëmbël. Pandispanjë, krem vaniljeje, pak çokollatë dhe Raffaello.' },
         it: { name: 'Raffaello', desc: 'Mediamente dolce. Pan di Spagna, crema alla vaniglia, un tocco di cioccolato, Raffaello.' },
         pl: { name: 'Raffaello', desc: 'Średnio słodkie. Biszkopt, krem waniliowy, odrobina czekolady, Raffaello.' },
         uk: { name: 'Raffaello', desc: 'Помірно солодкий. Бісквіт, ванільний крем, трохи шоколаду, Raffaello.' },
@@ -651,7 +651,7 @@ const savory: MenuSection = {
   views: ['list'],
   i18n: {
     en: { label: 'Snacks' },
-    sq: { label: 'Të kripura' },
+    sq: { label: 'Snacks' },
     it: { label: 'Salati' },
     pl: { label: 'Przekąski' },
     uk: { label: 'Солоне' },
@@ -663,7 +663,7 @@ const savory: MenuSection = {
     { id: 'sandwich',   slug: 'sandwich',   price: '150',
       i18n: {
         en: { name: 'Sandwich', desc: 'Salami, tomato.' },
-        sq: { name: 'Sandwich', desc: 'Salam, domate.' },
+        sq: { name: 'Sandwich', desc: 'Sallam dhe domate.' },
         it: { name: 'Sandwich', desc: 'Salame, pomodoro.' },
         pl: { name: 'Sandwich', desc: 'Salami, pomidor.' },
         uk: { name: 'Sandwich', desc: 'Салямі, помідор.' },
@@ -685,7 +685,7 @@ const savory: MenuSection = {
     { id: 'byrek-veg',  slug: 'byrek-veg',  price: '80',
       i18n: {
         en: { name: 'Byrek', desc: 'Spinach, potato, cheese, tomato.' },
-        sq: { name: 'Byrek', desc: 'Spinaq, patate, djathë, domate.' },
+        sq: { name: 'Byrek', desc: 'Spinaq, patate, djathë dhe domate.' },
         it: { name: 'Byrek', desc: 'Spinaci, patate, formaggio, pomodoro.' },
         pl: { name: 'Byrek', desc: 'Szpinak, ziemniak, ser, pomidor.' },
         uk: { name: 'Byrek', desc: 'Шпинат, картопля, сир, помідор.' },
@@ -703,19 +703,19 @@ const savory: MenuSection = {
 // Pairing quotes, translated once here and reused by both directions (why + wisdom).
 // Keep them translation-safe (see docs/pairing-rules.md): literal verbs, no wordplay.
 const QUOTES: Record<string, Record<string, string>> = {
-  'Bitter cuts the caramel.':      { sq: 'E hidhura pret karamelin.', it: "L'amaro taglia il caramello.", pl: 'Gorycz przełamuje karmel.', uk: 'Гіркота ріже карамель.', de: 'Bitterkeit durchbricht das Karamell.', fr: "L'amertume tranche le caramel.", no: 'Bitterhet kutter karamellen.' },
-  'Bitter cuts the chocolate.':    { sq: 'E hidhura pret çokollatën.', it: "L'amaro taglia il cioccolato.", pl: 'Gorycz przełamuje czekoladę.', uk: 'Гіркота ріже шоколад.', de: 'Bitterkeit durchbricht die Schokolade.', fr: "L'amertume tranche le chocolat.", no: 'Bitterhet kutter sjokoladen.' },
-  'Bitter cuts the sweetness.':    { sq: 'E hidhura pret ëmbëlsinë.', it: "L'amaro taglia la dolcezza.", pl: 'Gorycz przełamuje słodycz.', uk: 'Гіркота ріже солодкість.', de: 'Bitterkeit durchbricht die Süße.', fr: "L'amertume tranche le sucré.", no: 'Bitterhet kutter sødmen.' },
-  'Milk softens the sour berries.':{ sq: 'Qumështi zbut manaferrat e tharta.', it: 'Il latte ammorbidisce i frutti di bosco aspri.', pl: 'Mleko łagodzi kwaśne jagody.', uk: "Молоко пом'якшує кислі ягоди.", de: 'Milch mildert die sauren Beeren.', fr: 'Le lait adoucit les baies acidulées.', no: 'Melk mykner de syrlige bærene.' },
-  'Milk softens the sour fruit.':  { sq: 'Qumështi zbut frutin e thartë.', it: 'Il latte ammorbidisce la frutta aspra.', pl: 'Mleko łagodzi kwaśne owoce.', uk: "Молоко пом'якшує кислі фрукти.", de: 'Milch mildert die sauren Früchte.', fr: 'Le lait adoucit les fruits acidulés.', no: 'Melk mykner den syrlige frukten.' },
-  'Milk matches the cream.':       { sq: 'Qumështi shkon me kremin.', it: 'Il latte si abbina alla crema.', pl: 'Mleko pasuje do kremu.', uk: 'Молоко пасує до крему.', de: 'Milch passt zur Creme.', fr: "Le lait s'accorde à la crème.", no: 'Melk passer til kremen.' },
-  'Milk matches the coconut.':     { sq: 'Qumështi shkon me kokosin.', it: 'Il latte si abbina al cocco.', pl: 'Mleko pasuje do kokosa.', uk: 'Молоко пасує до кокоса.', de: 'Milch passt zur Kokosnuss.', fr: "Le lait s'accorde à la noix de coco.", no: 'Melk passer til kokosen.' },
-  'Milk matches the pistachio.':   { sq: 'Qumështi shkon me fëstëkun.', it: 'Il latte si abbina al pistacchio.', pl: 'Mleko pasuje do pistacji.', uk: 'Молоко пасує до фісташки.', de: 'Milch passt zur Pistazie.', fr: "Le lait s'accorde à la pistache.", no: 'Melk passer til pistasjen.' },
-  'Espresso matches the cacao.':   { sq: 'Espresso shkon me kakaon.', it: "L'espresso si abbina al cacao.", pl: 'Espresso pasuje do kakao.', uk: 'Еспресо пасує до какао.', de: 'Espresso passt zum Kakao.', fr: "L'espresso s'accorde au cacao.", no: 'Espresso passer til kakaoen.' },
-  'Mild coffee suits the apple.':  { sq: 'Kafeja e butë i shkon mollës.', it: 'Un caffè delicato si adatta alla mela.', pl: 'Łagodna kawa pasuje do jabłka.', uk: "М'яка кава пасує до яблука.", de: 'Milder Kaffee passt zum Apfel.', fr: 'Un café doux convient à la pomme.', no: 'Mild kaffe passer til eplet.' },
-  'Mild coffee suits the cherry.': { sq: 'Kafeja e butë i shkon qershisë.', it: 'Un caffè delicato si adatta alla ciliegia.', pl: 'Łagodna kawa pasuje do wiśni.', uk: "М'яка кава пасує до вишні.", de: 'Milder Kaffee passt zur Kirsche.', fr: 'Un café doux convient à la cerise.', no: 'Mild kaffe passer til kirsebæret.' },
-  'Cold coffee suits the mango.':  { sq: 'Kafeja e ftohtë i shkon mangos.', it: 'Il caffè freddo si adatta al mango.', pl: 'Zimna kawa pasuje do mango.', uk: 'Холодна кава пасує до манго.', de: 'Kalter Kaffee passt zur Mango.', fr: 'Le café froid convient à la mangue.', no: 'Kald kaffe passer til mango.' },
-  'Cold coffee suits fruit.':      { sq: 'Kafeja e ftohtë i shkon frutave.', it: 'Il caffè freddo si adatta alla frutta.', pl: 'Zimna kawa pasuje do owoców.', uk: 'Холодна кава пасує до фруктів.', de: 'Kalter Kaffee passt zu Obst.', fr: 'Le café froid convient aux fruits.', no: 'Kald kaffe passer til frukt.' },
+  'Bitter cuts the caramel.':      { sq: 'Shija e hidhur balancon karamelin.', it: "L'amaro taglia il caramello.", pl: 'Gorycz przełamuje karmel.', uk: 'Гіркота ріже карамель.', de: 'Bitterkeit durchbricht das Karamell.', fr: "L'amertume tranche le caramel.", no: 'Bitterhet kutter karamellen.' },
+  'Bitter cuts the chocolate.':    { sq: 'Shija e hidhur balancon çokollatën.', it: "L'amaro taglia il cioccolato.", pl: 'Gorycz przełamuje czekoladę.', uk: 'Гіркота ріже шоколад.', de: 'Bitterkeit durchbricht die Schokolade.', fr: "L'amertume tranche le chocolat.", no: 'Bitterhet kutter sjokoladen.' },
+  'Bitter cuts the sweetness.':    { sq: 'Shija e hidhur balancon ëmbëlsinë.', it: "L'amaro taglia la dolcezza.", pl: 'Gorycz przełamuje słodycz.', uk: 'Гіркота ріже солодкість.', de: 'Bitterkeit durchbricht die Süße.', fr: "L'amertume tranche le sucré.", no: 'Bitterhet kutter sødmen.' },
+  'Milk softens the sour berries.':{ sq: 'Qumështi zbut thartësinë e frutave të pyllit.', it: 'Il latte ammorbidisce i frutti di bosco aspri.', pl: 'Mleko łagodzi kwaśne jagody.', uk: "Молоко пом'якшує кислі ягоди.", de: 'Milch mildert die sauren Beeren.', fr: 'Le lait adoucit les baies acidulées.', no: 'Melk mykner de syrlige bærene.' },
+  'Milk softens the sour fruit.':  { sq: 'Qumështi zbut thartësinë e frutave.', it: 'Il latte ammorbidisce la frutta aspra.', pl: 'Mleko łagodzi kwaśne owoce.', uk: "Молоко пом'якшує кислі фрукти.", de: 'Milch mildert die sauren Früchte.', fr: 'Le lait adoucit les fruits acidulés.', no: 'Melk mykner den syrlige frukten.' },
+  'Milk matches the cream.':       { sq: 'Qumështi shkon mirë me kremin.', it: 'Il latte si abbina alla crema.', pl: 'Mleko pasuje do kremu.', uk: 'Молоко пасує до крему.', de: 'Milch passt zur Creme.', fr: "Le lait s'accorde à la crème.", no: 'Melk passer til kremen.' },
+  'Milk matches the coconut.':     { sq: 'Qumështi shkon mirë me kokosin.', it: 'Il latte si abbina al cocco.', pl: 'Mleko pasuje do kokosa.', uk: 'Молоко пасує до кокоса.', de: 'Milch passt zur Kokosnuss.', fr: "Le lait s'accorde à la noix de coco.", no: 'Melk passer til kokosen.' },
+  'Milk matches the pistachio.':   { sq: 'Qumështi shkon mirë me fëstëkun.', it: 'Il latte si abbina al pistacchio.', pl: 'Mleko pasuje do pistacji.', uk: 'Молоко пасує до фісташки.', de: 'Milch passt zur Pistazie.', fr: "Le lait s'accorde à la pistache.", no: 'Melk passer til pistasjen.' },
+  'Espresso matches the cacao.':   { sq: 'Espresso shkon mirë me kakaon.', it: "L'espresso si abbina al cacao.", pl: 'Espresso pasuje do kakao.', uk: 'Еспресо пасує до какао.', de: 'Espresso passt zum Kakao.', fr: "L'espresso s'accorde au cacao.", no: 'Espresso passer til kakaoen.' },
+  'Mild coffee suits the apple.':  { sq: 'Kafeja e butë shkon mirë me mollën.', it: 'Un caffè delicato si adatta alla mela.', pl: 'Łagodna kawa pasuje do jabłka.', uk: "М'яка кава пасує до яблука.", de: 'Milder Kaffee passt zum Apfel.', fr: 'Un café doux convient à la pomme.', no: 'Mild kaffe passer til eplet.' },
+  'Mild coffee suits the cherry.': { sq: 'Kafeja e butë shkon mirë me qershinë.', it: 'Un caffè delicato si adatta alla ciliegia.', pl: 'Łagodna kawa pasuje do wiśni.', uk: "М'яка кава пасує до вишні.", de: 'Milder Kaffee passt zur Kirsche.', fr: 'Un café doux convient à la cerise.', no: 'Mild kaffe passer til kirsebæret.' },
+  'Cold coffee suits the mango.':  { sq: 'Kafeja e ftohtë shkon mirë me mangon.', it: 'Il caffè freddo si adatta al mango.', pl: 'Zimna kawa pasuje do mango.', uk: 'Холодна кава пасує до манго.', de: 'Kalter Kaffee passt zur Mango.', fr: 'Le café froid convient à la mangue.', no: 'Kald kaffe passer til mango.' },
+  'Cold coffee suits fruit.':      { sq: 'Kafeja e ftohtë shkon mirë me frutat.', it: 'Il caffè freddo si adatta alla frutta.', pl: 'Zimna kawa pasuje do owoców.', uk: 'Холодна кава пасує до фруктів.', de: 'Kalter Kaffee passt zu Obst.', fr: 'Le café froid convient aux fruits.', no: 'Kald kaffe passer til frukt.' },
 }
 
 const whyI18n = (en: string): FoodPairing['i18n'] => {
