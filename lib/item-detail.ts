@@ -10,6 +10,7 @@
  */
 import { pickLocale, money } from './locale'
 import { parsePrice } from './cart'
+import { sweetLevel } from './text'
 import type { VenueMenuData, MenuItem, ItemOption } from './menu-data'
 
 export interface DetailDishRow {
@@ -44,6 +45,8 @@ export interface ItemDetail {
   why?: string
   /** Item-level serving note, shown as a quote on the detail (e.g. "Served with a glass of water."). */
   note?: string
+  /** Sweetness level, read from the BASE (en) description so it survives translation. */
+  sweet?: 1 | 2 | 3
 }
 
 function indexes(menu: VenueMenuData) {
@@ -128,5 +131,7 @@ export function buildItemDetail(
     }) ?? [],
     why: fp ? (fp.i18n[locale]?.why ?? fp.i18n['en']?.why) : undefined,
     note: text.note,
+    // Sweetness from the en desc so translated descs keep their cubes.
+    sweet: sweetLevel(item.i18n['en']?.desc ?? text.desc),
   }
 }

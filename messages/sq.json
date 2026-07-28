@@ -56,5 +56,11 @@
   },
   "footer": {
     "powered": "powered by Ospitalitta"
+  },
+  "view": {
+    "grid": "Rrjetë",
+    "list": "Listë",
+    "to_grid": "Kalo në pamje me karta",
+    "to_list": "Kalo në pamje listë"
   }
 }

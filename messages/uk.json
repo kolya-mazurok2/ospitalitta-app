@@ -56,5 +56,11 @@
   },
   "footer": {
     "powered": "powered by Ospitalitta"
+  },
+  "view": {
+    "grid": "Сітка",
+    "list": "Список",
+    "to_grid": "Перейти до карток",
+    "to_list": "Перейти до списку"
   }
 }

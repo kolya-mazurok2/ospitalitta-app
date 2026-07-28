@@ -170,7 +170,7 @@ const venues: Record<string, VenueConfig> = {
   'amour': {
     slug: 'amour',
     name: 'Amour',
-    locales: ['en', 'sq', 'it', 'uk'],
+    locales: ['en', 'sq', 'it', 'pl', 'uk', 'de', 'fr', 'no'],
     defaultLocale: 'en',
     brand: {
       themeAttr: 'amour',

@@ -56,5 +56,11 @@
   },
   "footer": {
     "powered": "powered by Ospitalitta"
+  },
+  "view": {
+    "grid": "Grille",
+    "list": "Liste",
+    "to_grid": "Passer à la vue en cartes",
+    "to_list": "Passer à la vue en liste"
   }
 }

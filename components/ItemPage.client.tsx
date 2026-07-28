@@ -16,7 +16,6 @@ import ListSheet from '@/components/ListSheet'
 import AddedToast from '@/components/AddedToast'
 import { useCart } from '@/lib/useCart'
 import { money } from '@/lib/locale'
-import { sweetLevel } from '@/lib/text'
 import { lsSet } from '@/lib/storage'
 import { track } from '@/lib/analytics'
 import { TASTE_KEYS } from '@/lib/menu-data'
@@ -47,7 +46,7 @@ export default function ItemPage({ detail, venueSlug, reviewUrl, houseIndicator 
   // Size (S/M/L) or variant (flavour) options — one selected at a time, price follows.
   const options = detail.sizes ?? detail.variants
   const optionLabel = detail.sizes ? 'Size' : 'Flavour'
-  const foodSweet = detail.isFood ? sweetLevel(detail.desc) : undefined
+  const foodSweet = detail.isFood ? detail.sweet : undefined
   const [optIdx, setOptIdx] = useState(0)
   const selected = options?.[optIdx]
   // Hero slider is for FLAVOUR variants only (each has its own image). Sizes (S/M/L) share

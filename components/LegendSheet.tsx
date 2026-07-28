@@ -228,7 +228,7 @@ export default function LegendSheet({
               </div>
             )}
             <div style={rowStyle}>
-              <span style={{ ...iconWrap, width: 'auto', minWidth: 30 }}><TasteMark taste="sweet" n={2} size={12} /></span>
+              <span style={iconWrap}><TasteMark taste="sweet" n={1} single size={16} /></span>
               <span style={rowName}>Sweetness</span>
               <span style={rowDesc}>more cubes, sweeter</span>
             </div>

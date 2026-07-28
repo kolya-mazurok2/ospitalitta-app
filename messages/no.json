@@ -56,5 +56,11 @@
   },
   "footer": {
     "powered": "powered by Ospitalitta"
+  },
+  "view": {
+    "grid": "Rutenett",
+    "list": "Liste",
+    "to_grid": "Bytt til kortvisning",
+    "to_list": "Bytt til listevisning"
   }
 }

@@ -16,6 +16,7 @@ import type { VenueMenuData, TasteKey, FoodKey } from '@/lib/menu-data'
 import { TASTE_KEYS } from '@/lib/menu-data'
 import { pickLocale, money } from '@/lib/locale'
 import { parsePrice } from '@/lib/cart'
+import { sweetLevel } from '@/lib/text'
 import { useCart } from '@/lib/useCart'
 import { lsGet, lsSet } from '@/lib/storage'
 import { setLocaleAction } from '@/app/actions/locale'
@@ -48,6 +49,7 @@ interface Props {
 }
 
 function ViewToggle({ mode, onChange }: { mode: 'expanded' | 'compact'; onChange: (m: 'expanded' | 'compact') => void }) {
+  const t = useTranslations()
   const isCompact = mode === 'compact'
   return (
     <button
@@ -59,7 +61,7 @@ function ViewToggle({ mode, onChange }: { mode: 'expanded' | 'compact'; onChange
         color: 'var(--ink-faint)',
         fontFamily: 'var(--font-text)', fontSize: '0.625rem', letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 600,
       }}
-      aria-label={isCompact ? 'Switch to card view' : 'Switch to list view'}
+      aria-label={isCompact ? t('view.to_grid') : t('view.to_list')}
     >
       {isCompact ? (
         /* grid.svg — switch back to cards */
@@ -75,7 +77,7 @@ function ViewToggle({ mode, onChange }: { mode: 'expanded' | 'compact'; onChange
           <path d="m25 25h-14c-.6 0-1-.4-1-1v-4c0-.6.4-1 1-1h14c.6 0 1 .4 1 1v4c0 .6-.4 1-1 1zm-18 0h-4c-.6 0-1-.4-1-1v-4c0-.6.4-1 1-1h4c.6 0 1 .4 1 1v4c0 .6-.4 1-1 1zm18-8h-14c-.6 0-1-.4-1-1v-4c0-.6.4-1 1-1h14c.6 0 1 .4 1 1v4c0 .6-.4 1-1 1zm-18 0h-4c-.6 0-1-.4-1-1v-4c0-.6.4-1 1-1h4c.6 0 1 .4 1 1v4c0 .6-.4 1-1 1zm18-8h-14c-.6 0-1-.4-1-1v-4c0-.6.4-1 1-1h14c.6 0 1 .4 1 1v4c0 .6-.4 1-1 1zm-18 0h-4c-.6 0-1-.4-1-1v-4c0-.6.4-1 1-1h4c.6 0 1 .4 1 1v4c0 .6-.4 1-1 1z"/>
         </svg>
       )}
-      <span>{isCompact ? 'Grid' : 'List'}</span>
+      <span>{isCompact ? t('view.grid') : t('view.list')}</span>
     </button>
   )
 }
@@ -574,6 +576,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
                       key={item.slug} id={item.slug}
                       name={text.name} desc={text.desc} price={item.price}
                       priceRange={priceRange}
+                      sweet={sweetLevel(item.i18n['en']?.desc ?? '')}
                       badge={item.badge}
                       house={item.house}
                       houseIndicator={houseIndicator}

@@ -21,6 +21,7 @@ interface Props {
   noDetail?: boolean   // list-only items: no detail page, so the compact row is not tappable and shows the price inline
   compact?: boolean
   last?: boolean       // last row in a list: drop the divider so it doesn't double the plate edge
+  sweet?: 1 | 2 | 3    // sweetness level from the base (en) desc; keeps cubes on translated locales
   videoSrc?: string
   posterSrc?: string
   variants?: ItemOption[]   // flavour variants — media becomes a carousel through their images
@@ -45,11 +46,12 @@ const badgePillStyle: React.CSSProperties = {
   flexShrink: 0,
 }
 
-export default function FoodCard({ id, name, desc, price, priceRange, badge, house, houseIndicator, noDetail, compact, last, videoSrc, posterSrc, variants, priority, onTap, onAdd }: Props) {
+export default function FoodCard({ id, name, desc, price, priceRange, badge, house, houseIndicator, noDetail, compact, last, sweet: sweetOverride, videoSrc, posterSrc, variants, priority, onTap, onAdd }: Props) {
   const { amount, unit } = parsePriceDisplay(price)
   // price shows amount only; unit becomes a badge label (rule: per-unit info belongs near name, not in price)
   const displayPrice = priceRange ?? amount
-  const sweet = sweetLevel(desc)
+  // Prefer the base-locale level passed in; fall back to parsing the (possibly localized) desc.
+  const sweet = sweetOverride ?? sweetLevel(desc)
   const [vIdx, setVIdx] = useState(0)
   const [interacted, setInteracted] = useState(false)
   const hasCarousel = !!(variants && variants.length > 1 && variants.some(v => v.posterSrc))

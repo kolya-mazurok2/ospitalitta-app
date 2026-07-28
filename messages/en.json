@@ -56,5 +56,11 @@
   },
   "footer": {
     "powered": "powered by Ospitalitta"
+  },
+  "view": {
+    "grid": "Grid",
+    "list": "List",
+    "to_grid": "Switch to card view",
+    "to_list": "Switch to list view"
   }
 }
