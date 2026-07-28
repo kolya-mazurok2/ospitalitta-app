@@ -37,6 +37,7 @@ interface Props {
   onboarding: { pricesNote: string; welcome?: string }
   defaultCategory?: 'cocktails' | 'drinks' | 'food'
   drinksCategoryLabel?: 'cocktails' | 'drinks'
+  flatDrinks?: boolean
   forceCompact?: boolean
   houseIndicator?: string
   showCocktailGuide?: boolean
@@ -54,8 +55,9 @@ function ViewToggle({ mode, onChange }: { mode: 'expanded' | 'compact'; onChange
       style={{
         flexShrink: 0, padding: '0 13px', height: '100%', minHeight: 44,
         background: 'transparent', border: 'none', borderLeft: '1px solid var(--line)',
-        cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
         color: 'var(--ink-faint)',
+        fontFamily: 'var(--font-text)', fontSize: '0.625rem', letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 600,
       }}
       aria-label={isCompact ? 'Switch to card view' : 'Switch to list view'}
     >
@@ -73,11 +75,12 @@ function ViewToggle({ mode, onChange }: { mode: 'expanded' | 'compact'; onChange
           <path d="m25 25h-14c-.6 0-1-.4-1-1v-4c0-.6.4-1 1-1h14c.6 0 1 .4 1 1v4c0 .6-.4 1-1 1zm-18 0h-4c-.6 0-1-.4-1-1v-4c0-.6.4-1 1-1h4c.6 0 1 .4 1 1v4c0 .6-.4 1-1 1zm18-8h-14c-.6 0-1-.4-1-1v-4c0-.6.4-1 1-1h14c.6 0 1 .4 1 1v4c0 .6-.4 1-1 1zm-18 0h-4c-.6 0-1-.4-1-1v-4c0-.6.4-1 1-1h4c.6 0 1 .4 1 1v4c0 .6-.4 1-1 1zm18-8h-14c-.6 0-1-.4-1-1v-4c0-.6.4-1 1-1h14c.6 0 1 .4 1 1v4c0 .6-.4 1-1 1zm-18 0h-4c-.6 0-1-.4-1-1v-4c0-.6.4-1 1-1h4c.6 0 1 .4 1 1v4c0 .6-.4 1-1 1z"/>
         </svg>
       )}
+      <span>{isCompact ? 'Grid' : 'List'}</span>
     </button>
   )
 }
 
-export default function MenuClient({ menuData, venueSlug, locale, leadTaste, locales, logoSrc, logoText, onboarding, defaultCategory, drinksCategoryLabel, forceCompact, houseIndicator, showCocktailGuide, backgroundTheme, reviewUrl, headerDecor, headerDecorLeft }: Props) {
+export default function MenuClient({ menuData, venueSlug, locale, leadTaste, locales, logoSrc, logoText, onboarding, defaultCategory, drinksCategoryLabel, flatDrinks, forceCompact, houseIndicator, showCocktailGuide, backgroundTheme, reviewUrl, headerDecor, headerDecorLeft }: Props) {
   const t = useTranslations()
   const router = useRouter()
   const { cart, count, total, toast, add: pushToCart, changeQty: setQty, clear: clearTheCart, placed, place, unplace } = useCart(venueSlug)
@@ -294,6 +297,46 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
   const currentSection = menuData.sections.find(s => s.key === tab)
   const currentFoodSection = menuData.foodSections.find(s => s.key === foodTab)
   const [showTop, setShowTop] = useState(false)
+  // a section can restrict its view modes (e.g. drinks/snacks are list-only)
+  const gridAllowedDrinks = !currentSection?.views || currentSection.views.includes('grid')
+  const gridAllowedFood = !currentFoodSection?.views || currentFoodSection.views.includes('grid')
+
+  // C · list-view readability: a translucent, blurred cream plate lifts list rows off the
+  // decorative backdrop. Only when a backdrop exists AND we're in list/compact layout.
+  const hasBackdrop = (backgroundTheme ?? 'none') !== 'none'
+  const listPlate = (isList: boolean): React.CSSProperties =>
+    hasBackdrop && isList
+      ? {
+          background: 'var(--list-panel-bg, var(--surface))',
+          backdropFilter: 'blur(7px)', WebkitBackdropFilter: 'blur(7px)',
+          border: '1px solid var(--list-panel-line, var(--line-soft))',
+          borderRadius: 'var(--list-panel-radius, 6px)',
+          marginLeft: -10, marginRight: -10, padding: '6px 12px',
+        }
+      : {}
+
+  // Top-level categories. Default = binary (food / cocktails). flatDrinks = each drink section its own top category.
+  const drinkTopCats: string[] = flatDrinks ? menuData.sections.map(s => s.key) : ['cocktails']
+  const topCats: string[] = defaultCategory === 'food' ? ['food', ...drinkTopCats] : [...drinkTopCats, 'food']
+  const selectTopCat = (cat: string) => {
+    if (cat === 'food' || cat === 'cocktails') { changeCategory(cat); return }
+    changeCategory('cocktails')
+    changeTab(cat as typeof tab)
+  }
+  const topCatActive = (cat: string) =>
+    cat === 'food' ? category === 'food'
+      : cat === 'cocktails' ? category === 'cocktails'
+      : category === 'cocktails' && tab === cat
+  const topCatLabel = (cat: string) => {
+    if (cat === 'food') return t('category.food')
+    if (cat === 'cocktails') return t(`category.${drinksCategoryLabel ?? 'cocktails'}`)
+    const sec = sectionByKey[cat]
+    return sec ? pl(sec.i18n).label : cat
+  }
+  // Sections shown under the active drinks category. Flat = the one selected section; grouped = all.
+  // Sub-tabs render only when this holds more than one — no boolean flags in the view.
+  const activeDrinkSections = flatDrinks ? (currentSection ? [currentSection] : []) : menuData.sections
+  const currentGridAllowed = category === 'food' ? gridAllowedFood : gridAllowedDrinks
 
   // shared tab button style
   const tabBtn = (active: boolean) => ({
@@ -315,8 +358,9 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
       {/* Scrollable content — logo header scrolls away; filters stick. IO root for impressions. */}
       <div ref={scrollRef} className="scrollbar-none" onScroll={e => setShowTop(e.currentTarget.scrollTop > 320)} style={{ flex: 1, minHeight: 0, overflowY: 'auto', position: 'relative', zIndex: 1 }}>
 
-        {/* logo header — scrolls away with the content */}
-        <div style={{ background: 'var(--header-bg, var(--surface))' }}>
+        {/* logo header — scrolls away with the content. Above the sticky filter bar so its
+            dropdowns (language / text-size) don't sink under it. */}
+        <div style={{ background: 'var(--header-bg, var(--surface))', position: 'relative', zIndex: 30 }}>
           <HeaderControls
             logoSrc={logoSrc} logoText={logoText}
             locale={locale} locales={locales} fontScale={fontScale}
@@ -329,30 +373,26 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
         </div>
 
         {/* filters — stick to the top while the content scrolls under them */}
-        <div style={{ position: 'sticky', top: 0, zIndex: 6 }}>
+        <div style={{ position: 'sticky', top: 0, zIndex: 20, background: 'var(--surface)' }}>
           {/* Category nav — hidden for food-only venues */}
           {hasCocktails && menuData.foodSections.length > 0 && (
-            <div style={{ flexShrink: 0, background: 'var(--surface)', borderBottom: '1px solid var(--line)' }}>
-              <div style={{ display: 'flex', padding: '0 18px' }}>
-                {(defaultCategory === 'food'
-                  ? ['food', 'cocktails'] as const
-                  : ['cocktails', 'food'] as const
-                ).map(cat => {
-                  const active = category === cat
+            <div style={{ flexShrink: 0, background: 'var(--surface)', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center' }}>
+              <div style={{ display: 'flex', padding: '0 18px', flex: 1 }}>
+                {topCats.map(cat => {
+                  const active = topCatActive(cat)
                   return (
-                    <button key={cat} onClick={() => changeCategory(cat)} style={tabBtn(active)}>
-                      {cat === 'cocktails'
-                        ? t(`category.${drinksCategoryLabel ?? 'cocktails'}`)
-                        : t('category.food')}
+                    <button key={cat} onClick={() => selectTopCat(cat)} style={tabBtn(active)}>
+                      {topCatLabel(cat)}
                       {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
                     </button>
                   )
                 })}
               </div>
+              {!forceCompact && currentGridAllowed && <ViewToggle mode={viewMode} onChange={changeViewMode} />}
             </div>
           )}
 
-          {category === 'cocktails' && (
+          {category === 'cocktails' && activeDrinkSections.length > 1 && (
             <div style={{ flexShrink: 0, background: 'var(--surface)', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center' }}>
               <div className="scrollbar-none" style={{ flex: 1, overflowX: 'auto' }}>
                 <div style={{ display: 'flex', padding: '0 16px', width: 'max-content' }}>
@@ -370,7 +410,6 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
                   })}
                 </div>
               </div>
-              {!forceCompact && <ViewToggle mode={viewMode} onChange={changeViewMode} />}
             </div>
           )}
           {category === 'food' && (
@@ -388,7 +427,6 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
                   })}
                 </div>
               </div>
-              {!forceCompact && <ViewToggle mode={viewMode} onChange={changeViewMode} />}
             </div>
           )}
         </div>
@@ -407,7 +445,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
                 return <SectionNote bodyText={secText.note} />
               })()}
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: viewMode === 'compact' ? 0 : 14, marginTop: viewMode === 'compact' ? 8 : 16 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: viewMode === 'compact' ? 0 : 14, marginTop: viewMode === 'compact' ? 8 : 16, ...listPlate(viewMode === 'compact' || !gridAllowedDrinks) }}>
                 {currentSection?.items.map((item, i) => {
                   const text = pl(item.i18n)
                   const dOpts = item.sizes ?? item.variants
@@ -420,11 +458,13 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
                       name={text.name} desc={text.desc} price={money(item.price)}
                       priceRange={dPriceRange}
                       glass={item.glass} taste={currentSection.key}
-                      compact={viewMode === 'compact'}
+                      compact={viewMode === 'compact' || !gridAllowedDrinks}
+                      last={i === (currentSection?.items.length ?? 0) - 1}
                       priority={i === 0}
                       lvl={item.lvl} flavor={item.flavor}
                       loved={item.loved} house={item.house}
                       houseIndicator={houseIndicator}
+                      noDetail={!gridAllowedDrinks}
                       videoSrc={item.videoSrc} posterSrc={item.posterSrc}
                       lovedLabel="loved here"
                       onTap={() => openCocktailDetail(item.slug)}
@@ -522,7 +562,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
                 )
               })()}
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: viewMode === 'compact' ? 0 : 12, marginTop: viewMode === 'compact' ? 8 : 16 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: viewMode === 'compact' ? 0 : 12, marginTop: viewMode === 'compact' ? 8 : 16, ...listPlate(viewMode === 'compact' || !gridAllowedFood) }}>
                 {currentFoodSection?.items.map((item, i) => {
                   const text = pl(item.i18n)
                   const opts = item.sizes ?? item.variants
@@ -538,7 +578,9 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
                       house={item.house}
                       houseIndicator={houseIndicator}
                       variants={item.variants}
-                      compact={viewMode === 'compact'}
+                      noDetail={!gridAllowedFood}
+                      compact={viewMode === 'compact' || !gridAllowedFood}
+                      last={i === (currentFoodSection?.items.length ?? 0) - 1}
                       priority={i === 0}
                       videoSrc={item.videoSrc}
                       posterSrc={item.posterSrc}
@@ -634,6 +676,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
           marksName={t('legend.marks_name')} marksDesc={t('legend.marks_desc')}
           oliveName={t('legend.olive_name')} oliveDesc={t('legend.olive_desc')}
           lovedName={t('legend.loved_name')} lovedDesc={t('legend.loved_desc')}
+          houseIndicator={houseIndicator} foodLegend={!(showCocktailGuide ?? true)}
           pricesNote={onboarding.pricesNote} welcome={onboarding.welcome} cta={t('legend.cta')}
           onClose={() => setLegendOpen(false)}
         />

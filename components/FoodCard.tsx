@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import CardVideo from '@/components/CardVideo'
 import { HouseMark, EyeSvg } from '@/components/ItemCard'
 import TasteMark from '@/components/TasteMark'
+import VariantSlider from '@/components/VariantSlider'
 import { parsePriceDisplay } from '@/lib/locale'
 import { clampDesc, sweetLevel } from '@/lib/text'
 import type { ItemOption } from '@/lib/menu-data'
@@ -17,7 +18,9 @@ interface Props {
   badge?: string
   house?: boolean
   houseIndicator?: string
+  noDetail?: boolean   // list-only items: no detail page, so the compact row is not tappable and shows the price inline
   compact?: boolean
+  last?: boolean       // last row in a list: drop the divider so it doesn't double the plate edge
   videoSrc?: string
   posterSrc?: string
   variants?: ItemOption[]   // flavour variants — media becomes a carousel through their images
@@ -42,14 +45,20 @@ const badgePillStyle: React.CSSProperties = {
   flexShrink: 0,
 }
 
-export default function FoodCard({ id, name, desc, price, priceRange, badge, house, houseIndicator, compact, videoSrc, posterSrc, variants, priority, onTap, onAdd }: Props) {
+export default function FoodCard({ id, name, desc, price, priceRange, badge, house, houseIndicator, noDetail, compact, last, videoSrc, posterSrc, variants, priority, onTap, onAdd }: Props) {
   const { amount, unit } = parsePriceDisplay(price)
   // price shows amount only; unit becomes a badge label (rule: per-unit info belongs near name, not in price)
   const displayPrice = priceRange ?? amount
   const sweet = sweetLevel(desc)
   const [vIdx, setVIdx] = useState(0)
+  const [interacted, setInteracted] = useState(false)
   const hasCarousel = !!(variants && variants.length > 1 && variants.some(v => v.posterSrc))
-  const carouselSrc = hasCarousel ? (variants![vIdx % variants!.length].posterSrc ?? posterSrc) : undefined
+  // auto-advance the slider every 5s until the guest interacts
+  useEffect(() => {
+    if (!hasCarousel || interacted || !variants) return
+    const id = setInterval(() => setVIdx(i => (i + 1) % variants.length), 5000)
+    return () => clearInterval(id)
+  }, [hasCarousel, interacted, variants])
   // derive unit badge from price string if no explicit badge set
   const zoneBadge = badge ?? (unit ? 'Per ' + unit.replace('PER ', '').toLowerCase() : null)
 
@@ -57,12 +66,12 @@ export default function FoodCard({ id, name, desc, price, priceRange, badge, hou
     return (
       <div
         id={`item-${id}`}
-        onClick={onTap}
+        onClick={noDetail ? undefined : onTap}
         style={{
           display: 'flex', alignItems: 'flex-end', gap: 12,
           padding: '10px 0',
-          borderBottom: '1px solid var(--hairline)',
-          cursor: 'pointer',
+          borderBottom: last ? 'none' : '1px solid var(--hairline)',
+          cursor: noDetail ? 'default' : 'pointer',
         }}
       >
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -80,25 +89,20 @@ export default function FoodCard({ id, name, desc, price, priceRange, badge, hou
             }}>
               {name}
             </span>
-            {sweet && (
-              <span style={{ color: 'var(--brand)', display: 'inline-flex', flexShrink: 0 }}>
-                <TasteMark taste="sweet" n={sweet} size={11} />
-              </span>
-            )}
             {!house && zoneBadge && (
               <span style={{ ...badgePillStyle, fontSize: '0.45rem', padding: '2px 6px' }}>
                 {zoneBadge}
               </span>
             )}
           </div>
-          {/* Description only — price lives in the detail sheet, not in the list */}
+          {/* Description with the price at the end — the list row is the only place it shows */}
           {desc && (
             <p style={{
               fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.6875rem',
               color: 'var(--ink-body-2)', margin: '2px 0 0',
               overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
             }}>
-              {clampDesc(desc)}
+              {clampDesc(desc).replace(/\.\s*$/, '')}, {displayPrice}.
             </p>
           )}
         </div>
@@ -142,28 +146,13 @@ export default function FoodCard({ id, name, desc, price, priceRange, badge, hou
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
         {hasCarousel ? (
-          <>
-            <img
-              src={carouselSrc} alt={`${name} — ${variants![vIdx % variants!.length].label}`}
-              loading={priority ? 'eager' : 'lazy'} decoding="async"
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-            />
-            <button
-              onClick={(e) => { e.stopPropagation(); setVIdx(i => (i - 1 + variants!.length) % variants!.length) }}
-              aria-label="Previous variant"
-              style={{ position: 'absolute', top: '50%', left: 6, transform: 'translateY(-50%)', zIndex: 2, width: 30, height: 30, borderRadius: '50%', border: 'none', background: 'rgb(0 0 0 / 0.4)', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, lineHeight: 0, paddingBottom: 2, backdropFilter: 'blur(2px)' }}
-            >‹</button>
-            <button
-              onClick={(e) => { e.stopPropagation(); setVIdx(i => (i + 1) % variants!.length) }}
-              aria-label="Next variant"
-              style={{ position: 'absolute', top: '50%', right: 6, transform: 'translateY(-50%)', zIndex: 2, width: 30, height: 30, borderRadius: '50%', border: 'none', background: 'rgb(0 0 0 / 0.4)', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, lineHeight: 0, paddingBottom: 2, backdropFilter: 'blur(2px)' }}
-            >›</button>
-            <div style={{ position: 'absolute', bottom: 8, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 4, zIndex: 2 }}>
-              {variants!.map((_, i) => (
-                <span key={i} style={{ width: 5, height: 5, borderRadius: '50%', background: i === vIdx % variants!.length ? '#fff' : 'rgb(255 255 255 / 0.5)' }} />
-              ))}
-            </div>
-          </>
+          <VariantSlider
+            images={variants!.map(v => ({ src: v.posterSrc ?? posterSrc ?? '', alt: `${name}, ${v.label}` }))}
+            index={vIdx}
+            onIndexChange={setVIdx}
+            priority={priority}
+            onInteract={() => setInteracted(true)}
+          />
         ) : videoSrc ? (
           <CardVideo
             src={videoSrc} poster={posterSrc}
@@ -233,7 +222,7 @@ export default function FoodCard({ id, name, desc, price, priceRange, badge, hou
         {/* sweetness — sugar mark above the description */}
         {sweet && (
           <span style={{ color: 'var(--brand)', display: 'inline-flex', alignSelf: 'flex-start' }}>
-            <TasteMark taste="sweet" n={sweet} size={12} />
+            <TasteMark taste="sweet" n={sweet} size={14} />
           </span>
         )}
         {/* 2×2 grid — desc/name left col, badge/price right col */}

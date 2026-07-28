@@ -155,6 +155,7 @@ export interface VenueConfig {
   logoText?: string      // text wordmark — use when venue wordmark is live type (e.g. Côte)
   defaultCategory?: 'cocktails' | 'drinks' | 'food'
   drinksCategoryLabel?: 'cocktails' | 'drinks'  // label for left category tab (default: 'cocktails')
+  flatDrinks?: boolean  // each drink section becomes its own top-level category (no sub-tabs)
   forceCompact?: boolean  // always render items in compact list mode, hide view toggle
   houseIndicator?: 'olive' | 'shell' | 'fish' | 'heart'
   showCocktailGuide?: boolean
@@ -182,6 +183,7 @@ const venues: Record<string, VenueConfig> = {
     logoSrc: '/venue-assets/amour/amour-logo.png',
     defaultCategory: 'food',
     drinksCategoryLabel: 'drinks',
+    flatDrinks: true,
     houseIndicator: 'heart',
     showCocktailGuide: false,
     backgroundTheme: 'patisserie',

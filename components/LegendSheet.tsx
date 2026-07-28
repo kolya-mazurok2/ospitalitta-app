@@ -1,4 +1,6 @@
 import TasteMark from '@/components/TasteMark'
+import { HouseMark } from '@/components/ItemCard'
+import { FlavourGlyph, SizeGlyph } from '@/components/MenuGlyphs'
 
 interface Props {
   title: string
@@ -18,6 +20,8 @@ interface Props {
   oliveDesc: string
   lovedName: string
   lovedDesc: string
+  houseIndicator?: string
+  foodLegend?: boolean
   pricesNote: string
   cta: string
   onClose: () => void
@@ -44,6 +48,7 @@ export default function LegendSheet({
   title, sub, welcome, hasCocktails, showRows = true,
   bitterName, bitterDesc, sourName, sourDesc, sweetName, sweetDesc,
   marksName, marksDesc, oliveName, oliveDesc, lovedName, lovedDesc,
+  houseIndicator, foodLegend,
   pricesNote, cta, onClose,
 }: Props) {
   return (
@@ -92,14 +97,14 @@ export default function LegendSheet({
           letterSpacing: '0.02em', color: 'var(--ink-heading)',
           marginTop: 20, lineHeight: 1.2, textAlign: 'center',
         }}>
-          {title}
+          {foodLegend ? 'Menu guide' : title}
         </h3>
         <p style={{
           fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.875rem',
           lineHeight: 1.5, color: 'var(--ink-body)',
           marginTop: 6, textAlign: 'center', whiteSpace: 'pre-line',
         }}>
-          {sub}
+          {foodLegend ? 'What the marks on the menu mean.' : sub}
         </p>
 
         {welcome && (
@@ -211,6 +216,34 @@ export default function LegendSheet({
             <span style={rowDesc}>{oliveDesc}</span>
           </div>
         </div>}
+
+        {/* food markers — sweetness, size, flavour, best seller (patisserie venues) */}
+        {foodLegend && (
+          <div style={{ display: 'flex', flexDirection: 'column', marginTop: 14 }}>
+            {houseIndicator && (
+              <div style={rowStyle}>
+                <span style={iconWrap}><HouseMark kind={houseIndicator} size={16} /></span>
+                <span style={rowName}>Best seller</span>
+                <span style={rowDesc}>what guests order most</span>
+              </div>
+            )}
+            <div style={rowStyle}>
+              <span style={{ ...iconWrap, width: 'auto', minWidth: 30 }}><TasteMark taste="sweet" n={2} size={12} /></span>
+              <span style={rowName}>Sweetness</span>
+              <span style={rowDesc}>more cubes, sweeter</span>
+            </div>
+            <div style={rowStyle}>
+              <span style={iconWrap}><SizeGlyph size={17} /></span>
+              <span style={rowName}>Size</span>
+              <span style={rowDesc}>sold in more than one size</span>
+            </div>
+            <div style={rowStyle}>
+              <span style={iconWrap}><FlavourGlyph size={16} /></span>
+              <span style={rowName}>Flavour</span>
+              <span style={rowDesc}>chocolate, caramel, pistachio…</span>
+            </div>
+          </div>
+        )}
 
         {/* prices note */}
         <div style={{

@@ -19,7 +19,9 @@ interface Props {
   loved?: boolean
   house?: boolean
   houseIndicator?: string
+  noDetail?: boolean   // list-only items: not tappable, price shown inline
   compact?: boolean
+  last?: boolean       // last row in a list: drop the divider so it doesn't double the plate edge
   videoSrc?: string
   posterSrc?: string
   lovedLabel: string
@@ -102,7 +104,7 @@ export function HouseMark({ kind, size, inline, style }: { kind?: string; size: 
 
 export default function ItemCard({
   id, name, desc, price, priceRange, glass,
-  loved, house, houseIndicator, compact, videoSrc, posterSrc, lovedLabel, priority, onTap, onAdd,
+  loved, house, houseIndicator, noDetail, compact, last, videoSrc, posterSrc, lovedLabel, priority, onTap, onAdd,
 }: Props) {
   // taste/lvl/flavor stay in Props — callers pass them and the detail sheet still shows
   // the profile. The card itself no longer draws taste marks.
@@ -112,12 +114,12 @@ export default function ItemCard({
     return (
       <div
         id={`item-${id}`}
-        onClick={onTap}
+        onClick={noDetail ? undefined : onTap}
         style={{
           display: 'flex', alignItems: 'flex-end', gap: 12,
           padding: '10px 0',
-          borderBottom: '1px solid var(--hairline)',
-          cursor: 'pointer',
+          borderBottom: last ? 'none' : '1px solid var(--hairline)',
+          cursor: noDetail ? 'default' : 'pointer',
         }}
       >
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -131,14 +133,14 @@ export default function ItemCard({
             </span>
             {showIndicator && <HouseMark kind={houseIndicator} size={houseIndicator === 'fish' ? 13 : 9} inline style={{ marginLeft: 3 }} />}
           </div>
-          {/* Description only — price lives in the detail sheet, not in the list */}
+          {/* Description with the price at the end — the list row is the only place it shows */}
           {desc && (
             <p style={{
               fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.6875rem',
               color: 'var(--ink-body-2)', margin: '2px 0 0',
               overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
             }}>
-              {clampDesc(desc)}
+              {clampDesc(desc).replace(/\.\s*$/, '')}, {priceRange ?? price}.
             </p>
           )}
         </div>

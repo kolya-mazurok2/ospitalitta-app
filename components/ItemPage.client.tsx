@@ -3,6 +3,12 @@
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import TasteMark from '@/components/TasteMark'
+import { FlavourGlyph, SizeGlyph } from '@/components/MenuGlyphs'
+import VariantSlider from '@/components/VariantSlider'
+
+const TASTE_LABEL: Record<'bitter' | 'sour' | 'sweet', string> = {
+  bitter: 'Bitterness', sour: 'Sourness', sweet: 'Sweetness',
+}
 import { HouseMark } from '@/components/ItemCard'
 import CartBar from '@/components/CartBar'
 import SectionNote from '@/components/SectionNote'
@@ -10,6 +16,7 @@ import ListSheet from '@/components/ListSheet'
 import AddedToast from '@/components/AddedToast'
 import { useCart } from '@/lib/useCart'
 import { money } from '@/lib/locale'
+import { sweetLevel } from '@/lib/text'
 import { lsSet } from '@/lib/storage'
 import { track } from '@/lib/analytics'
 import { TASTE_KEYS } from '@/lib/menu-data'
@@ -40,8 +47,14 @@ export default function ItemPage({ detail, venueSlug, reviewUrl, houseIndicator 
   // Size (S/M/L) or variant (flavour) options — one selected at a time, price follows.
   const options = detail.sizes ?? detail.variants
   const optionLabel = detail.sizes ? 'Size' : 'Flavour'
+  const foodSweet = detail.isFood ? sweetLevel(detail.desc) : undefined
   const [optIdx, setOptIdx] = useState(0)
   const selected = options?.[optIdx]
+  // Hero slider is for FLAVOUR variants only (each has its own image). Sizes (S/M/L) share
+  // one image, so switching size must NOT swipe the hero.
+  const flavourImages = detail.variants && detail.variants.length > 1 && detail.variants.some(v => v.posterSrc)
+    ? detail.variants.map(o => ({ src: o.posterSrc ?? detail.posterSrc ?? '', alt: detail.name }))
+    : null
   const selPriceRaw = selected ? (Number(selected.price.replace(/\D/g, '')) || 0) : detail.rawPrice
   const selPriceText = selected ? money(selected.price) : detail.price
   const addName = selected ? `${detail.name} (${selected.label})` : detail.name
@@ -98,34 +111,49 @@ export default function ItemPage({ detail, venueSlug, reviewUrl, houseIndicator 
         }}>
           {/* Still only. The card in the list is where the clip plays; repeating it here
               would fetch several MB for a screen the guest is reading, not scanning. */}
-          {(selected?.posterSrc ?? detail.posterSrc) && (
+          {flavourImages ? (
+            // Same swipe slider as the grid card, synced to the selected flavour.
+            <VariantSlider
+              images={flavourImages}
+              index={optIdx}
+              onIndexChange={setOptIdx}
+              priority
+            />
+          ) : (selected?.posterSrc ?? detail.posterSrc) ? (
             // Same file the card already showed, so this is a cache hit, not a second download.
             // eslint-disable-next-line @next/next/no-img-element
             <img
+              key={selected?.posterSrc ?? detail.posterSrc} className="osp-fade"
               src={selected?.posterSrc ?? detail.posterSrc} alt={detail.name}
               fetchPriority="high" decoding="async"
               style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
             />
-          )}
+          ) : null}
 
+          {/* Back = app chrome (frosted glass + full arrow), deliberately NOT the slider's
+              solid espresso chevron circles, so the two never read as the same control. */}
           <button
             onClick={goBack}
             aria-label="Back to menu"
             style={{
-              position: 'absolute', top: 14, left: 14,
-              width: 38, height: 38, borderRadius: '50%',
-              border: 'none', background: 'var(--surface-dark-2)', color: 'var(--on-dark)',
+              position: 'absolute', top: 14, left: 14, zIndex: 3,
+              width: 40, height: 40, borderRadius: '50%',
+              border: '1px solid rgb(255 255 255 / 0.22)',
+              background: 'rgb(20 15 11 / 0.42)',
+              backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+              color: '#fff',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               cursor: 'pointer', padding: 0,
-              boxShadow: '0 4px 14px rgb(0 0 0 / 0.3)',
+              boxShadow: '0 4px 14px rgb(0 0 0 / 0.28)',
             }}
           >
-            <svg width="9" height="16" viewBox="0 0 6 11" fill="none"
-              stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"
-              style={{ display: 'block', transform: 'rotate(180deg)' }} aria-hidden>
-              <path d="M1 1.5 L5 5.5 L1 9.5" />
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+              style={{ display: 'block' }} aria-hidden>
+              <path d="M19 12H5M11 6l-6 6 6 6" />
             </svg>
           </button>
+
         </div>
 
         <div style={{ padding: '18px 24px 160px' }}>
@@ -158,30 +186,18 @@ export default function ItemPage({ detail, venueSlug, reviewUrl, houseIndicator 
             )}
           </div>
 
-          {tasteRows.length > 0 && (
-            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '10px 20px', marginTop: 14, color: 'var(--brand)' }}>
-              {tasteRows.map((r, i) => (
-                <TasteMark key={i} taste={r.taste} n={r.n} single={detail.single} size={22} style={{ gap: 5 }} />
-              ))}
-            </div>
-          )}
-
-          <p style={{
-            fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '1rem',
-            lineHeight: 1.5, color: 'var(--ink-body)',
-            textWrap: 'pretty', margin: '5px 0 0',
-          }}>
-            {detail.desc}
-          </p>
-
+          {/* Size / Flavour switcher — right under the title */}
           {options && (
-            <div style={{ marginTop: 18 }}>
+            <div style={{ marginTop: 14 }}>
               <div style={{
+                display: 'flex', alignItems: 'center', gap: 5,
                 fontFamily: 'var(--font-text)', fontSize: '0.6875rem', fontWeight: 700,
                 letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-faint)',
                 marginBottom: 9,
               }}>
-                {optionLabel}
+                {detail.sizes && <span style={{ color: 'var(--brand)', display: 'inline-flex' }}><SizeGlyph size={13} /></span>}
+                {detail.variants && <span style={{ color: 'var(--brand)', display: 'inline-flex' }}><FlavourGlyph size={13} /></span>}
+                <span>{optionLabel}</span>
               </div>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                 {options.map((o, i) => (
@@ -203,13 +219,67 @@ export default function ItemPage({ detail, venueSlug, reviewUrl, houseIndicator 
             </div>
           )}
 
+          {/* Sweetness — one small mark + label (like Flavour), then a bigger n-of-3 scale below. */}
+          {foodSweet && (
+            <div style={{ marginTop: 14 }}>
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 5, marginBottom: 9,
+                fontFamily: 'var(--font-text)', fontSize: '0.6875rem', fontWeight: 700,
+                letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-faint)',
+              }}>
+                <span style={{ color: 'var(--brand)', display: 'inline-flex' }}><TasteMark taste="sweet" n={1} single size={13} /></span>
+                <span>Sweetness</span>
+              </div>
+              <div style={{ color: 'var(--brand)' }}>
+                <TasteMark taste="sweet" n={foodSweet} size={24} style={{ gap: 6 }} />
+              </div>
+            </div>
+          )}
+
+          {tasteRows.length > 0 && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginTop: 14 }}>
+              {tasteRows.map((r, i) => (
+                <div key={i}>
+                  <div style={{
+                    display: 'flex', alignItems: 'center', gap: 5, marginBottom: 9,
+                    fontFamily: 'var(--font-text)', fontSize: '0.6875rem', fontWeight: 700,
+                    letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-faint)',
+                  }}>
+                    <span style={{ color: 'var(--brand)', display: 'inline-flex' }}>
+                      <TasteMark taste={r.taste} n={1} single size={13} />
+                    </span>
+                    <span>{TASTE_LABEL[r.taste]}</span>
+                  </div>
+                  <div style={{ color: 'var(--brand)' }}>
+                    <TasteMark taste={r.taste} n={r.n} single={detail.single} size={24} style={{ gap: 6 }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <p style={{
+            fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '1rem',
+            lineHeight: 1.5, color: 'var(--ink-body)',
+            textWrap: 'pretty', margin: '14px 0 0',
+          }}>
+            {detail.desc}
+          </p>
+
           <div style={{
             fontFamily: 'var(--font-text)', fontSize: options ? '1.0625rem' : '0.875rem',
             fontWeight: options ? 600 : 400,
-            letterSpacing: '0.03em', color: 'var(--brand)', marginTop: 12,
+            letterSpacing: '0.03em', color: 'var(--brand)', marginTop: 30,
           }}>
             {selPriceText}
           </div>
+
+          {/* Item-level serving note (e.g. espresso "Served with a glass of water.") — same quiet quote as pairings */}
+          {detail.note && (
+            <div style={{ marginTop: 20 }}>
+              <SectionNote bodyText={detail.note} bleed={24} />
+            </div>
+          )}
 
           {detail.dishes.length > 0 && (
             <div style={{ marginTop: 26 }}>

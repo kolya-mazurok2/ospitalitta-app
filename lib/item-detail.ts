@@ -42,6 +42,8 @@ export interface ItemDetail {
   dishes: DetailDishRow[]
   /** One concrete line about why these pairings work. */
   why?: string
+  /** Item-level serving note, shown as a quote on the detail (e.g. "Served with a glass of water."). */
+  note?: string
 }
 
 function indexes(menu: VenueMenuData) {
@@ -71,8 +73,10 @@ export function buildItemDetail(
     const taste = (section === 'bitter' || section === 'sour' || section === 'sweet')
       ? (section as 'bitter' | 'sour' | 'sweet')
       : undefined
-    const why = taste ? menu.tasteWhy?.[taste] : undefined
     const pairing = menu.pairings.find(p => p.cocktailRef === slug)
+    // Taste-driven line for cocktails; for coffees (no taste axis) fall back to the pairing's own wisdom.
+    const why = (taste ? menu.tasteWhy?.[taste] : undefined)
+      ?? (pairing?.i18n[locale]?.wisdom ?? pairing?.i18n['en']?.wisdom)
 
     return {
       slug, name: text.name, desc: text.desc,
@@ -94,6 +98,7 @@ export function buildItemDetail(
         }
       }) ?? [],
       why,
+      note: text.note,
     }
   }
 
@@ -122,5 +127,6 @@ export function buildItemDetail(
       }]
     }) ?? [],
     why: fp ? (fp.i18n[locale]?.why ?? fp.i18n['en']?.why) : undefined,
+    note: text.note,
   }
 }

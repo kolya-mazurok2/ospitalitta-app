@@ -39,6 +39,7 @@ export default async function MenuPage({ params }: Props) {
       onboarding={{ pricesNote: venue.onboarding.pricesNote, welcome }}
       defaultCategory={venue.defaultCategory}
       drinksCategoryLabel={venue.drinksCategoryLabel}
+      flatDrinks={venue.flatDrinks}
       forceCompact={venue.forceCompact}
       houseIndicator={venue.houseIndicator}
       showCocktailGuide={venue.showCocktailGuide ?? true}

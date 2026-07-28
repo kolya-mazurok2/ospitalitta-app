@@ -96,6 +96,11 @@
   --note-border-color: var(--brand);
   --note-text-color:   var(--ink-body);
 
+  /* list-view readability plate — translucent cream + blur lifts rows off the decor backdrop */
+  --list-panel-bg:     rgb(243 234 216 / 0.82);
+  --list-panel-line:   var(--line-soft);
+  --list-panel-radius: 6px;
+
   --section-sub-color: var(--ink-faint);
   --section-sub-size:  0.625rem;
 
