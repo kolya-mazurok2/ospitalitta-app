@@ -1,15 +1,18 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Chevron, sliderArrow } from '@/components/SliderArrow'
+import CardVideo from '@/components/CardVideo'
 
-export interface SliderImage { src: string; alt: string }
+export interface SliderImage { src: string; alt: string; videoSrc?: string }
 
 /**
  * Seamless infinite variant/size slider. The strip is [clone(last), ...images, clone(first)],
  * so stepping past the last slide keeps moving FORWARD into the leading clone and then snaps
  * back to the real first without a transition. Controlled: the parent owns the logical `index`
  * (drives size/flavour selection + price); the slider animates toward it.
+ *
+ * A slide with `videoSrc` plays a clip (muted, looping) instead of showing the poster.
+ * Navigation is swipe + the dots below — no arrows.
  */
 export default function VariantSlider({
   images,
@@ -54,7 +57,6 @@ export default function VariantSlider({
 
   const go = (nextPos: number) => { setTrans(true); setPos(nextPos); onIndexChange(logical(nextPos)) }
   const cur = () => (pos <= 0 ? len : pos >= len + 1 ? 1 : pos) // normalise off a clone
-  const step = (dir: 1 | -1) => { onInteract?.(); go(cur() + dir) }
 
   return (
     <div
@@ -89,26 +91,30 @@ export default function VariantSlider({
         }}
       >
         {slides.map((im, i) => (
-          <img
-            key={i}
-            src={im.src} alt={im.alt}
-            draggable={false}
-            loading={i <= 1 && priority ? 'eager' : 'lazy'} decoding="async"
-            style={{ flex: '0 0 100%', width: '100%', height: '100%', objectFit: 'cover', display: 'block', pointerEvents: 'none' }}
-          />
+          <div key={i} style={{ flex: '0 0 100%', width: '100%', height: '100%', position: 'relative' }}>
+            {im.videoSrc ? (
+              <CardVideo
+                src={im.videoSrc} poster={im.src}
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block', pointerEvents: 'none' }}
+              />
+            ) : (
+              <img
+                src={im.src} alt={im.alt}
+                draggable={false}
+                loading={i <= 1 && priority ? 'eager' : 'lazy'} decoding="async"
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block', pointerEvents: 'none' }}
+              />
+            )}
+          </div>
         ))}
       </div>
-      <button
-        onClick={(e) => { e.stopPropagation(); step(-1) }}
-        aria-label="Previous" style={sliderArrow('left')}
-      ><Chevron dir="left" /></button>
-      <button
-        onClick={(e) => { e.stopPropagation(); step(1) }}
-        aria-label="Next" style={sliderArrow('right')}
-      ><Chevron dir="right" /></button>
-      <div style={{ position: 'absolute', bottom: 8, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 4, zIndex: 2 }}>
+      <div style={{ position: 'absolute', bottom: 10, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 6, zIndex: 2 }}>
         {images.map((_, i) => (
-          <span key={i} style={{ width: 5, height: 5, borderRadius: '50%', background: i === logical(pos) ? '#fff' : 'rgb(255 255 255 / 0.5)' }} />
+          <span key={i} style={{
+            width: 9, height: 9, borderRadius: '50%',
+            background: i === logical(pos) ? '#fff' : 'rgb(255 255 255 / 0.5)',
+            boxShadow: '0 1px 3px rgb(0 0 0 / 0.45)',
+          }} />
         ))}
       </div>
     </div>

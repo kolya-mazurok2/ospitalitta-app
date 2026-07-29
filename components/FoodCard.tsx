@@ -219,50 +219,40 @@ export default function FoodCard({ id, name, desc, price, priceRange, badge, hou
             <span>{badge ?? 'Best seller'}</span>
           </div>
         )}
-        {/* 2×2 grid — desc/name left col, badge/price right col */}
+        {/* description — full card width, always one line, ellipsis on overflow */}
+        <p style={{
+          fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.84375rem',
+          lineHeight: 1.45, color: 'var(--ink-body-2)', margin: 0,
+          whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+        }}>
+          {desc}
+        </p>
+        {/* name (left) · unit badge + price (right) */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr 80px',
-          gridTemplateRows: '1fr auto',
           columnGap: 10,
-          rowGap: 10,
+          alignItems: 'end',
         }}>
-          {/* row 1: description — takes the badge column too when there is no corner badge */}
-          <p style={{
-            gridColumn: (!house && zoneBadge) ? 1 : '1 / -1', gridRow: 1,
-            fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.84375rem',
-            lineHeight: 1.45, color: 'var(--ink-body-2)', margin: 0,
-            textWrap: 'pretty' as React.CSSProperties['textWrap'],
-            alignSelf: 'start',
-          }}>
-            {desc}
-          </p>
-          {/* row 1 right: sweetness above the price (BB position) + optional unit badge */}
-          <div style={{
-            gridColumn: 2, gridRow: 1,
-            display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 5,
-            alignSelf: 'start',
-          }}>
-            {!house && zoneBadge && <span style={{ ...badgePillStyle, marginRight: -6 }}>{zoneBadge}</span>}
-          </div>
-          {/* row 2 left: name */}
           <span style={{
-            gridColumn: 1, gridRow: 2,
+            gridColumn: 1,
             fontFamily: 'var(--font-display)', fontSize: 'var(--card-title-size, 0.9375rem)',
             letterSpacing: '0.01em', color: 'var(--ink)', lineHeight: 1.1,
-            alignSelf: 'end',
           }}>
             {name}
           </span>
-          {/* row 2 right: price */}
-          <span style={{
-            gridColumn: 2, gridRow: 2,
-            fontFamily: 'var(--font-text)', fontSize: '0.8125rem',
-            letterSpacing: '0.03em', color: 'var(--brand)', textAlign: 'right',
-            alignSelf: 'end',
+          <div style={{
+            gridColumn: 2,
+            display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 5,
           }}>
-            {displayPrice}
-          </span>
+            {!house && zoneBadge && <span style={{ ...badgePillStyle, marginRight: -6 }}>{zoneBadge}</span>}
+            <span style={{
+              fontFamily: 'var(--font-text)', fontSize: '0.8125rem',
+              letterSpacing: '0.03em', color: 'var(--brand)', textAlign: 'right',
+            }}>
+              {displayPrice}
+            </span>
+          </div>
         </div>
       </div>
     </div>

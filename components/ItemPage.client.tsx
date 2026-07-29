@@ -3,11 +3,25 @@
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import TasteMark from '@/components/TasteMark'
-import { FlavourGlyph, SizeGlyph } from '@/components/MenuGlyphs'
+import { FlavourGlyph, SizeGlyph, TasteGlyph } from '@/components/MenuGlyphs'
 import VariantSlider from '@/components/VariantSlider'
 
 const TASTE_LABEL: Record<'bitter' | 'sour' | 'sweet', string> = {
   bitter: 'Bitterness', sour: 'Sourness', sweet: 'Sweetness',
+}
+
+/** One rhythm step between the blocks under the title (24px). Every block owns its TOP
+ *  margin and nothing owns a bottom one, so the gap never depends on what comes after and
+ *  two neighbours can't quietly add up to a different number. */
+const BLOCK_GAP = '1.5rem'
+/** Section label → its own content, inside a block. */
+const LABEL_GAP = '0.5625rem'
+
+/** Shared look of the Size/Flavour and Taste section labels. */
+const sectionLabel: React.CSSProperties = {
+  display: 'flex', alignItems: 'center', gap: 5,
+  fontFamily: 'var(--font-text)', fontSize: '0.6875rem', fontWeight: 700,
+  letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-faint)',
 }
 
 /** One taste characteristic in its own box: small mark + label on top, n-of-3 scale below.
@@ -36,7 +50,6 @@ function TasteBox({ taste, label, n, single }: {
     </div>
   )
 }
-import { HouseMark } from '@/components/ItemCard'
 import CartBar from '@/components/CartBar'
 import SectionNote from '@/components/SectionNote'
 import ListSheet from '@/components/ListSheet'
@@ -53,7 +66,6 @@ interface Props {
   detail: ItemDetail
   venueSlug: string
   reviewUrl?: string
-  houseIndicator?: string
 }
 
 /**
@@ -64,7 +76,7 @@ interface Props {
  * written to localStorage before navigating, which is the same channel the menu already
  * reads its landing tab from.
  */
-export default function ItemPage({ detail, venueSlug, reviewUrl, houseIndicator }: Props) {
+export default function ItemPage({ detail, venueSlug, reviewUrl }: Props) {
   const t = useTranslations()
   const router = useRouter()
   const { cart, count, total, toast, add, changeQty, clear, placed, place, unplace } = useCart(venueSlug)
@@ -183,49 +195,28 @@ export default function ItemPage({ detail, venueSlug, reviewUrl, houseIndicator 
         </div>
 
         <div style={{ padding: '18px 24px 160px' }}>
-          {detail.loved && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 9 }}>
-              <span style={{
-                fontFamily: 'var(--font-text)', fontWeight: 500, fontSize: '0.53125rem',
-                letterSpacing: '0.16em', textTransform: 'uppercase',
-                color: 'var(--brand)', lineHeight: 1,
-              }}>
-                loved here
-              </span>
-              <svg viewBox="154 164 314 303" style={{ width: 12, height: 12, display: 'block', fill: 'var(--brand)' }} aria-hidden>
-                <path d="m467.804 292.907c-7.47-48.489-60.582-101.763-132.159-62.814-29.177-90.905-119.689-69.448-145.953-43.65-85.322 76.173 8.362 203.179 40.333 268.032 14.045-39.091-117.417-181.241-27.244-255.414 68.632-56.454 126.977 25.183 124.741 56.454 44.947-40.995 121.184-16.165 122.736 37.392 3.752 129.472-200.887 143.96-206.188 175.093 115.457-25.643 238.406-79.846 223.734-175.093z" />
-                <path d="m287.945 231.035c-46.589-62.449-117.225 12.49-74.644 84.931-12.023-79.435 25.55-110.91 74.644-84.931z" />
-              </svg>
-            </div>
-          )}
-
-          {/* name + olive */}
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-            <h1 style={{
-              fontFamily: 'var(--font-display)', fontSize: '1.4375rem',
-              letterSpacing: '0.01em', color: 'var(--ink)', lineHeight: 1.15, margin: 0,
-            }}>
-              {detail.name}
-            </h1>
-            {detail.house && houseIndicator && (
-              <HouseMark kind={houseIndicator} size={16} inline />
-            )}
-          </div>
+          {/* name — no house mark and no "loved here" here on purpose: both marks are grid
+              affordances that help the guest pick between cards, and the guest who opened
+              this page has already picked. */}
+          <h1 style={{
+            fontFamily: 'var(--font-display)', fontSize: '1.4375rem',
+            letterSpacing: '0.01em', color: 'var(--ink)', lineHeight: 1.15, margin: 0,
+          }}>
+            {detail.name}
+          </h1>
 
           {/* Size / Flavour switcher — right under the title */}
           {options && (
-            <div style={{ marginTop: 14 }}>
-              <div style={{
-                display: 'flex', alignItems: 'center', gap: 5,
-                fontFamily: 'var(--font-text)', fontSize: '0.6875rem', fontWeight: 700,
-                letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-faint)',
-                marginBottom: 9,
-              }}>
+            <div style={{ marginTop: BLOCK_GAP, display: 'flex', flexDirection: 'column', gap: LABEL_GAP }}>
+              <div style={sectionLabel}>
                 {detail.sizes && <span style={{ color: 'var(--brand)', display: 'inline-flex' }}><SizeGlyph size={13} /></span>}
                 {detail.variants && <span style={{ color: 'var(--brand)', display: 'inline-flex' }}><FlavourGlyph size={13} /></span>}
                 <span>{optionLabel}</span>
               </div>
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              {/* Pills carry 15px of inner padding, so their label text starts well inside the
+                  content gutter and reads as indented against the title above. Pulling the row
+                  out by 12px lands that text back on the gutter line. */}
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginLeft: -12 }}>
                 {options.map((o, i) => (
                   <button
                     key={o.label}
@@ -245,20 +236,29 @@ export default function ItemPage({ detail, venueSlug, reviewUrl, houseIndicator 
             </div>
           )}
 
-          {/* Taste characteristics — each in its own box, all in a row (not a stack). */}
+          {/* Taste characteristics — own section, so bitterness/sweetness read as one group
+              under a heading instead of loose boxes floating after the option pills.
+              Heading matches the Size/Flavour one; the box row keeps its -15 pull so the
+              box CONTENT (not the border) lines up with the gutter. */}
           {(foodSweet || tasteRows.length > 0) && (
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 14, marginInline: -15 }}>
-              {foodSweet && <TasteBox taste="sweet" label="Sweetness" n={foodSweet} />}
-              {tasteRows.map((r, i) => (
-                <TasteBox key={i} taste={r.taste} label={TASTE_LABEL[r.taste]} n={r.n} single={detail.single} />
-              ))}
+            <div style={{ marginTop: BLOCK_GAP, display: 'flex', flexDirection: 'column', gap: LABEL_GAP }}>
+              <div style={sectionLabel}>
+                <span style={{ color: 'var(--brand)', display: 'inline-flex' }}><TasteGlyph size={13} /></span>
+                <span>Taste</span>
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginInline: -15 }}>
+                {foodSweet && <TasteBox taste="sweet" label="Sweetness" n={foodSweet} />}
+                {tasteRows.map((r, i) => (
+                  <TasteBox key={i} taste={r.taste} label={TASTE_LABEL[r.taste]} n={r.n} single={detail.single} />
+                ))}
+              </div>
             </div>
           )}
 
           <p style={{
             fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '1rem',
             lineHeight: 1.5, color: 'var(--ink-body)',
-            textWrap: 'pretty', margin: '14px 0 0',
+            textWrap: 'pretty', margin: 0, marginTop: BLOCK_GAP,
           }}>
             {detail.desc}
           </p>

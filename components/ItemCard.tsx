@@ -230,9 +230,26 @@ export default function ItemCard({
           </div>
         )}
 
+        {/* FAB add button — bottom-right corner of the image */}
+        <button
+          onClick={(e) => { e.stopPropagation(); onAdd(e) }}
+          style={{
+            position: 'absolute', bottom: 8, right: 8,
+            width: 34, height: 34, borderRadius: '50%',
+            border: 'none', background: 'var(--fab-bg)', color: 'var(--fab-fg)',
+            lineHeight: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            cursor: 'pointer', boxShadow: '0 2px 8px rgb(0 0 0 / 0.28), 0 0 0 1px rgb(255 255 255 / 0.18)',
+          }}
+          aria-label={`Add ${name}`}
+        >
+          <svg viewBox="0 0 100 100" width="22" height="22" fill="none" stroke="currentColor" strokeLinecap="round" style={{ display: 'block' }} aria-hidden>
+            <line x1="50" y1="22" x2="50" y2="78" strokeWidth="7"/>
+            <line x1="22" y1="50" x2="78" y2="50" strokeWidth="7"/>
+          </svg>
+        </button>
       </div>
 
-      {/* body: 2×2 grid — desc/name left, price right. loved spans full width above */}
+      {/* body: desc full-width single line, then name (left) / price (right) */}
       <div style={{ padding: '10px 15px 14px' }}>
         {loved && (
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: 4, marginBottom: 7 }}>
@@ -250,26 +267,23 @@ export default function ItemCard({
           </div>
         )}
 
+        {/* description — full card width, always one line, ellipsis on overflow */}
+        <p style={{
+          fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.84375rem',
+          lineHeight: 1.45, color: 'var(--ink-body-2)', margin: '0 0 8px',
+          whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+        }}>
+          {desc}
+        </p>
+
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr 80px',
-          gridTemplateRows: '1fr auto',
           columnGap: 14,
-          rowGap: 8,
+          alignItems: 'end',
         }}>
-          {/* [1,1] desc */}
-          <p style={{
-            gridColumn: 1, gridRow: 1,
-            fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.84375rem',
-            lineHeight: 1.45, color: 'var(--ink-body-2)',
-            margin: 0, textWrap: 'pretty' as React.CSSProperties['textWrap'],
-            alignSelf: 'start',
-          }}>
-            {desc}
-          </p>
-
-          {/* [2,1] name + olive indicator */}
-          <div style={{ gridColumn: 1, gridRow: 2, alignSelf: 'end' }}>
+          {/* name + olive indicator */}
+          <div style={{ gridColumn: 1 }}>
             <span style={{
               fontFamily: 'var(--font-display)', fontSize: 'var(--card-title-size, 0.9375rem)',
               letterSpacing: '0.01em', color: 'var(--ink)',
@@ -280,31 +294,12 @@ export default function ItemCard({
             {showIndicator && <HouseMark kind={houseIndicator} size={houseIndicator === 'fish' ? 15 : 11} inline style={{ marginLeft: 3 }} />}
           </div>
 
-          {/* [1,2] add — the FAB moved off the media zone and now sits above the price */}
-          <button
-            onClick={(e) => { e.stopPropagation(); onAdd(e) }}
-            style={{
-              gridColumn: 2, gridRow: 1, justifySelf: 'end', alignSelf: 'start',
-              flexShrink: 0, width: 30, height: 30, marginRight: -4,
-              background: 'transparent', border: 'none', color: 'var(--ink-faint)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer', padding: 0,
-            }}
-            aria-label={`Add ${name}`}
-          >
-            <svg viewBox="0 0 100 100" width="24" height="24" fill="none" stroke="currentColor" strokeLinecap="round" style={{ display: 'block' }} aria-hidden>
-              <circle cx="50" cy="50" r="46" strokeWidth="3.5"/>
-              <line x1="50" y1="32" x2="50" y2="68" strokeWidth="4.5"/>
-              <line x1="32" y1="50" x2="68" y2="50" strokeWidth="4.5"/>
-            </svg>
-          </button>
-
-          {/* [2,2] price */}
+          {/* price */}
           <span style={{
-            gridColumn: 2, gridRow: 2,
+            gridColumn: 2,
             fontFamily: 'var(--font-text)', fontSize: '0.8125rem',
             letterSpacing: '0.03em', color: 'var(--brand)',
-            textAlign: 'right', alignSelf: 'end',
+            textAlign: 'right',
           }}>
             {priceRange ?? price}
           </span>
