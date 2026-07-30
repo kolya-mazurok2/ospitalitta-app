@@ -35,6 +35,7 @@ interface Props {
   locales: string[]
   logoSrc?: string
   logoText?: string
+  siteUrl?: string
   onboarding: { pricesNote: string; welcome?: string }
   defaultCategory?: 'cocktails' | 'drinks' | 'food'
   drinksCategoryLabel?: 'cocktails' | 'drinks'
@@ -82,24 +83,36 @@ function ViewToggle({ mode, onChange }: { mode: 'expanded' | 'compact'; onChange
   )
 }
 
-export default function MenuClient({ menuData, venueSlug, locale, leadTaste, locales, logoSrc, logoText, onboarding, defaultCategory, drinksCategoryLabel, flatDrinks, forceCompact, houseIndicator, showCocktailGuide, backgroundTheme, reviewUrl, headerDecor, headerDecorLeft }: Props) {
+/** Top-level menu families. 'bar' = beer + soft drinks; 'spirits' = the bottle shelf. */
+type Category = 'cocktails' | 'spirits' | 'bar' | 'food'
+
+export default function MenuClient({ menuData, venueSlug, locale, leadTaste, locales, logoSrc, logoText, siteUrl, onboarding, defaultCategory, drinksCategoryLabel, flatDrinks, forceCompact, houseIndicator, showCocktailGuide, backgroundTheme, reviewUrl, headerDecor, headerDecorLeft }: Props) {
   const t = useTranslations()
   const router = useRouter()
   const { cart, count, total, toast, add: pushToCart, changeQty: setQty, clear: clearTheCart, placed, place, unplace } = useCart(venueSlug)
 
   const hasCocktails = menuData.sections.length > 0
   const hasFoodSections = menuData.foodSections.length > 0
+  // Bottle lists — the spirits shelf and beer/soft. Each is its own top-level category:
+  // they are priced per pour and carry no photo or story, so folding them into the taste
+  // tabs would put 60 bare rows behind a taste the guest picked to find a cocktail.
+  const spiritSections = menuData.spiritSections ?? []
+  const barSections = menuData.barSections ?? []
+  const hasSpirits = spiritSections.length > 0
+  const hasBar = barSections.length > 0
   const isTasteBased = hasCocktails && TASTE_KEYS.has(menuData.sections[0].key)
   const rawDefault = defaultCategory ?? (hasCocktails ? 'cocktails' : 'food')
-  const initialCategory: 'cocktails' | 'food' = rawDefault === 'drinks' ? 'cocktails' : rawDefault
+  const initialCategory: Category = rawDefault === 'drinks' ? 'cocktails' : rawDefault
   // Returning from a product page lands on that item's own tab — the page writes both
   // keys before navigating back, so a guest who arrived by a shared link still ends up
   // in the right part of the menu.
-  const [category, setCategory] = useState<'cocktails' | 'food'>(() => {
+  const [category, setCategory] = useState<Category>(() => {
     if (typeof window === 'undefined') return initialCategory
     const saved = lsGet(`osp_cat_${venueSlug}`)
     if (saved === 'food' && hasFoodSections) return 'food'
     if (saved === 'cocktails' && hasCocktails) return 'cocktails'
+    if (saved === 'spirits' && hasSpirits) return 'spirits'
+    if (saved === 'bar' && hasBar) return 'bar'
     return initialCategory
   })
   const [viewMode, setViewMode] = useState<'expanded' | 'compact'>(() => {
@@ -124,6 +137,10 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
     const saved = lsGet(`osp_foodtab_${venueSlug}`)
     return saved && menuData.foodSections.some(s => s.key === saved) ? (saved as FoodKey) : fallback
   })
+  // Each bottle family remembers its own open sub-tab, so switching Spirits ↔ Drinks and
+  // back does not dump the guest at Gin every time.
+  const [spiritTab, setSpiritTab] = useState<string>(() => spiritSections[0]?.key ?? '')
+  const [barTab, setBarTab] = useState<string>(() => barSections[0]?.key ?? '')
   const [showList, setShowList] = useState(false)
   const [legendOpen, setLegendOpen] = useState(false)
   const [fontScale, setFontScale] = useState(1)
@@ -135,9 +152,14 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
     setTab(key)
   }
 
-  const changeCategory = (cat: 'cocktails' | 'food') => {
+  const changeCategory = (cat: Category) => {
     lsSet(`osp_cat_${venueSlug}`, cat)
     setCategory(cat)
+  }
+
+  const changeBottleTab = (key: string) => {
+    if (category === 'spirits') setSpiritTab(key)
+    else setBarTab(key)
   }
 
   const changeFoodTab = (key: FoodKey) => {
@@ -175,7 +197,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
     scrollRef.current?.scrollTo({ top: 0 })
     // Deliberately not keyed on pendingScroll — this fires on tab switches only.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tab, foodTab, category])
+  }, [tab, foodTab, spiritTab, barTab, category])
 
   // Scroll to pending item — reruns on tab/category/foodTab change so element is in DOM
   useEffect(() => {
@@ -199,11 +221,15 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
   // slug → which list the item lives in. Impressions resolve their own section instead of
   // trusting the active tab, so a mid-scroll tab switch can't mislabel an in-flight card.
   const sectionOfSlug = useMemo(() => {
-    const m: Record<string, { kind: 'cocktail' | 'food'; section: string }> = {}
+    const m: Record<string, { kind: 'cocktail' | 'food' | 'bottle'; section: string }> = {}
     for (const sec of menuData.sections)
       for (const item of sec.items) m[item.slug] = { kind: 'cocktail', section: sec.key }
     for (const sec of menuData.foodSections)
       for (const item of sec.items) m[item.slug] = { kind: 'food', section: sec.key }
+    // Bottle rows have no detail page — they are indexed for impressions only, and the
+    // 'bottle' kind is what stops a cart line from routing to a page that doesn't exist.
+    for (const sec of [...(menuData.spiritSections ?? []), ...(menuData.barSections ?? [])])
+      for (const item of sec.items) m[item.slug] = { kind: 'bottle', section: sec.key }
     return m
   }, [menuData])
 
@@ -224,7 +250,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
       })
     },
     !legendOpen && !showList,
-    [category, tab, foodTab, viewMode, sectionOfSlug, venueSlug],
+    [category, tab, foodTab, spiritTab, barTab, viewMode, sectionOfSlug, venueSlug],
   )
 
   const foodPickEntry = useMemo(() => {
@@ -283,6 +309,7 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
     onOpen: () => {
       const meta = sectionOfSlug[ci.slug]
       if (!meta) return
+      if (meta.kind === 'bottle') return   // no detail page for a bottle row
       setShowList(false)
       if (meta.kind === 'food') openFoodDetail(ci.slug)
       else openCocktailDetail(ci.slug)
@@ -318,27 +345,43 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
       : {}
 
   // Top-level categories. Default = binary (food / cocktails). flatDrinks = each drink section its own top category.
+  // Bottle families slot in between drinks and food when the venue has them.
   const drinkTopCats: string[] = flatDrinks ? menuData.sections.map(s => s.key) : ['cocktails']
-  const topCats: string[] = defaultCategory === 'food' ? ['food', ...drinkTopCats] : [...drinkTopCats, 'food']
+  const bottleTopCats: string[] = [...(hasSpirits ? ['spirits'] : []), ...(hasBar ? ['bar'] : [])]
+  // Order: what the venue is known for first, bottle lists last — cocktails · food · spirits · drinks.
+  // The shelf is a reference list; it sits behind the two things a guest actually browses.
+  const topCats: string[] = defaultCategory === 'food'
+    ? ['food', ...drinkTopCats, ...bottleTopCats]
+    : [...drinkTopCats, 'food', ...bottleTopCats]
   const selectTopCat = (cat: string) => {
-    if (cat === 'food' || cat === 'cocktails') { changeCategory(cat); return }
+    if (cat === 'food' || cat === 'cocktails' || cat === 'spirits' || cat === 'bar') { changeCategory(cat); return }
     changeCategory('cocktails')
     changeTab(cat as typeof tab)
   }
   const topCatActive = (cat: string) =>
-    cat === 'food' ? category === 'food'
+    cat === 'food' || cat === 'spirits' || cat === 'bar' ? category === cat
       : cat === 'cocktails' ? category === 'cocktails'
       : category === 'cocktails' && tab === cat
   const topCatLabel = (cat: string) => {
     if (cat === 'food') return t('category.food')
+    if (cat === 'spirits') return t('category.spirits')
+    if (cat === 'bar') return t('category.drinks')
     if (cat === 'cocktails') return t(`category.${drinksCategoryLabel ?? 'cocktails'}`)
     const sec = sectionByKey[cat]
     return sec ? pl(sec.i18n).label : cat
   }
+
+  // The bottle family currently on screen, with its own sub-tab state resolved.
+  const bottleSections = category === 'spirits' ? spiritSections : category === 'bar' ? barSections : []
+  const bottleTab = category === 'spirits' ? spiritTab : barTab
+  const currentBottleSection = bottleSections.find(s => s.key === bottleTab) ?? bottleSections[0]
   // Sections shown under the active drinks category. Flat = the one selected section; grouped = all.
   // Sub-tabs render only when this holds more than one — no boolean flags in the view.
   const activeDrinkSections = flatDrinks ? (currentSection ? [currentSection] : []) : menuData.sections
-  const currentGridAllowed = category === 'food' ? gridAllowedFood : gridAllowedDrinks
+  // Bottle lists are list-only by construction, so the grid/list toggle has nothing to switch.
+  const currentGridAllowed = category === 'food' ? gridAllowedFood
+    : category === 'cocktails' ? gridAllowedDrinks
+    : false
 
   // shared tab button style
   const tabBtn = (active: boolean) => ({
@@ -358,13 +401,15 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
       <MenuBackdrop theme={backgroundTheme ?? 'none'} />
 
       {/* Scrollable content — logo header scrolls away; filters stick. IO root for impressions. */}
-      <div ref={scrollRef} className="scrollbar-none" onScroll={e => setShowTop(e.currentTarget.scrollTop > 320)} style={{ flex: 1, minHeight: 0, overflowY: 'auto', position: 'relative', zIndex: 1 }}>
+      {/* overflowX hidden: overflowY auto makes the X axis compute to auto too, so any
+          stray-wide child would scroll the page sideways. The menu never scrolls X. */}
+      <div ref={scrollRef} className="scrollbar-none" onScroll={e => setShowTop(e.currentTarget.scrollTop > 320)} style={{ flex: 1, minHeight: 0, overflowY: 'auto', overflowX: 'hidden', position: 'relative', zIndex: 1 }}>
 
         {/* logo header — scrolls away with the content. Above the sticky filter bar so its
             dropdowns (language / text-size) don't sink under it. */}
         <div style={{ background: 'var(--header-bg, var(--surface))', position: 'relative', zIndex: 30 }}>
           <HeaderControls
-            logoSrc={logoSrc} logoText={logoText}
+            logoSrc={logoSrc} logoText={logoText} siteUrl={siteUrl}
             locale={locale} locales={locales} fontScale={fontScale}
             onOpenLegend={() => setLegendOpen(true)}
             onLocaleChange={handleLocaleChange}
@@ -379,16 +424,20 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
           {/* Category nav — hidden for food-only venues */}
           {hasCocktails && menuData.foodSections.length > 0 && (
             <div style={{ flexShrink: 0, background: 'var(--surface)', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center' }}>
-              <div style={{ display: 'flex', padding: '0 18px', flex: 1 }}>
-                {topCats.map(cat => {
-                  const active = topCatActive(cat)
-                  return (
-                    <button key={cat} onClick={() => selectTopCat(cat)} style={tabBtn(active)}>
-                      {topCatLabel(cat)}
-                      {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
-                    </button>
-                  )
-                })}
+              {/* scrolls internally: with spirits + bar the top cats overflow a phone, and
+                  without this the overflow becomes a whole-page horizontal scroll. */}
+              <div className="scrollbar-none" style={{ flex: 1, overflowX: 'auto' }}>
+                <div style={{ display: 'flex', padding: '0 18px', width: 'max-content' }}>
+                  {topCats.map(cat => {
+                    const active = topCatActive(cat)
+                    return (
+                      <button key={cat} onClick={() => selectTopCat(cat)} style={tabBtn(active)}>
+                        {topCatLabel(cat)}
+                        {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
+                      </button>
+                    )
+                  })}
+                </div>
               </div>
               {!forceCompact && currentGridAllowed && <ViewToggle mode={viewMode} onChange={changeViewMode} />}
             </div>
@@ -406,6 +455,25 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
                       <button key={tk} onClick={() => { track('taste_tab_switch', { venue_slug: venueSlug, taste: tk }); changeTab(tk) }} style={{ ...tabBtn(active), display: 'inline-flex', alignItems: 'center', gap: 6 }}>
                         {label}
                         <TasteIcon taste={tk} active={active} />
+                        {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
+          {/* Bottle sub-tabs — same row as the food tabs, no taste icons: these are
+              categories of bottle, not of flavour. */}
+          {bottleSections.length > 1 && (
+            <div style={{ flexShrink: 0, background: 'var(--surface)', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center' }}>
+              <div className="scrollbar-none" style={{ flex: 1, overflowX: 'auto' }}>
+                <div style={{ display: 'flex', padding: '0 16px', width: 'max-content' }}>
+                  {bottleSections.map(sec => {
+                    const active = currentBottleSection?.key === sec.key
+                    return (
+                      <button key={sec.key} onClick={() => changeBottleTab(sec.key)} style={tabBtn(active)}>
+                        {pl(sec.i18n).label}
                         {active && <span style={{ position: 'absolute', left: 16, right: 16, bottom: 0, height: 2, background: 'var(--tab-underline)' }} />}
                       </button>
                     )
@@ -486,6 +554,36 @@ export default function MenuClient({ menuData, venueSlug, locale, leadTaste, loc
               </div>
             </div>
           </>
+        )}
+
+        {/* ===== BOTTLE LISTS — spirits shelf · beer & soft ===== */}
+        {currentBottleSection && (
+          <div style={{ padding: '0 18px 28px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', marginTop: 8, ...listPlate(true) }}>
+              {currentBottleSection.items.map((item, i) => {
+                const text = pl(item.i18n)
+                return (
+                  <ItemCard
+                    key={item.slug} id={item.slug}
+                    name={text.name} desc={text.desc} price={money(item.price)}
+                    taste={currentBottleSection.key}
+                    compact noDetail
+                    last={i === currentBottleSection.items.length - 1}
+                    lovedLabel="loved here"
+                    onTap={() => {}}
+                    onAdd={(e) => {
+                      e.stopPropagation()
+                      pushToCart(item.slug, text.name, parsePrice(item.price))
+                    }}
+                  />
+                )
+              })}
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: 40 }}>
+              <OspitalittaMark />
+            </div>
+          </div>
         )}
 
         {/* ===== FOOD ===== */}

@@ -164,6 +164,8 @@ export interface VenueConfig {
   headerDecorLeft?: string
   /** Google review link. Omit and the thank-you screen simply drops the review block. */
   reviewUrl?: string
+  /** Venue's own page on the marketing site. Set → the header wordmark links back to it. */
+  siteUrl?: string
 }
 
 const venues: Record<string, VenueConfig> = {
@@ -250,6 +252,7 @@ const venues: Record<string, VenueConfig> = {
       ],
     },
     logoSrc: '/assets/bb-logo-crop.png',
+    siteUrl: 'https://ospitalitta.com/venue/bb',
     houseIndicator: 'olive',
     reviewUrl: 'https://maps.app.goo.gl/fyXLGu8BJR215ujS6',
     backgroundTheme: 'cocktail',

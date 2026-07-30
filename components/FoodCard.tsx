@@ -147,7 +147,7 @@ export default function FoodCard({ id, name, desc, price, priceRange, badge, hou
       }}>
         {hasCarousel ? (
           <VariantSlider
-            images={variants!.map(v => ({ src: v.posterSrc ?? posterSrc ?? '', alt: `${name}, ${v.label}` }))}
+            images={variants!.map(v => ({ src: v.posterSrc ?? posterSrc ?? '', alt: `${name}, ${v.label}`, videoSrc: v.videoSrc }))}
             index={vIdx}
             onIndexChange={setVIdx}
             priority={priority}
@@ -248,7 +248,7 @@ export default function FoodCard({ id, name, desc, price, priceRange, badge, hou
             {!house && zoneBadge && <span style={{ ...badgePillStyle, marginRight: -6 }}>{zoneBadge}</span>}
             <span style={{
               fontFamily: 'var(--font-text)', fontSize: '0.8125rem',
-              letterSpacing: '0.03em', color: 'var(--brand)', textAlign: 'right',
+              letterSpacing: '0.03em', color: 'var(--price, var(--brand))', textAlign: 'right',
             }}>
               {displayPrice}
             </span>

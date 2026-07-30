@@ -94,7 +94,7 @@ export default function FeaturedPick({ name, desc, price, glass, taste, n, house
             </span>
             <span style={{
               fontFamily: 'var(--font-text)', fontSize: '0.8125rem',
-              letterSpacing: '0.03em', color: 'var(--brand)', flexShrink: 0,
+              letterSpacing: '0.03em', color: 'var(--price, var(--brand))', flexShrink: 0,
             }}>
               {price}
             </span>

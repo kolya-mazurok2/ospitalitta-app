@@ -133,16 +133,18 @@ export default function ItemCard({
             </span>
             {showIndicator && <HouseMark kind={houseIndicator} size={houseIndicator === 'fish' ? 13 : 9} inline style={{ marginLeft: 3 }} />}
           </div>
-          {/* Description with the price at the end — the list row is the only place it shows */}
-          {desc && (
-            <p style={{
-              fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.6875rem',
-              color: 'var(--ink-body-2)', margin: '2px 0 0',
-              overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-            }}>
-              {clampDesc(desc).replace(/\.\s*$/, '')}, {priceRange ?? price}.
-            </p>
-          )}
+          {/* Description with the price at the end — the list row is the only place it shows.
+              The price renders even when there is no description: a row without a description
+              is just terse, a row without a price is broken. */}
+          <p style={{
+            fontFamily: 'var(--font-text)', fontWeight: 300, fontSize: '0.6875rem',
+            color: 'var(--ink-body-2)', margin: '2px 0 0',
+            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+          }}>
+            {desc
+              ? `${clampDesc(desc).replace(/\.\s*$/, '')}, ${priceRange ?? price}.`
+              : priceRange ?? price}
+          </p>
         </div>
         <button
           onClick={(e) => { e.stopPropagation(); onAdd(e) }}
@@ -298,7 +300,7 @@ export default function ItemCard({
           <span style={{
             gridColumn: 2,
             fontFamily: 'var(--font-text)', fontSize: '0.8125rem',
-            letterSpacing: '0.03em', color: 'var(--brand)',
+            letterSpacing: '0.03em', color: 'var(--price, var(--brand))',
             textAlign: 'right',
           }}>
             {priceRange ?? price}

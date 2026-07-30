@@ -90,8 +90,8 @@ export default function ItemPage({ detail, venueSlug, reviewUrl }: Props) {
   const selected = options?.[optIdx]
   // Hero slider is for FLAVOUR variants only (each has its own image). Sizes (S/M/L) share
   // one image, so switching size must NOT swipe the hero.
-  const flavourImages = detail.variants && detail.variants.length > 1 && detail.variants.some(v => v.posterSrc)
-    ? detail.variants.map(o => ({ src: o.posterSrc ?? detail.posterSrc ?? '', alt: detail.name }))
+  const flavourImages = detail.variants && detail.variants.length > 1 && detail.variants.some(v => v.posterSrc || v.videoSrc)
+    ? detail.variants.map(o => ({ src: o.posterSrc ?? detail.posterSrc ?? '', alt: detail.name, videoSrc: o.videoSrc }))
     : null
   const selPriceRaw = selected ? (Number(selected.price.replace(/\D/g, '')) || 0) : detail.rawPrice
   const selPriceText = selected ? money(selected.price) : detail.price
@@ -266,7 +266,7 @@ export default function ItemPage({ detail, venueSlug, reviewUrl }: Props) {
           <div style={{
             fontFamily: 'var(--font-text)', fontSize: options ? '1.0625rem' : '0.875rem',
             fontWeight: options ? 600 : 400,
-            letterSpacing: '0.03em', color: 'var(--brand)', marginTop: 30,
+            letterSpacing: '0.03em', color: 'var(--price, var(--brand))', marginTop: 30,
           }}>
             {selPriceText}
           </div>

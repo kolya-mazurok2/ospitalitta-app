@@ -47,9 +47,27 @@ const ALL_LOCALES: { code: string; label: string }[] = [
   { code: 'en', label: 'English' },
 ]
 
+/** The wordmark, linked to the venue site when there is one — otherwise untouched. */
+function LogoLink({ siteUrl, venueName, children }: {
+  siteUrl?: string; venueName?: string; children: React.ReactNode
+}) {
+  if (!siteUrl || !children) return <>{children}</>
+  return (
+    <a
+      href={siteUrl}
+      aria-label={venueName ? `${venueName} — website` : 'Venue website'}
+      style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}
+    >
+      {children}
+    </a>
+  )
+}
+
 interface Props {
   logoSrc?: string
   logoText?: string
+  /** Venue site. Set → the wordmark becomes the way back to it; omitted → plain mark. */
+  siteUrl?: string
   locale: string
   locales: string[]
   fontScale: number
@@ -61,7 +79,7 @@ interface Props {
 }
 
 export default function HeaderControls({
-  logoSrc, logoText, locale, locales, fontScale,
+  logoSrc, logoText, siteUrl, locale, locales, fontScale,
   onOpenLegend, onLocaleChange, onScaleChange, headerDecor, headerDecorLeft,
 }: Props) {
   const [aaOpen, setAaOpen] = useState(false)
@@ -130,31 +148,35 @@ export default function HeaderControls({
       )}
       {/* logo left, controls right; the controls line up on the logo's bottom edge */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        {/* logo — image or live-text wordmark */}
-        {logoText ? (
-          <span style={{
-            fontFamily: 'var(--font-display)', fontWeight: 800,
-            fontSize: '1.625rem', letterSpacing: '0.06em',
-            color: 'var(--brand)', lineHeight: 1, display: 'block',
-          }}>
-            {logoText}
-          </span>
-        ) : logoSrc ? (
-          <span style={{
-            display: 'block', flexShrink: 0,
-            background: 'var(--surface-logo)', padding: '6px 10px',
-          }}>
-            <Image
-              src={logoSrc}
-              alt=""
-              width={300}
-              height={40}
-              className="venue-logo"
-              style={{ height: '40px', width: 'auto', display: 'block' }}
-              priority
-            />
-          </span>
-        ) : null}
+        {/* logo — image or live-text wordmark. Wrapped in the venue's own site link when the
+            venue has one: the guest arrived here by QR with no browser history to go back
+            through, and the wordmark is the one thing on screen they already read as "home". */}
+        <LogoLink siteUrl={siteUrl} venueName={logoText}>
+          {logoText ? (
+            <span style={{
+              fontFamily: 'var(--font-display)', fontWeight: 800,
+              fontSize: '1.625rem', letterSpacing: '0.06em',
+              color: 'var(--brand)', lineHeight: 1, display: 'block',
+            }}>
+              {logoText}
+            </span>
+          ) : logoSrc ? (
+            <span style={{
+              display: 'block', flexShrink: 0,
+              background: 'var(--surface-logo)', padding: '6px 10px',
+            }}>
+              <Image
+                src={logoSrc}
+                alt=""
+                width={300}
+                height={40}
+                className="venue-logo"
+                style={{ height: '40px', width: 'auto', display: 'block' }}
+                priority
+              />
+            </span>
+          ) : null}
+        </LogoLink>
 
         {/* controls */}
         <div style={{ display: 'flex', alignItems: 'flex-end', gap: 18 }}>

@@ -125,6 +125,7 @@
   --brand:          var(--bb-olive-cream); /* default, on paper */
   --brand-on-dark:  var(--bb-olive-app);
   --brand-bright:   var(--bb-olive-bright);
+  --price:          var(--bb-olive-app);   /* a step greener than brand so the number pops off the name */
   --hairline:       var(--bb-olive-logo);  /* olive borders/frames */
   --accent-pit:     var(--bb-cherry);
 
@@ -162,6 +163,7 @@
   --brand:          var(--bb-olive-bright);
   --brand-on-dark:  var(--bb-olive-app);
   --brand-bright:   var(--bb-olive-hi);
+  --price:          var(--bb-olive-hi);    /* brightest olive so the number reads on char */
   --hairline:       var(--bb-olive-logo);
 
   /* lines/faint ink must come off --bb-on-dark, not --bb-grey: grey at 0.5

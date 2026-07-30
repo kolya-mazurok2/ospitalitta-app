@@ -7,6 +7,9 @@
 export type GlassType = 'wine' | 'collins' | 'rocks' | 'martini' | 'coupe'
 export type TasteKey = 'bitter' | 'sour' | 'sweet' | 'spicy' | 'zero'
 export type TierKey  = 'tier-600' | 'tier-700' | 'tier-800' | 'tier-900' | 'tier-1000'
+/** Bottle-list categories: the spirits shelf plus beer/soft. Priced per pour, not composed. */
+export type BarKey   = 'gin' | 'rhum' | 'whisky' | 'tequila' | 'cognac' | 'vodka' | 'amari'
+                     | 'birre' | 'soft'
 export type FoodKey  = 'pizza' | 'sharing'
                      | 'cold' | 'warm' | 'salads' | 'pasta' | 'mains' | 'fresh-fish'
                      | 'hot-drinks' | 'cold-coffees' | 'soft-drinks' | 'bio-juices'
@@ -82,7 +85,7 @@ export interface MenuItem {
 }
 
 export interface MenuSection {
-  key: TasteKey | TierKey | FoodKey
+  key: TasteKey | TierKey | FoodKey | BarKey
   type: 'cocktail' | 'food'
   /** Which view modes this section supports. Omit = both. e.g. ['list'] = list-only, no toggle. */
   views?: ('grid' | 'list')[]
@@ -122,6 +125,10 @@ export interface VenueMenuData {
   /** Currency shown with prices (venue-controlled). Prices themselves are plain numbers. */
   currency?: string
   sections: MenuSection[]
+  /** The spirits shelf — its own top-level category, list-only, no detail page. */
+  spiritSections?: MenuSection[]
+  /** Beer + soft drinks — own top-level category, same list-only treatment. */
+  barSections?: MenuSection[]
   foodSections: MenuSection[]
   pairings: Pairing[]
   foodPairings: FoodPairing[]
@@ -213,10 +220,14 @@ const bitter: MenuSection = {
       videoSrc: '/venue-assets/bottle-brothers/barrel-aged-coconut-negroni.mp4',
       posterSrc: '/venue-assets/bottle-brothers/barrel-aged-coconut-negroni.jpg',
       variants: [
-        { label: 'Barrel-Aged Coconut', price: '1000', posterSrc: '/venue-assets/bottle-brothers/barrel-aged-coconut-negroni.jpg' },
+        { label: 'Barrel-Aged Coconut', price: '1000', posterSrc: '/venue-assets/bottle-brothers/barrel-aged-coconut-negroni.jpg', videoSrc: '/venue-assets/bottle-brothers/barrel-aged-coconut-negroni.mp4' },
         { label: 'Strawberry & Basil',  price: '850',  posterSrc: '/venue-assets/bottle-brothers/negroni-strawberry-basil.jpg' },
       ],
       i18n: { en: { name: 'Negroni', desc: 'Medium bitter, lightly sweet. Stirred over ice. Barrel-aged coconut — warm and tropical, or strawberry & basil — fruity and fresh.' } } },
+    { id: 'negroni-classic', slug: 'negroni-classic', price: '550', glass: 'rocks', lvl: 3,
+      tastes: [{ taste: 'bitter', lvl: 3 }, { taste: 'sweet', lvl: 1 }],
+      posterSrc: '/venue-assets/bottle-brothers/negroni-classic.jpg',
+      i18n: { en: { name: 'Negroni Classic', desc: 'Strongly bitter, lightly sweet. Stirred over ice. Gin, Campari, sweet vermouth, orange peel. Bites from the first sip and stays dry to the end.' } } },
     { id: 'campari-spritz', slug: 'campari-spritz', price: '550', glass: 'wine', lvl: 3,
       posterSrc: '/venue-assets/bottle-brothers/campari-spritz.jpg',
       i18n: { en: { name: 'Campari Spritz', desc: 'Strongly bitter. Sharp and dry. Campari, prosecco, soda. Bites from the first sip and holds it.' } } },
@@ -595,12 +606,155 @@ export const foodFeaturedPick: FoodFeaturedPick = {
 }
 
 // ---------------------------------------------------------------------------
+// BB bottle list — spirits shelf + beer/soft (owner price list, 2026-07-30)
+// ---------------------------------------------------------------------------
+// These are not cocktails: no photo, no story, no pairing — a name and a price.
+// They render list-only (`views: ['list']`), which also switches the card to
+// noDetail, so tapping a row does nothing instead of opening an empty page.
+//
+// ⚠️ Two things are deliberately NOT here until the owner confirms them:
+//   1. the pour size — his covering note said "Bombay 4cl – 600L" while the list
+//      says Bombay 450, so neither the measure nor that price is settled;
+//   2. Skull Premium (30000) and AU premium (20000) — 290 € and 190 € read as
+//      bottle prices or a stray zero, and a wrong one of those is the kind of
+//      number a guest screenshots.
+// Brand spellings are corrected to the real labels (Sailor Jerry, Ardbeg,
+// Jägermeister, Kahlúa, Budweiser, Skyy, El Jimador, Espolòn, Volcán, Patrón);
+// the list as typed by the owner stays verbatim in menu-raw.md.
+
+/** One bottle-list row. Slug is derived so 60-odd rows don't each carry three near-identical strings. */
+const pour = (prefix: string, name: string, price: string, desc = ''): MenuItem => {
+  const slug = `${prefix}-${name.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`
+  return { id: slug, slug, price, i18n: { en: { name, desc } } }
+}
+
+/**
+ * Shared shape of every bottle-list section. `pour` stamps the serve size onto every row
+ * that doesn't carry its own — the guest reads "4 cl, 450", and without it a bare "450"
+ * next to a spirit could as easily be the bottle.
+ */
+const bottleSection = (key: BarKey, label: string, items: MenuItem[], pourSize?: string): MenuSection => ({
+  key, type: 'cocktail', views: ['list'], i18n: { en: { label } },
+  items: pourSize
+    ? items.map(it => it.i18n.en.desc ? it : { ...it, i18n: { en: { ...it.i18n.en, desc: pourSize } } })
+    : items,
+})
+
+/**
+ * Serve size for the spirits shelf. From the owner's covering note ("Bombay 4cl").
+ * Spelled with the millilitres in brackets, not as "4 cl / 40 ml": a slash reads as a
+ * choice between two pours, brackets read as the same pour said twice — and half this
+ * room's guests price a drink in ml, not cl.
+ */
+const POUR = '4 cl (40 ml)'
+
+const gin = bottleSection('gin', 'Gin', [
+  pour('gin', 'Bickens', '400'),
+  pour('gin', 'Bombay', '450'),
+  pour('gin', 'Tanqueray', '550'),
+  pour('gin', 'Tanqueray 10', '700'),
+  pour('gin', 'Tanqueray Sevilla', '500'),
+  pour('gin', "Hendrick's", '650'),
+  pour('gin', 'Gin Mare', '650'),
+  pour('gin', 'Engine', '700'),
+  pour('gin', 'Nordés', '600'),
+  pour('gin', 'Portofino', '900'),
+  pour('gin', "Brockman's", '800'),
+  pour('gin', 'Etsu Japanese', '1000'),
+  pour('gin', 'Amuerte', '1000'),
+  pour('gin', 'Alchemist', '700'),
+], POUR)
+
+const rhum = bottleSection('rhum', 'Rhum', [
+  pour('rhum', 'Pampero', '400'),
+  pour('rhum', 'Pampero Especial', '450'),
+  pour('rhum', 'Bacardi', '400'),
+  pour('rhum', 'Sailor Jerry', '450'),
+  pour('rhum', 'Zacapa', '1000'),
+  pour('rhum', 'Minoki', '1100'),
+  pour('rhum', 'Planteray Coconut', '750'),
+  pour('rhum', 'Planteray Pineapple', '750'),
+  pour('rhum', 'Planteray Overproof', '800'),
+  pour('rhum', 'Eminente 7yo', '800'),
+  pour('rhum', 'Eminente 10yo', '1200'),
+  pour('rhum', 'Kraken Spiced', '450'),
+], POUR)
+
+const whisky = bottleSection('whisky', 'Whisky', [
+  pour('whisky', "Jack Daniel's", '450'),
+  pour('whisky', 'Chivas', '500'),
+  pour('whisky', 'Johnnie Walker Red Label', '400'),
+  pour('whisky', 'Johnnie Walker Black Label', '600'),
+  pour('whisky', 'Johnnie Walker Blue Label', '2300'),
+  pour('whisky', 'Ardbeg 10yo', '1200'),
+  pour('whisky', 'Talisker 10yo', '850'),
+  pour('whisky', 'Jim Beam Bourbon', '450'),
+  pour('whisky', 'Wild Turkey', '500'),
+  pour('whisky', 'The Busker Single Pot', '500'),
+], POUR)
+
+const tequila = bottleSection('tequila', 'Tequila', [
+  pour('tequila', 'Sierra', '400'),
+  pour('tequila', 'El Jimador', '450'),
+  pour('tequila', 'Espolòn', '500'),
+  pour('tequila', 'Volcán', '800'),
+  pour('tequila', 'Patrón', '1000'),
+], POUR)
+
+const cognac = bottleSection('cognac', 'Cognac', [
+  pour('cognac', 'Hennessy VS', '450'),
+  pour('cognac', 'Hennessy VSOP', '600'),
+], POUR)
+
+const vodka = bottleSection('vodka', 'Vodka', [
+  pour('vodka', 'Skyy', '450'),
+  pour('vodka', 'Absolut', '400'),
+  pour('vodka', 'Belvedere', '700'),
+  pour('vodka', 'Grey Goose', '750'),
+], POUR)
+
+const amari = bottleSection('amari', 'Amari e Digestivi', [
+  pour('amari', 'Disaronno', '350'),
+  pour('amari', 'Montenegro', '350'),
+  pour('amari', 'Limoncello', '350'),
+  pour('amari', 'Amaro del Capo', '350'),
+  pour('amari', 'Averna', '350'),
+  pour('amari', 'Jägermeister', '350'),
+  pour('amari', 'Baileys', '350'),
+  pour('amari', 'Kahlúa', '350'),
+  pour('amari', 'Sambuca', '350'),
+], POUR)
+
+const birre = bottleSection('birre', 'Birre', [
+  pour('birre', 'Nastro Azzurro', '400', 'Draft · 40 cl (400 ml)'),
+  pour('birre', 'Corona', '400', '33 cl (330 ml)'),
+  pour('birre', 'Iliria', '300', '33 cl (330 ml)'),
+  pour('birre', 'Kaiser Kristal', '450', '50 cl (500 ml)'),
+  pour('birre', 'Budweiser Kristal', '500', '50 cl (500 ml)'),
+  pour('birre', 'Franziskaner', '500', '50 cl (500 ml)'),
+  pour('birre', 'Schöfferhofer', '450', '50 cl (500 ml)'),
+])
+
+const soft = bottleSection('soft', 'Soft Drinks', [
+  pour('soft', 'Acqua Naturale', '120', '50 cl (500 ml)'), // TODO(serve): water size unconfirmed
+  pour('soft', 'Acqua Gassata', '120', '50 cl (500 ml)'), // TODO(serve): water size unconfirmed
+  pour('soft', 'Coca Cola', '200', '33 cl (330 ml)'),
+  pour('soft', 'Fanta / Exotic', '200', '33 cl (330 ml)'),
+  pour('soft', 'Lemon Soda', '200', '33 cl (330 ml)'),
+  pour('soft', 'Bravo', '170', '25 cl (250 ml)'), // TODO(serve): juice size unconfirmed
+  pour('soft', 'Red Bull', '350', '25 cl (250 ml)'),
+])
+
+// ---------------------------------------------------------------------------
 // Full venue menu export
 // ---------------------------------------------------------------------------
 
 export const bbMenuData: VenueMenuData = {
   currency: 'L',
   sections: [bitter, sour, sweet, spicy, zero],
+  spiritSections: [gin, rhum, whisky, tequila, cognac, vodka, amari],
+  barSections: [birre, soft],
   foodSections: [pizza, sharing],
   pairings,
   foodPairings,
